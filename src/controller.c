@@ -9,13 +9,13 @@
 #include "render.h"
 
 /* Window properties */
-static const unsigned int WINDOW_WIDTH = 1000;
-static const unsigned int WINDOW_HEIGHT = 800;
-static const char WINDOW_TITLE[] = "TD04 Ex01";
-static float aspectRatio = 1.0;
+const unsigned int WINDOW_WIDTH = 1000;
+const unsigned int WINDOW_HEIGHT = 800;
+const char WINDOW_TITLE[] = "TD04 Ex01";
+float aspectRatio = 1.0;
 
 /* Minimal time wanted between two images */
-static const double FRAMERATE_IN_SECONDS = 1. / 30.;
+const double FRAMERATE_IN_SECONDS = 1. / 30.;
 
 /* Virtual windows space */
 // Space is defined in interval -1 and 1 on x and y axes
