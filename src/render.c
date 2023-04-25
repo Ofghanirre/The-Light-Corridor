@@ -26,7 +26,7 @@ int render_tick() {
     gluLookAt(0., 0., 40., 0., 0., 0., 0., 1., 0.);
 
     // Lighting
-    float position[4] = {0., 0., 5., 1.0};
+    float position[4] = {0., 0., 40., 1.0};
     float intensity[3] = {1.5, 1.5, 1.5};
     float quadratic_attenuation = 0.0004;
     glEnable(GL_LIGHTING);
@@ -46,27 +46,27 @@ int render_tick() {
     glBegin(GL_QUADS);
         glColor3f(1., 0., 0.);
         glNormal3f(0., 1., 0.);
-        glVertex3f(-25., -15., 0.);
-        glVertex3f(25., -15., 0.);
+        glVertex3f(-25., -15., 50.);
+        glVertex3f(25., -15., 50.);
         glVertex3f(25., -15., -100.);
         glVertex3f(-25., -15., -100.);
         
         glNormal3f(0., -1., 0.);
-        glVertex3f(25., 15., 0.);
-        glVertex3f(-25., 15., 0.);
+        glVertex3f(25., 15., 50.);
+        glVertex3f(-25., 15., 50.);
         glVertex3f(-25., 15., -100.);
         glVertex3f(25., 15., -100.);
 
         glColor3f(0.5, 0., 0.5);
         glNormal3f(1., 0., 0.);
-        glVertex3f(-25., -15., 0.);
-        glVertex3f(-25., 15., 0.);
+        glVertex3f(-25., -15., 50.);
+        glVertex3f(-25., 15., 50.);
         glVertex3f(-25., 15., -100.);
         glVertex3f(-25., -15., -100.);
 
         glNormal3f(-1., 0., 0.);
-        glVertex3f(25., -15., 0.);
-        glVertex3f(25., 15., 0.);
+        glVertex3f(25., -15., 50.);
+        glVertex3f(25., 15., 50.);
         glVertex3f(25., 15., -100.);
         glVertex3f(25., -15., -100.);
     glEnd();
