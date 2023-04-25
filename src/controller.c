@@ -10,7 +10,7 @@
 
 /* Window properties */
 const unsigned int WINDOW_WIDTH = 1000;
-const unsigned int WINDOW_HEIGHT = 800;
+const unsigned int WINDOW_HEIGHT = 600;
 const char WINDOW_TITLE[] = "TD04 Ex01";
 static float aspectRatio = 1.0;
 
@@ -19,7 +19,7 @@ const double FRAMERATE_IN_SECONDS = 1. / 30.;
 
 /* Virtual windows space */
 // Space is defined in interval -1 and 1 on x and y axes
-static const float GL_VIEW_SIZE = 2.;
+static const float GL_VIEW_SIZE = 50.;
 
 /* Error handling function */
 void onError(int error, const char* description)
@@ -35,18 +35,7 @@ void onWindowResized(GLFWwindow* window, int width, int height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	if( aspectRatio > 1)
-	{
-		gluOrtho2D(
-		-GL_VIEW_SIZE / 2. * aspectRatio, GL_VIEW_SIZE / 2. * aspectRatio,
-		-GL_VIEW_SIZE / 2., GL_VIEW_SIZE / 2.);
-	}
-	else
-	{
-		gluOrtho2D(
-		-GL_VIEW_SIZE / 2., GL_VIEW_SIZE / 2.,
-		-GL_VIEW_SIZE / 2. / aspectRatio, GL_VIEW_SIZE / 2. / aspectRatio);
-	}
+    gluPerspective(60.0, aspectRatio, 1, 200);
 	glMatrixMode(GL_MODELVIEW);
 
 }
@@ -80,7 +69,6 @@ GLFWwindow* window_init() {
 	if (!window) {
 		return NULL;
 	}
-
 
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
