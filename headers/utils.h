@@ -5,11 +5,10 @@
 #define MEMORY_ERROR -1000
 
 #include <stdlib.h>
+#include <stdio.h>
 
-void cfree(void* ptr) {
-    if (ptr != NULL) {
-        free(ptr);
-    }
-}
+extern unsigned int __FLAG_MEMORY_ERROR__;
+
+void cfree(void* ptr);
 
 #endif

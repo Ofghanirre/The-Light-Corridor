@@ -5,6 +5,11 @@
 #include "colors.h"
 
 /* ------ Structs ------ */
+
+/**
+ * @brief List the possibles figures type
+ * 
+ */
 typedef enum FigureType {
     RECTANGLE,
     CIRCLE,
@@ -12,20 +17,38 @@ typedef enum FigureType {
     LABEL
 } FigureType;
 
+/**
+ * @brief Represents a rectangle focused on position (0,0,0)
+ * Its height / width is then calculated with the "top-left" point and the "down-right" point
+ * 
+ */
 typedef struct Figure_Rectangle {
     Point3D p1, p2;
 } Figure_Rectangle;
 
+/**
+ * @brief Represents a circle / sphere focused on position (0,0,0)
+ */
 typedef struct Figure_Circle {
-    Point3D center;
     float radius;
 } Figure_Circle, Figure_Sphere;
 
+/**
+ * @brief Represents a label centered on position (0,0,0)
+ */
 typedef struct Figure_Label {
     const char* text;
     int font_size;
 } Figure_Label;
 
+/**
+ * @brief Represents a figure that is to be drawn on the screen, keep in mind that this
+ * struct merely represents the data of the figure. It does not hold the position /
+ * direction information and thus can not be displayed like so.
+ * 
+ * To be displayed it needs to be used in a Graphic_Object
+ * 
+ */
 typedef struct Figure {
     FigureType type;
     union {
@@ -40,8 +63,8 @@ typedef struct Figure {
 /* ------ Functions ------*/
 
 Figure make_rectangle(Point3D p1, Point3D p2, ColorRGBA color);
-Figure make_circle(Point3D center, float radius, ColorRGBA color);
-Figure make_sphere(Point3D center, float radius, ColorRGBA color);
+Figure make_circle(float radius, ColorRGBA color);
+Figure make_sphere(float radius, ColorRGBA color);
 Figure make_label(const char* text, int font_size, ColorRGBA color);
 
 #endif
