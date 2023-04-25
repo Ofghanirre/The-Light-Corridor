@@ -16,6 +16,8 @@ OBJECTS = \
 	game.o \
 	render.o \
 	scenery.o \
+	utils.o \
+	test.o \
 	structs/colors.o \
 	structs/vectors.o \
 	structs/figures.o \

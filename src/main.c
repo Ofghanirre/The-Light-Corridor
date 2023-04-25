@@ -11,11 +11,12 @@
 #include "render.h"
 #include "controller.h"
 
+#include "test.h"
 
 int main(int argc, char const *argv[])
 {
     printf("Launching " PROJECT_NAME " ~ " PROJECT_VERSION "!\n");
-    
+    // test_scenery();
     /* GLFW initialisation */
 	GLFWwindow* window;
 	if (!glfwInit()) return -1;
