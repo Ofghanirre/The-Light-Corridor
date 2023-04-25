@@ -27,8 +27,8 @@ int render_tick() {
 
     // Lighting
     float position[4] = {0., 0., 40., 1.0};
-    float intensity[3] = {1.5, 1.5, 1.5};
-    float quadratic_attenuation = 0.0004;
+    float intensity[3] = {3., 3., 3.};
+    float quadratic_attenuation = 0.001;
     glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
