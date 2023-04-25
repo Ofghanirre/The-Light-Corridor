@@ -1,4 +1,5 @@
 #include "game.h"
+#include <stdio.h>
 
 void game_init() {
     printf("Game init\n");

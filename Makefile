@@ -17,7 +17,7 @@ all : main #main
 main : $(OBJDIR)main.o $(OBJDIR)controller.o $(OBJDIR)game.o $(OBJDIR)render.o
 	mkdir -p $(BINDIR)
 	mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) $(OBJDIR)main.o -o $(BINDIR)$(EXEC) $(LDFLAGS)
+	$(CC) $(CFLAGS) $^ -o $(BINDIR)$(EXEC) $(LDFLAGS)
 
 clean :
 	rm -rf *~
