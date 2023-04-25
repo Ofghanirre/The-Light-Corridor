@@ -48,34 +48,34 @@ int render_tick() {
         glNormal3f(0., 1., 0.);
         glVertex3f(-25., -15., 50.);
         glVertex3f(25., -15., 50.);
-        glVertex3f(25., -15., -100.);
-        glVertex3f(-25., -15., -100.);
+        glVertex3f(25., -15., -200.);
+        glVertex3f(-25., -15., -200.);
         
         glNormal3f(0., -1., 0.);
         glVertex3f(25., 15., 50.);
         glVertex3f(-25., 15., 50.);
-        glVertex3f(-25., 15., -100.);
-        glVertex3f(25., 15., -100.);
+        glVertex3f(-25., 15., -200.);
+        glVertex3f(25., 15., -200.);
 
         glColor3f(0.5, 0., 0.5);
         glNormal3f(1., 0., 0.);
         glVertex3f(-25., -15., 50.);
         glVertex3f(-25., 15., 50.);
-        glVertex3f(-25., 15., -100.);
-        glVertex3f(-25., -15., -100.);
+        glVertex3f(-25., 15., -200.);
+        glVertex3f(-25., -15., -200.);
 
         glNormal3f(-1., 0., 0.);
         glVertex3f(25., -15., 50.);
         glVertex3f(25., 15., 50.);
-        glVertex3f(25., 15., -100.);
-        glVertex3f(25., -15., -100.);
+        glVertex3f(25., 15., -200.);
+        glVertex3f(25., -15., -200.);
     glEnd();
 
     // Lines test
     glLineWidth(5);
     glColor3f(.5, .5, .5);
     glNormal3f(0., 0., 1.);
-    for (int i = 0 ; i > -100 ; i -= 20) {
+    for (int i = 0 ; i > -200 ; i -= 20) {
         glBegin(GL_LINE_LOOP);
             glVertex3f(-24.9, -14.9, i);
             glVertex3f(24.9, -14.9, i);
