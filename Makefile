@@ -15,9 +15,11 @@ OBJECTS = \
 	controller.o \
 	game.o \
 	render.o \
+	scenery.o \
 	structs/colors.o \
 	structs/vectors.o \
-	structs/figures.o
+	structs/figures.o \
+	structs/graphicObjects.o
 # ---
 
 _OBJECTS = $(addprefix $(OBJDIR), $(join $(OBJECTS), $(A)))
