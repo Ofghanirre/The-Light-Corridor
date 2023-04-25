@@ -35,23 +35,6 @@ void onWindowResized(GLFWwindow* window, int width, int height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	// if( aspectRatio > 1)
-	// {
-	// 	gluOrtho2D(
-	// 	-GL_VIEW_SIZE / 2. * aspectRatio, 
-    //     GL_VIEW_SIZE / 2. * aspectRatio,
-	// 	-GL_VIEW_SIZE / 2., 
-    //     GL_VIEW_SIZE / 2.);
-	// }
-	// else
-	// {
-	// 	gluOrtho2D(
-	// 	-GL_VIEW_SIZE / 2., 
-    //     GL_VIEW_SIZE / 2.,
-	// 	-GL_VIEW_SIZE / 2. / aspectRatio, 
-    //     GL_VIEW_SIZE / 2. / aspectRatio);
-	// }
-
     gluPerspective(60.0, aspectRatio, 1, 200);
 	glMatrixMode(GL_MODELVIEW);
 
@@ -86,7 +69,6 @@ GLFWwindow* window_init() {
 	if (!window) {
 		return NULL;
 	}
-
 
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
