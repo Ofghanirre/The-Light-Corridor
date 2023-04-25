@@ -4,6 +4,7 @@
 #include "vectors.h"
 #include "colors.h"
 
+/* ------ Structs ------ */
 typedef enum FigureType {
     RECTANGLE,
     CIRCLE,
@@ -35,6 +36,8 @@ typedef struct Figure {
     } fig;
     ColorRGBA color;
 } Figure;
+
+/* ------ Functions ------*/
 
 Figure make_rectangle(Point3D p1, Point3D p2, ColorRGBA color);
 Figure make_circle(Point3D center, float radius, ColorRGBA color);

@@ -15,6 +15,7 @@ OBJECTS = \
 	controller.o \
 	game.o \
 	render.o \
+	structs/colors.o \
 	structs/vectors.o \
 	structs/figures.o
 # ---

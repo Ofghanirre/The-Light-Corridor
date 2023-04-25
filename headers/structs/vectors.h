@@ -1,6 +1,8 @@
 #ifndef __VECTORS_H__
 #define __VECTORS_H__
 
+/* ------ Structs ------*/
+
 typedef struct Vec2D {
     float x, y;
 } Vec2D, Point2D;
@@ -8,6 +10,8 @@ typedef struct Vec2D {
 typedef struct Vec3D {
     float x, y, z;
 } Vec3D, Point3D;
+
+/* ------ Functions ------*/
 
 /*------ VEC 2D ------ */
 Vec2D sum_Vec2D(Vec2D a, Vec2D b);
