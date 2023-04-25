@@ -1,6 +1,8 @@
 #ifndef __CONTROLLER_H
 #define __CONTROLLER_H
 
+#include <GLFW/glfw3.h>
+
 /* Window properties */
 extern const unsigned int WINDOW_WIDTH;
 extern const unsigned int WINDOW_HEIGHT;
