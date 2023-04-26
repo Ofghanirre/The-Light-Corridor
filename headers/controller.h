@@ -2,6 +2,7 @@
 #define __CONTROLLER_H
 
 #include <GLFW/glfw3.h>
+#include "structs/vectors.h"
 
 /* Window properties */
 extern const unsigned int WINDOW_WIDTH;
@@ -23,20 +24,14 @@ extern const double FRAMERATE_IN_SECONDS;
  * x, y coordinates are at the center of the rectangular shaped paddle
 */
 typedef struct paddle_s {
-    double x;
-    double y;
+    Vec2D position;
 } paddle_t;
 
 #define BALL_RADIUS 2.5
 
 typedef struct ball_s {
-    double x;
-    double y;
-    double z;
-
-    double vel_x;
-    double vel_y;
-    double vel_z;
+    Vec3D position;
+    Vec3D velocity;
 } ball_t;
 
 typedef struct game_state_s {
