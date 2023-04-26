@@ -30,20 +30,27 @@ void scenery_clear();
 void scenery_free();
 
 /**
- * @brief Append a Graphic_Element to the end of the scenery stack
- * Increases the scenery.object_amount by 1
+ * @brief Append a Graphic_Object to the obstacles of the scenery
  * 
  * @param obj 
  * @return - int -1 if the scenery hasn't been initialized, thus not creating the object
- * - MEMORY_ERROR if the object could not been allocated
+ * - MEMORY_ERROR if the object could not been allocated (the flag __FLAG_MEMORY_ERROR__ will be raised)
  * - int 0 if clear
  */
 int scenery_append_obstacle(Graphic_Object obj);
+
+/**
+ * @brief Append a Graphic_Object to the bonus of the scenery
+ * 
+ * @param obj 
+ * @return - int -1 if the scenery hasn't been initialized, thus not creating the object
+ * - MEMORY_ERROR if the object could not been allocated (the flag __FLAG_MEMORY_ERROR__ will be raised)
+ * - int 0 if clear
+ */
 int scenery_append_bonus(Graphic_Object obj);
 
 /**
- * @brief Removes a Graphic_Element at the start of the scenery stack
- * Increases the scenery.object_amount by 1
+ * @brief Removes a Graphic_Object of the scenery's obstacles
  * 
  * @param obj 
  * @return - int -1 if the object hasn't been initialized, thus not creating the object
@@ -51,6 +58,15 @@ int scenery_append_bonus(Graphic_Object obj);
  * - int 0 if clear
  */
 int scenery_remove_first_obstacle();
+
+/**
+ * @brief Removes a Graphic_Object of the scenery's obstacles
+ * 
+ * @param obj 
+ * @return - int -1 if the object hasn't been initialized, thus not creating the object
+ * - int 1 if the stack is empty
+ * - int 0 if clear
+ */
 int scenery_remove_first_bonus();
 
 

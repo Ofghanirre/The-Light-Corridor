@@ -28,17 +28,21 @@ void scenery_clear() {
 }
 
 int scenery_append_obstacle(Graphic_Object obj) {
+    if (!is_initialized) return -1;
     return GOL_append_node(&(GLOBAL_scenery.obstacles), obj);
 }
 
 int scenery_append_bonus(Graphic_Object obj) {
+    if (!is_initialized) return -1;
     return GOL_append_node(&(GLOBAL_scenery.bonus), obj);
 }
 
 int scenery_remove_first_obstacle() {
+    if (!is_initialized) return -1;
     return GOL_remove_first(&(GLOBAL_scenery.obstacles));
 }
 
 int scenery_remove_first_bonus() {
+    if (!is_initialized) return -1;
     return GOL_remove_first(&(GLOBAL_scenery.bonus));
 }
