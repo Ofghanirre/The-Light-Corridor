@@ -52,7 +52,6 @@ static void draw_corridor() {
             glVertex3f(24.9, 14.9, i);
             glVertex3f(-24.9, 14.9, i);
         glEnd();
-
     }
 }
 
@@ -110,12 +109,12 @@ int render_tick() {
     draw_corridor();
 
     glPushMatrix();
-        glTranslated(game_state.paddle.x, game_state.paddle.y, PADDLE_Z);
+        glTranslated(game_state.paddle.position.x, game_state.paddle.position.y, PADDLE_Z);
         draw_paddle();
     glPopMatrix();
 
     glPushMatrix();
-        glTranslated(game_state.ball.x, game_state.ball.y, game_state.ball.z);
+        glTranslated(game_state.ball.position.x, game_state.ball.position.y, game_state.ball.position.z);
         draw_ball();
     glPopMatrix();
     
