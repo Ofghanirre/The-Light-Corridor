@@ -15,19 +15,17 @@ const char WINDOW_TITLE[] = "The Light Corridor";
 static float aspectRatio = 1.0;
 
 /* Minimal time wanted between two images */
-const double FRAMERATE_IN_SECONDS = 1. / 30.;
+const double FRAMERATE_IN_SECONDS = 1. / 60.;
 
-/* Virtual windows space */
-// Space is defined in interval -1 and 1 on x and y axes
-static const float GL_VIEW_SIZE = 50.;
+game_state_t game_state;
 
 /* Error handling function */
-void onError(int error, const char* description)
+static void onError(int error, const char* description)
 {
 	fprintf(stderr, "GLFW Error: %s\n", description);
 }
 
-void onWindowResized(GLFWwindow* window, int width, int height)
+static void onWindowResized(GLFWwindow* window, int width, int height)
 {
 	aspectRatio = width / (float) height;
 
@@ -40,7 +38,7 @@ void onWindowResized(GLFWwindow* window, int width, int height)
 
 }
 
-void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
+static void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (action == GLFW_PRESS) {
 		switch(key) {
@@ -54,10 +52,21 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 			case GLFW_KEY_P :
 				glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 				break;
-			default: fprintf(stdout,"Unhandled key : %d\n", key);
+			default: fprintf(stdout, "Unhandled key : %d\n", key);
 		}
 	}
 }
+
+static void cursor_position_callback(GLFWwindow* window, double x, double y)
+{
+    int width, height;
+    glfwGetWindowSize(window, &width, &height);
+
+    game_state.paddle.x = (x / width - 0.5) * CORRIDOR_WIDTH;
+    game_state.paddle.y = (0.5 - y / height) * CORRIDOR_HEIGHT;
+    clamp_paddle_position();
+}
+
 
 GLFWwindow* window_init() {
     GLFWwindow* window;
@@ -75,13 +84,19 @@ GLFWwindow* window_init() {
 
 	glfwSetWindowSizeCallback(window,onWindowResized);
 	glfwSetKeyCallback(window, onKey);
+    glfwSetCursorPosCallback(window, cursor_position_callback);
 
 	onWindowResized(window,WINDOW_WIDTH,WINDOW_HEIGHT);
+
+    /* Hides mouse cursor */
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     return window;
 }
 
 int run_game(GLFWwindow * window) {
+    
+
     while (!glfwWindowShouldClose(window)) {
         double startTime = glfwGetTime();
 
@@ -97,9 +112,10 @@ int run_game(GLFWwindow * window) {
 
         double elapsedTime = glfwGetTime() - startTime;
 		/* If to few time is spend vs our wanted FPS, we wait */
-		if(elapsedTime < FRAMERATE_IN_SECONDS)
+		while (elapsedTime < FRAMERATE_IN_SECONDS)
 		{
 			glfwWaitEventsTimeout(FRAMERATE_IN_SECONDS-elapsedTime);
+            elapsedTime = glfwGetTime() - startTime;
 		}
     }
     return 0;

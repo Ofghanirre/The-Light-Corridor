@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "glfw3.h": "c"
+        "glfw3.h": "c",
+        "controller.h": "c",
+        "math.h": "c",
+        "glu.h": "c"
     }
 }

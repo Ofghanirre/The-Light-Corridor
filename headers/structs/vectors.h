@@ -4,11 +4,11 @@
 /* ------ Structs ------*/
 
 typedef struct Vec2D {
-    float x, y;
+    double x, y;
 } Vec2D, Point2D;
 
 typedef struct Vec3D {
-    float x, y, z;
+    double x, y, z;
 } Vec3D, Point3D;
 
 /* ------ Functions ------*/
@@ -16,17 +16,32 @@ typedef struct Vec3D {
 /*------ VEC 2D ------ */
 Vec2D sum_Vec2D(Vec2D a, Vec2D b);
 #define sum_Point2D sum_Vec2D
-Vec2D mul_Vec2D(Vec2D v, float x);
+Vec2D mul_Vec2D(Vec2D v, double x);
 #define mul_Point2D mul_Vec2D
 int equals_Vec2D(Vec2D a, Vec2D b);
 #define equals_Point2D equals_Vec2D
 
 /*------ VEC 3D ------ */
+
+// Sum
 Vec3D sum_Vec3D(Vec3D a, Vec3D b);
 #define sum_Point3D sum_Vec3D
-Vec3D mul_Vec3D(Vec3D v, float x);
+
+// Scalar multiplication
+Vec3D mul_Vec3D(Vec3D v, double x);
 #define mul_Point3D mul_Vec3D
+
+// Equality
 int equals_Vec3D(Vec3D a, Vec3D b);
 #define equals_Point3D equals_Vec3D
+
+// Dot product
+double dot_Vec3D(Vec3D u, Vec3D v);
+
+// Norm
+double norm_vec3D(Vec3D u);
+
+// Normalized vector
+Vec3D normalize_Vec3D(Vec3D u);
 
 #endif
