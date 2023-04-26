@@ -35,18 +35,15 @@ typedef struct Graphic_Object {
  * As some element can be pretty neet to create some functions have been implemented to
  * factorize the code for the creation of element such as the ball, walls, bonuses ect.
  * (new_ball, new_paddle, ect)
- */
-typedef struct Graphic_Element {
-    int object_amount;
-    Graphic_Object* object_list;
-} Graphic_Element;
+ *
+*/
 
 /**
  * @brief Represents a Node for a linkedList of Graphic_Element
  * 
  */
 typedef struct Node {
-    Graphic_Element elem;
+    Graphic_Object elem;
     struct Node* next;
 } Node;
 
@@ -60,8 +57,8 @@ typedef struct Node {
  * 
  */
 typedef struct Scenery {
-    Graphic_Element paddle;
-    Graphic_Element ball;
+    Graphic_Object paddle;
+    Graphic_Object ball;
 
     Node* obstacle_list;
     Node* last_obstacle;
@@ -74,8 +71,6 @@ typedef struct Scenery {
 
 /* ------ Functions ------ */
 
-Graphic_Element new_Graphic_Element(Graphic_Object* objects, int size);
-void free_Graphic_Element(Graphic_Element elem);
-Graphic_Element new_ball();
-Graphic_Element new_paddle();
+Graphic_Object new_ball();
+Graphic_Object new_paddle();
 #endif

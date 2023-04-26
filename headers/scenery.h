@@ -38,8 +38,8 @@ void scenery_free();
  * - MEMORY_ERROR if the object could not been allocated
  * - int 0 if clear
  */
-int scenery_append_obstacle(Graphic_Element elem);
-int scenery_append_bonus(Graphic_Element elem);
+int scenery_append_obstacle(Graphic_Object obj);
+int scenery_append_bonus(Graphic_Object obj);
 
 /**
  * @brief Removes a Graphic_Element at the start of the scenery stack

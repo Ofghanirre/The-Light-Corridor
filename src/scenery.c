@@ -26,7 +26,6 @@ void free_linked_list(Node** list) {
     while (iter != NULL) {
         Node * temp = iter;
         iter = iter->next;
-        free_Graphic_Element(temp->elem);
         free(temp);
     }
     *list = NULL;
@@ -35,8 +34,6 @@ void free_linked_list(Node** list) {
 void scenery_free() {
     free_linked_list(&(GLOBAL_scenery.obstacle_list));
     free_linked_list(&(GLOBAL_scenery.bonus_list));
-    free_Graphic_Element(GLOBAL_scenery.ball);
-    free_Graphic_Element(GLOBAL_scenery.paddle);
 }
 
 void scenery_clear() {
@@ -49,7 +46,7 @@ void scenery_clear() {
 }
 
 
-int scenery_append(Graphic_Element elem, Node ** list, Node** last_elem, int * list_size) {
+int scenery_append(Graphic_Object elem, Node ** list, Node** last_elem, int * list_size) {
     if (!is_initialized) return -1;
     Node* node = (Node*)malloc(sizeof(Node));
     if (node == NULL) return MEMORY_ERROR; // TODO HANDLE BETTER LATER ON
@@ -63,12 +60,12 @@ int scenery_append(Graphic_Element elem, Node ** list, Node** last_elem, int * l
     return CLEAR;
 }
 
-int scenery_append_obstacle(Graphic_Element elem) {
-    return scenery_append(elem, &(GLOBAL_scenery.obstacle_list), &(GLOBAL_scenery.last_obstacle), &(GLOBAL_scenery.obstacle_amount));
+int scenery_append_obstacle(Graphic_Object obj) {
+    return scenery_append(obj, &(GLOBAL_scenery.obstacle_list), &(GLOBAL_scenery.last_obstacle), &(GLOBAL_scenery.obstacle_amount));
 }
 
-int scenery_append_bonus(Graphic_Element elem) {
-    return scenery_append(elem, &(GLOBAL_scenery.bonus_list),  &(GLOBAL_scenery.last_bonus), &(GLOBAL_scenery.bonus_amount));
+int scenery_append_bonus(Graphic_Object obj) {
+    return scenery_append(obj, &(GLOBAL_scenery.bonus_list),  &(GLOBAL_scenery.last_bonus), &(GLOBAL_scenery.bonus_amount));
 }
 
 int scenery_remove_first(Node ** list, Node** last_elem, int * list_size) {
@@ -80,8 +77,7 @@ int scenery_remove_first(Node ** list, Node** last_elem, int * list_size) {
     if ((*list_size) == 0) {
         *last_elem = NULL;
     }
-    free_Graphic_Element(temp->elem);
-    cfree(temp);
+    free(temp);
     return CLEAR;
 }
 
