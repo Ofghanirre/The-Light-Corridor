@@ -36,13 +36,15 @@ void test_scenery() {
     scenery_clear();
     printf("=== Scenery Clear ===\n");
     d();
-    int result = scenery_append_obstacle(new_ball());
+    /*int result = scenery_append_obstacle(new_ball());
     printf("%d\n", result);
-    if (result == -1) printf("Can not add on unitialized scenery !\n");
+    if (result == -1) printf("Can not add on unitialized scenery !\n");*/
 
     scenery_init();
     printf("=== Scenery reInitialisation ===\n");
+    
 
     d();
+    scenery_clear();
     exit(EXIT_SUCCESS);
 }

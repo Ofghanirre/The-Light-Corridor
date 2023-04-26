@@ -25,9 +25,9 @@ void free_linked_list(Node** list) {
     Node* iter = *list;
     while (iter != NULL) {
         Node * temp = iter;
-        free_Graphic_Element(temp->elem);
-        cfree(temp);
         iter = iter->next;
+        free_Graphic_Element(temp->elem);
+        free(temp);
     }
     *list = NULL;
 }

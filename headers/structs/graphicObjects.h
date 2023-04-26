@@ -18,7 +18,7 @@
  */
 typedef struct Graphic_Object {
     Point3D position;
-    Vec3D orientation;
+    Vec3D orientation; 
     Figure figure;
 } Graphic_Object;
 
