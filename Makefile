@@ -1,6 +1,6 @@
 # Compilation Flags
 CC		= gcc
-CFLAGS	= -Wall -O2 -g
+CFLAGS	= -Wall -O1 -g
 LDFLAGS	= -lglfw -lGLU -lGL -lm
 
 # Compilation Folders:

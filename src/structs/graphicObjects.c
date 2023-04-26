@@ -5,7 +5,7 @@ Graphic_Element new_Graphic_Element(Graphic_Object* objects, int size) {
 }
 
 void free_Graphic_Element(Graphic_Element elem) {
-    cfree(elem.object_list);
+    free(elem.object_list);
 }
 
 Graphic_Element new_ball() {
