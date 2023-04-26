@@ -31,9 +31,44 @@ void static ball_detect_wall_collision() {
     }
 }
 
+// Returns 1 if the ball failed to be caught
+int static ball_detect_paddle_collision() {
+    if (game_state.ball.position.z + BALL_RADIUS <= 0) {
+        return 0;
+    }
+    if (game_state.ball.position.z > 0) {
+        return 1;
+    }
+    
+    if (game_state.ball.position.x > game_state.paddle.position.x - PADDLE_WIDTH / 2 - BALL_RADIUS / 2
+        && game_state.ball.position.x < game_state.paddle.position.x + PADDLE_WIDTH / 2 + BALL_RADIUS / 2
+        && game_state.ball.position.y > game_state.paddle.position.y - PADDLE_WIDTH / 2 - BALL_RADIUS / 2
+        && game_state.ball.position.y < game_state.paddle.position.y + PADDLE_WIDTH / 2 + BALL_RADIUS / 2) {
+            ball_bounce((Vec3D){0., 0., -1.});
+        }
+    return 0;
+}
+
+// Temp, there won't actually be a back wall in the actual game
+void static ball_detect_back() {
+    if (game_state.ball.position.z < -100) {
+        ball_bounce((Vec3D){0., 0., 1.});
+    }
+}
+
 void static ball_tick() {
     game_state.ball.position = sum_Vec3D(game_state.ball.position, game_state.ball.velocity);
     ball_detect_wall_collision();
+    ball_detect_back();
+    int lost_ball = ball_detect_paddle_collision();
+    
+    if (lost_ball) {
+        printf("You lost the ball!\n");
+        game_state.camera_pos = 0;
+
+        game_state.ball.position = (Vec3D){0., 0., -10.};
+        game_state.ball.velocity = (Vec3D){-0.5, -0.5, -1.};
+    }
 }
 
 void game_init() {
@@ -43,7 +78,7 @@ void game_init() {
     game_state.camera_pos = 0;
 
     game_state.ball.position = (Vec3D){0., 0., -10.};
-    game_state.ball.velocity = (Vec3D){-0.5, -0.5, 0.};
+    game_state.ball.velocity = (Vec3D){-0.5, -0.5, -1.};
 }
 
 void game_free() {
