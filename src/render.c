@@ -4,41 +4,48 @@
 #include <GLFW/glfw3.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <math.h>
 
 static void draw_corridor() {
+    float x1, x2, y1, y2;
+    x1 = -CORRIDOR_WIDTH / 2;
+    x2 = CORRIDOR_WIDTH / 2;
+    y1 = -CORRIDOR_HEIGHT / 2;
+    y2 = CORRIDOR_HEIGHT / 2;
+
     glBegin(GL_QUADS);
         glColor3f(1., 0., 0.);
         glNormal3f(0., 1., 0.);
-        glVertex3f(-25., -15., 50.);
-        glVertex3f(25., -15., 50.);
-        glVertex3f(25., -15., -200.);
-        glVertex3f(-25., -15., -200.);
+        glVertex3f(x1, y1, 50.);
+        glVertex3f(x2, y1, 50.);
+        glVertex3f(x2, y1, -200.);
+        glVertex3f(x1, y1, -200.);
         
         glNormal3f(0., -1., 0.);
-        glVertex3f(25., 15., 50.);
-        glVertex3f(-25., 15., 50.);
-        glVertex3f(-25., 15., -200.);
-        glVertex3f(25., 15., -200.);
+        glVertex3f(x2, y2, 50.);
+        glVertex3f(x1, y2, 50.);
+        glVertex3f(x1, y2, -200.);
+        glVertex3f(x2, y2, -200.);
 
         glColor3f(0.5, 0., 0.5);
         glNormal3f(1., 0., 0.);
-        glVertex3f(-25., -15., 50.);
-        glVertex3f(-25., 15., 50.);
-        glVertex3f(-25., 15., -200.);
-        glVertex3f(-25., -15., -200.);
+        glVertex3f(x1, y1, 50.);
+        glVertex3f(x1, y2, 50.);
+        glVertex3f(x1, y2, -200.);
+        glVertex3f(x1, y1, -200.);
 
         glNormal3f(-1., 0., 0.);
-        glVertex3f(25., -15., 50.);
-        glVertex3f(25., 15., 50.);
-        glVertex3f(25., 15., -200.);
-        glVertex3f(25., -15., -200.);
+        glVertex3f(x2, y1, 50.);
+        glVertex3f(x2, y2, 50.);
+        glVertex3f(x2, y2, -200.);
+        glVertex3f(x2, y1, -200.);
     glEnd();
 
     // Lines test
     glLineWidth(5);
     glColor3f(.5, .5, .5);
     glNormal3f(0., 0., 1.);
-    for (int i = 0 ; i > -200 ; i -= 20) {
+    for (double i = fmod(game_state.camera_pos, 20.); i > -200 ; i -= 20) {
         glBegin(GL_LINE_LOOP);
             glVertex3f(-24.9, -14.9, i);
             glVertex3f(24.9, -14.9, i);

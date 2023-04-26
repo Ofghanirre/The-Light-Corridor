@@ -28,6 +28,7 @@ typedef struct paddle_s {
 } paddle_t;
 
 typedef struct game_state_s {
+    double camera_pos;
     paddle_t paddle;
 } game_state_t;
 

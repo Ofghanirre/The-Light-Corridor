@@ -6,6 +6,7 @@ void game_init() {
     printf("Game init\n");
     game_state.paddle.x = 0;
     game_state.paddle.y = 0;
+    game_state.camera_pos = 0;
 }
 
 void game_free() {
@@ -13,6 +14,8 @@ void game_free() {
 }
 
 int game_tick() {
+    // Test
+    game_state.camera_pos += 1. / 5;
     return 0;
 }
 

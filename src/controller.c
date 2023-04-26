@@ -15,7 +15,7 @@ const char WINDOW_TITLE[] = "The Light Corridor";
 static float aspectRatio = 1.0;
 
 /* Minimal time wanted between two images */
-const double FRAMERATE_IN_SECONDS = 1. / 30.;
+const double FRAMERATE_IN_SECONDS = 1. / 60.;
 
 /* Virtual windows space */
 // Space is defined in interval -1 and 1 on x and y axes
@@ -116,9 +116,10 @@ int run_game(GLFWwindow * window) {
 
         double elapsedTime = glfwGetTime() - startTime;
 		/* If to few time is spend vs our wanted FPS, we wait */
-		if(elapsedTime < FRAMERATE_IN_SECONDS)
+		while (elapsedTime < FRAMERATE_IN_SECONDS)
 		{
 			glfwWaitEventsTimeout(FRAMERATE_IN_SECONDS-elapsedTime);
+            elapsedTime = glfwGetTime() - startTime;
 		}
     }
     return 0;
