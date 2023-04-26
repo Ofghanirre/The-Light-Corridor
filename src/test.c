@@ -1,8 +1,8 @@
 #include "test.h"
 
 void d() {
-    printf("Obstacles : %d <> last : %p\n", scenery.obstacle_amount, scenery.last_obstacle);
-    Node* iter = scenery.obstacle_list;
+    printf("Obstacles : %d <> last : %p\n", scenery.obstacles.size, scenery.obstacles.tail);
+    Node* iter = scenery.obstacles.head;
     while (iter != NULL) {
         printf("%p ->", (void*) iter);
         iter = iter->next;
