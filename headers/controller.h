@@ -33,6 +33,10 @@ typedef struct ball_s {
     double x;
     double y;
     double z;
+
+    double vel_x;
+    double vel_y;
+    double vel_z;
 } ball_t;
 
 typedef struct game_state_s {
