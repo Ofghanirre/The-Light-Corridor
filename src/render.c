@@ -66,6 +66,11 @@ static void draw_paddle() {
     glEnd();
 }
 
+static void draw_ball() {
+    glColor3f(0.5, 0.5, 0.5);
+    gluSphere(gluNewQuadric(), BALL_RADIUS, 64, 64);
+}
+
 void render_init() {
     printf("Render init\n");
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -107,6 +112,11 @@ int render_tick() {
     glPushMatrix();
         glTranslated(game_state.paddle.x, game_state.paddle.y, PADDLE_Z);
         draw_paddle();
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslated(game_state.ball.x, game_state.ball.y, game_state.ball.z);
+        draw_ball();
     glPopMatrix();
     
     glDisable(GL_COLOR_MATERIAL);

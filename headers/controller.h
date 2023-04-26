@@ -27,9 +27,18 @@ typedef struct paddle_s {
     double y;
 } paddle_t;
 
+#define BALL_RADIUS 2.5
+
+typedef struct ball_s {
+    double x;
+    double y;
+    double z;
+} ball_t;
+
 typedef struct game_state_s {
     double camera_pos;
     paddle_t paddle;
+    ball_t ball;
 } game_state_t;
 
 extern game_state_t game_state;

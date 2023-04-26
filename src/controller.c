@@ -17,10 +17,6 @@ static float aspectRatio = 1.0;
 /* Minimal time wanted between two images */
 const double FRAMERATE_IN_SECONDS = 1. / 60.;
 
-/* Virtual windows space */
-// Space is defined in interval -1 and 1 on x and y axes
-static const float GL_VIEW_SIZE = 50.;
-
 game_state_t game_state;
 
 /* Error handling function */

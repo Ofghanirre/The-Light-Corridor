@@ -7,6 +7,9 @@ void game_init() {
     game_state.paddle.x = 0;
     game_state.paddle.y = 0;
     game_state.camera_pos = 0;
+    game_state.ball.x = 0;
+    game_state.ball.y = 0;
+    game_state.ball.z = -10;
 }
 
 void game_free() {
