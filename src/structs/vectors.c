@@ -39,3 +39,7 @@ double norm_vec3D(Vec3D u) {
 Vec3D normalize_Vec3D(Vec3D u) {
     return mul_Vec3D(u, 1. / norm_vec3D(u));
 }
+
+Vec3D cross_vec3D(Vec3D u, Vec3D v) {
+    return (Vec3D){u.y * v.z - v.y * u.z, v.x * u.z - u.x * v.z, u.x * v.y - v.x * u.y};
+}

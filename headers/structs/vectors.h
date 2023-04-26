@@ -44,4 +44,7 @@ double norm_vec3D(Vec3D u);
 // Normalized vector
 Vec3D normalize_Vec3D(Vec3D u);
 
+// Cross product
+Vec3D cross_vec3D(Vec3D u, Vec3D v);
+
 #endif
