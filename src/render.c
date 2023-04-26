@@ -5,44 +5,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-void render_init() {
-    printf("Render init\n");
-    glClearColor(0.0, 0.0, 0.0, 0.0);
-    glEnable(GL_DEPTH_TEST);
-    glShadeModel(GL_SMOOTH);
-}
-
-void render_free() {
-    printf("Render free\n");
-}
-
-int render_tick() {    
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    
-    // Camera setup
-    gluLookAt(0., 0., 40., 0., 0., 0., 0., 1., 0.);
-
-    // Lighting
-    float position[4] = {0., 0., 40., 1.0};
-    float intensity[3] = {3., 3., 3.};
-    float quadratic_attenuation = 0.001;
-    glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-
-    glLightfv(GL_LIGHT0, GL_POSITION, position);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, intensity);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, intensity);
-    glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, &quadratic_attenuation);
-
-    glColorMaterial(GL_FRONT, GL_DIFFUSE);
-    glEnable(GL_COLOR_MATERIAL);
-
-    // Start drawing
-
-    // Draw corridor
+static void draw_corridor() {
     glBegin(GL_QUADS);
         glColor3f(1., 0., 0.);
         glNormal3f(0., 1., 0.);
@@ -84,11 +47,64 @@ int render_tick() {
         glEnd();
 
     }
+}
+
+static void draw_paddle() {
+    glColor3f(1., 1., 1.);
+    glBegin(GL_LINE_LOOP);
+        glVertex3f(-PADDLE_WIDTH / 2, -PADDLE_HEIGHT / 2, 0);
+        glVertex3f(-PADDLE_WIDTH / 2, PADDLE_HEIGHT / 2, 0);
+        glVertex3f(PADDLE_WIDTH / 2, PADDLE_HEIGHT / 2, 0);
+        glVertex3f(PADDLE_WIDTH / 2, -PADDLE_HEIGHT / 2, 0);
+    glEnd();
+}
+
+void render_init() {
+    printf("Render init\n");
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glEnable(GL_DEPTH_TEST);
+    glShadeModel(GL_SMOOTH);
+}
+
+void render_free() {
+    printf("Render free\n");
+}
+
+int render_tick() {    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    
+    // Camera setup
+    gluLookAt(0., 0., 30., 0., 0., 0., 0., 1., 0.);
+
+    // Lighting
+    float position[4] = {0., 0., 40., 1.0};
+    float intensity[3] = {3., 3., 3.};
+    float quadratic_attenuation = 0.001;
+    glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+
+    glLightfv(GL_LIGHT0, GL_POSITION, position);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, intensity);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, intensity);
+    glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, &quadratic_attenuation);
+
+    glColorMaterial(GL_FRONT, GL_DIFFUSE);
+    glEnable(GL_COLOR_MATERIAL);
+
+    // Start drawing
+    draw_corridor();
+
+    glPushMatrix();
+        glTranslated(game_state.paddle.x, game_state.paddle.y, PADDLE_Z);
+        draw_paddle();
+    glPopMatrix();
     
     glDisable(GL_COLOR_MATERIAL);
     glDisable(GL_LIGHTING);
 
     glFinish();
-
     return 0;
 }
