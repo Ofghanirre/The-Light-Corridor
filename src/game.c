@@ -42,12 +42,12 @@ int static ball_detect_paddle_collision() {
     //if (game_state.ball.direction.z < 0) { return 0;}
 
     // The ball is still too far from the paddle
-    if (game_state.ball.position.z + BALL_RADIUS <= 0) {
+    if (game_state.ball.position.z + BALL_RADIUS <= 0 + game_state.camera_pos) {
         return 0;
     }
 
     // We ball passed the paddle
-    if (game_state.ball.position.z > 0) {
+    if (game_state.ball.position.z > 0 + game_state.camera_pos) {
         return 1;
     }
     
@@ -66,7 +66,7 @@ int static ball_detect_paddle_collision() {
             Vec3D base_direction = (Vec3D){0., 0., -1.};
 
             game_state.ball.direction = rotate_x(rotate_y(base_direction, -x_theta), y_theta);
-            game_state.ball.position.z = PADDLE_Z - BALL_RADIUS - 0.5;
+            game_state.ball.position.z = PADDLE_Z - BALL_RADIUS - 0.5 + game_state.camera_pos;
 
             if (game_state.glue_enabled) {
                 game_state.ball.glued = 1;
@@ -79,7 +79,7 @@ int static ball_detect_paddle_collision() {
 
 // Temp, there won't actually be a back wall in the actual game
 void static ball_detect_back() {
-    if (game_state.ball.position.z < -50) {
+    if (game_state.ball.position.z < game_state.camera_pos - 50) {
         ball_bounce((Vec3D){0., 0., 1.});
     }
 }
@@ -88,7 +88,7 @@ void static ball_tick() {
     if (game_state.ball.glued != 0) {
         game_state.ball.position.x = game_state.paddle.position.x + game_state.ball.glued_offset.x;
         game_state.ball.position.y = game_state.paddle.position.y + game_state.ball.glued_offset.y;
-        game_state.ball.position.z = PADDLE_Z - BALL_RADIUS;
+        game_state.ball.position.z = game_state.camera_pos - PADDLE_Z - BALL_RADIUS;
         return;
     }
 
@@ -111,6 +111,7 @@ void game_init() {
     game_state.paddle.position = (Vec2D){0., 0.};
 
     game_state.camera_pos = 0;
+    game_state.moving_forward = 0;
 
     game_state.ball.position = (Vec3D){0., 0., -BALL_RADIUS};
     game_state.ball.direction = (Vec3D){0, 0, -1};
@@ -128,6 +129,10 @@ void game_free() {
 
 int game_tick() {
     ball_tick();
+
+    if (game_state.moving_forward) {
+        game_state.camera_pos -= 0.5;
+    }
     return 0;
 }
 

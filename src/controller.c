@@ -71,6 +71,10 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
 {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
         game_state.ball.glued = 0;
+    } else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        game_state.moving_forward = 1;
+    } else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+        game_state.moving_forward = 0;
     }
 }
 

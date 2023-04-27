@@ -45,7 +45,7 @@ static void draw_corridor() {
     glLineWidth(5);
     glColor3f(.5, .5, .5);
     glNormal3f(0., 0., 1.);
-    for (double i = fmod(game_state.camera_pos, 20.); i > -200 ; i -= 20) {
+    for (double i = fmod(-game_state.camera_pos, 20.); i > -200 ; i -= 20) {
         glBegin(GL_LINE_LOOP);
             glVertex3f(-24.9, -14.9, i);
             glVertex3f(24.9, -14.9, i);
@@ -106,16 +106,21 @@ int render_tick() {
     glEnable(GL_COLOR_MATERIAL);
 
     // Start drawing
-    draw_corridor();
 
+    // Corridor and paddle are at fixed position on screen
+    draw_corridor();
     glPushMatrix();
         glTranslated(game_state.paddle.position.x, game_state.paddle.position.y, PADDLE_Z);
         draw_paddle();
     glPopMatrix();
 
+    // Ball, obstacles and walls must be translated according to how far into the level we are
     glPushMatrix();
-        glTranslated(game_state.ball.position.x, game_state.ball.position.y, game_state.ball.position.z);
-        draw_ball();
+        glTranslated(0., 0., -game_state.camera_pos);
+        glPushMatrix();
+            glTranslated(game_state.ball.position.x, game_state.ball.position.y, game_state.ball.position.z);
+            draw_ball();
+        glPopMatrix();
     glPopMatrix();
     
     glDisable(GL_COLOR_MATERIAL);

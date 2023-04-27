@@ -31,7 +31,7 @@ typedef struct paddle_s {
 
 typedef struct ball_s {
     Vec3D position;
-    
+
     Vec3D direction;
     double speed;
 
@@ -41,6 +41,7 @@ typedef struct ball_s {
 
 typedef struct game_state_s {
     double camera_pos;
+    int moving_forward;
     paddle_t paddle;
     ball_t ball;
     int glue_enabled;
