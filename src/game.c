@@ -13,8 +13,8 @@
  * the given normal vector
 */
 void static ball_bounce(Vec3D normal) {
-    double dot = dot_Vec3D(game_state.ball.velocity, normal);
-    game_state.ball.velocity = sum_Vec3D(game_state.ball.velocity, mul_Vec3D(normal, -2 * dot));
+    double dot = dot_Vec3D(game_state.ball.direction, normal);
+    game_state.ball.direction = normalize_Vec3D(sum_Vec3D(game_state.ball.direction, mul_Vec3D(normal, -2 * dot)));
 }
 
 void static ball_detect_wall_collision() {
@@ -38,9 +38,15 @@ void static ball_detect_wall_collision() {
 
 // Returns 1 if the ball failed to be caught
 int static ball_detect_paddle_collision() {
+    // We only consider paddle collision is the ball is heading towards it
+    //if (game_state.ball.direction.z < 0) { return 0;}
+
+    // The ball is still too far from the paddle
     if (game_state.ball.position.z + BALL_RADIUS <= 0) {
         return 0;
     }
+
+    // We ball passed the paddle
     if (game_state.ball.position.z > 0) {
         return 1;
     }
@@ -49,22 +55,18 @@ int static ball_detect_paddle_collision() {
         && game_state.ball.position.x < game_state.paddle.position.x + PADDLE_WIDTH / 2 + BALL_RADIUS / 2
         && game_state.ball.position.y > game_state.paddle.position.y - PADDLE_WIDTH / 2 - BALL_RADIUS / 2
         && game_state.ball.position.y < game_state.paddle.position.y + PADDLE_WIDTH / 2 + BALL_RADIUS / 2) {
-            Vec3D base_normal = (Vec3D){0., 0., -1.};
             Vec3D point_impact = (Vec3D){game_state.ball.position.x, game_state.ball.position.y, 0};
             Vec3D center = (Vec3D){game_state.paddle.position.x, game_state.paddle.position.y, 0};
-            Vec3D impact_dir = normalize_Vec3D(sum_Vec3D(point_impact, mul_Vec3D(center, -1)));
+            Vec3D impact = sum_Vec3D(point_impact, mul_Vec3D(center, -1));
 
-            double theta = acos(dot_Vec3D(impact_dir, base_normal));
-            Vec3D axis = normalize_Vec3D(cross_vec3D(base_normal, impact_dir));
+            double max_angle = M_PI / 4;
+            double x_theta = impact.x / (PADDLE_WIDTH / 2) * max_angle;
+            double y_theta = impact.y / (PADDLE_HEIGHT / 2) * max_angle;
 
-            double angle_factor = sin(theta) * 2;
-            double rotation_angle = angle_factor * M_PI / 2;
+            Vec3D base_direction = (Vec3D){0., 0., -1.};
 
-            // Calculate rotation
-            Vec3D normal = base_normal;
-
-            printf("Calculated normal: %f, %f, %f\n", normal.x, normal.y, normal.z);
-            ball_bounce(normal);
+            game_state.ball.direction = rotate_x(rotate_y(base_direction, -x_theta), y_theta);
+            game_state.ball.position.z = PADDLE_Z - BALL_RADIUS - 0.5;
 
             if (game_state.glue_enabled) {
                 game_state.ball.glued = 1;
@@ -77,7 +79,7 @@ int static ball_detect_paddle_collision() {
 
 // Temp, there won't actually be a back wall in the actual game
 void static ball_detect_back() {
-    if (game_state.ball.position.z < -100) {
+    if (game_state.ball.position.z < -50) {
         ball_bounce((Vec3D){0., 0., 1.});
     }
 }
@@ -90,7 +92,7 @@ void static ball_tick() {
         return;
     }
 
-    game_state.ball.position = sum_Vec3D(game_state.ball.position, game_state.ball.velocity);
+    game_state.ball.position = sum_Vec3D(game_state.ball.position, mul_Vec3D(game_state.ball.direction, game_state.ball.speed));
     ball_detect_wall_collision();
     ball_detect_back();
     int lost_ball = ball_detect_paddle_collision();
@@ -99,8 +101,8 @@ void static ball_tick() {
         printf("You lost the ball!\n");
         game_state.camera_pos = 0;
 
-        game_state.ball.position = (Vec3D){0., 0., -10.};
-        game_state.ball.velocity = (Vec3D){-0.5, -0.5, -1.};
+        game_state.ball.glued = 1;
+        game_state.ball.direction = (Vec3D){0., 0., -1.};
     }
 }
 
@@ -111,12 +113,13 @@ void game_init() {
     game_state.camera_pos = 0;
 
     game_state.ball.position = (Vec3D){0., 0., -BALL_RADIUS};
-    game_state.ball.velocity = (Vec3D){0, 0, -1.};
+    game_state.ball.direction = (Vec3D){0, 0, -1};
+    game_state.ball.speed = 1.;
     game_state.ball.glued = 1;
     game_state.ball.glued_offset = (Vec2D){0., 0.};
-
+    
     // Test: glue mode on
-    game_state.glue_enabled = 1;
+    game_state.glue_enabled = 0;
 }
 
 void game_free() {

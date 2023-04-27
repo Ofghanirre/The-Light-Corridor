@@ -39,12 +39,18 @@ int equals_Vec3D(Vec3D a, Vec3D b);
 double dot_Vec3D(Vec3D u, Vec3D v);
 
 // Norm
-double norm_vec3D(Vec3D u);
+double norm_Vec3D(Vec3D u);
 
 // Normalized vector
 Vec3D normalize_Vec3D(Vec3D u);
 
 // Cross product
-Vec3D cross_vec3D(Vec3D u, Vec3D v);
+Vec3D cross_Vec3D(Vec3D u, Vec3D v);
+
+// Rotates on x axis
+Vec3D rotate_x(Vec3D u, double angle);
+
+// Rotates on y axis
+Vec3D rotate_y(Vec3D u, double angle);
 
 #endif

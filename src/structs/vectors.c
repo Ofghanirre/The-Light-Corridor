@@ -32,14 +32,22 @@ double dot_Vec3D(Vec3D u, Vec3D v) {
     return u.x * v.x + u.y * v.y + u.z * v.z;
 }
 
-double norm_vec3D(Vec3D u) {
+double norm_Vec3D(Vec3D u) {
     return sqrt(dot_Vec3D(u, u));
 }
 
 Vec3D normalize_Vec3D(Vec3D u) {
-    return mul_Vec3D(u, 1. / norm_vec3D(u));
+    return mul_Vec3D(u, 1. / norm_Vec3D(u));
 }
 
-Vec3D cross_vec3D(Vec3D u, Vec3D v) {
+Vec3D cross_Vec3D(Vec3D u, Vec3D v) {
     return (Vec3D){u.y * v.z - v.y * u.z, v.x * u.z - u.x * v.z, u.x * v.y - v.x * u.y};
+}
+
+Vec3D rotate_x(Vec3D u, double angle) {
+    return (Vec3D){u.x, u.y * cos(angle) - sin(angle) * u.z, sin(angle) * u.y + cos(angle) * u.z};
+}
+
+Vec3D rotate_y(Vec3D u, double angle) {
+    return (Vec3D){cos(angle) * u.x + sin(angle) * u.z, u.y, -sin(angle) * u.x + cos(angle) * u.z};
 }

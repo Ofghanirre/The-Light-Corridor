@@ -31,7 +31,9 @@ typedef struct paddle_s {
 
 typedef struct ball_s {
     Vec3D position;
-    Vec3D velocity;
+    
+    Vec3D direction;
+    double speed;
 
     Vec2D glued_offset;
     int glued;
