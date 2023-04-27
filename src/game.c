@@ -130,7 +130,7 @@ void game_free() {
 int game_tick() {
     ball_tick();
 
-    if (game_state.moving_forward) {
+    if (game_state.moving_forward && !game_state.ball.glued) {
         game_state.camera_pos -= 0.5;
     }
     return 0;
