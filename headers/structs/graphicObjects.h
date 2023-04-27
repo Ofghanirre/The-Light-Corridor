@@ -11,10 +11,8 @@
  * @brief Represents an Object that can be displayed in the scene
  * The objects consists of a geometrical figure, a 3d position and orientation
  * 
- * Even if a Graphic_Object can be displayed, we want it to be wrapped up in an 
- * Graphic_Element struct so that we can display multiple Object as one element.
- * 
- * That can help creates multi-figure element
+ * As some element can be pretty neet to create some functions have been implemented to
+ * factorize the code for the creation of element such as the ball, paddle
  */
 typedef struct Graphic_Object {
     Point3D position;
@@ -22,33 +20,21 @@ typedef struct Graphic_Object {
     Figure figure;
 } Graphic_Object;
 
-/**
- * @brief Represents an Element that can be displayed in the scene
- * Consists of a multiple of Graphic_Object, with differents positions and orientations
- * 
- * A Graphic_Element is really usefull to create template that can be easly placed / 
- * animated and removed.
- * 
- * The List is a dynamically allocated list, can be created with new_Graphic_Element,
- * and properly freed with free_Graphic_Element.
- * 
- * As some element can be pretty neet to create some functions have been implemented to
- * factorize the code for the creation of element such as the ball, walls, bonuses ect.
- * (new_ball, new_paddle, ect)
- */
-typedef struct Graphic_Element {
-    int object_amount;
-    Graphic_Object* object_list;
-} Graphic_Element;
 
 /**
  * @brief Represents a Node for a linkedList of Graphic_Element
  * 
  */
 typedef struct Node {
-    Graphic_Element elem;
+    Graphic_Object elem;
     struct Node* next;
 } Node;
+
+typedef struct Graphic_Object_List {
+    Node * head;
+    Node * tail;
+    int size;
+} Graphic_Object_List, GO_List, GOL;
 
 /**
  * @brief Represents the scenery of the game
@@ -60,22 +46,50 @@ typedef struct Node {
  * 
  */
 typedef struct Scenery {
-    Graphic_Element paddle;
-    Graphic_Element ball;
-
-    Node* obstacle_list;
-    Node* last_obstacle;
-    int obstacle_amount;
-
-    Node* bonus_list;
-    Node* last_bonus;
-    int bonus_amount;
+    Graphic_Object paddle;
+    Graphic_Object ball;
+    Graphic_Object_List obstacles;
+    Graphic_Object_List bonus;
 } Scenery;
 
 /* ------ Functions ------ */
 
-Graphic_Element new_Graphic_Element(Graphic_Object* objects, int size);
-void free_Graphic_Element(Graphic_Element elem);
-Graphic_Element new_ball();
-Graphic_Element new_paddle();
+Graphic_Object new_ball();
+Graphic_Object new_paddle();
+
+/**
+ * @brief Returns a new, empty GOL
+ * 
+ * @return Graphic_Object_List 
+ */
+Graphic_Object_List new_graphic_object_list();
+
+/**
+ * @brief Free and clears a given GOL
+ * 
+ * @param obj 
+ */
+void free_graphic_object_list(Graphic_Object_List * obj);
+
+/**
+ * @brief Create, allocates and append a new Graphic_Object into a GOL
+ * within a Node.
+ * The node is added at the end of the list.
+ * 
+ * As there is an allocation the flag __FLAG_MEMORY_ERROR__ can be raised and need
+ * to be looked over while using the function.
+ * 
+ * @param list 
+ * @param obj 
+ * @return int 
+ */
+int GOL_append_node(Graphic_Object_List * list, Graphic_Object obj);
+
+/**
+ * @brief Remove and free the head of the list
+ * 
+ * @param list 
+ * @return int 
+ */
+int GOL_remove_first(Graphic_Object_List * list);
 #endif
