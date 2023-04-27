@@ -32,12 +32,16 @@ typedef struct paddle_s {
 typedef struct ball_s {
     Vec3D position;
     Vec3D velocity;
+
+    Vec2D glued_offset;
+    int glued;
 } ball_t;
 
 typedef struct game_state_s {
     double camera_pos;
     paddle_t paddle;
     ball_t ball;
+    int glue_enabled;
 } game_state_t;
 
 extern game_state_t game_state;

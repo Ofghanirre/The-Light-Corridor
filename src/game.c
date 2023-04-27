@@ -65,6 +65,12 @@ int static ball_detect_paddle_collision() {
 
             printf("Calculated normal: %f, %f, %f\n", normal.x, normal.y, normal.z);
             ball_bounce(normal);
+
+            if (game_state.glue_enabled) {
+                game_state.ball.glued = 1;
+                game_state.ball.glued_offset.x = game_state.ball.position.x - game_state.paddle.position.x;
+                game_state.ball.glued_offset.y = game_state.ball.position.y - game_state.paddle.position.y;
+            }
         }
     return 0;
 }
@@ -77,6 +83,13 @@ void static ball_detect_back() {
 }
 
 void static ball_tick() {
+    if (game_state.ball.glued != 0) {
+        game_state.ball.position.x = game_state.paddle.position.x + game_state.ball.glued_offset.x;
+        game_state.ball.position.y = game_state.paddle.position.y + game_state.ball.glued_offset.y;
+        game_state.ball.position.z = PADDLE_Z - BALL_RADIUS;
+        return;
+    }
+
     game_state.ball.position = sum_Vec3D(game_state.ball.position, game_state.ball.velocity);
     ball_detect_wall_collision();
     ball_detect_back();
@@ -97,8 +110,13 @@ void game_init() {
 
     game_state.camera_pos = 0;
 
-    game_state.ball.position = (Vec3D){0., 0., -10.};
-    game_state.ball.velocity = (Vec3D){-0.5, -0.5, -1.};
+    game_state.ball.position = (Vec3D){0., 0., -BALL_RADIUS};
+    game_state.ball.velocity = (Vec3D){0, 0, -1.};
+    game_state.ball.glued = 1;
+    game_state.ball.glued_offset = (Vec2D){0., 0.};
+
+    // Test: glue mode on
+    game_state.glue_enabled = 1;
 }
 
 void game_free() {

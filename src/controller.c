@@ -67,6 +67,13 @@ static void cursor_position_callback(GLFWwindow* window, double x, double y)
     clamp_paddle_position();
 }
 
+static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
+        game_state.ball.glued = 0;
+    }
+}
+
 
 GLFWwindow* window_init() {
     GLFWwindow* window;
@@ -85,6 +92,7 @@ GLFWwindow* window_init() {
 	glfwSetWindowSizeCallback(window,onWindowResized);
 	glfwSetKeyCallback(window, onKey);
     glfwSetCursorPosCallback(window, cursor_position_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
 
 	onWindowResized(window,WINDOW_WIDTH,WINDOW_HEIGHT);
 
