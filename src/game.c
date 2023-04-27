@@ -2,6 +2,11 @@
 #include "controller.h"
 #include "structs/vectors.h"
 #include <stdio.h>
+#include <math.h>
+
+#ifndef M_PI
+#define M_PI 3.141
+#endif
 
 /**
  * Modifies the ball's velocity vector as if it bounced off a surface with
@@ -44,7 +49,22 @@ int static ball_detect_paddle_collision() {
         && game_state.ball.position.x < game_state.paddle.position.x + PADDLE_WIDTH / 2 + BALL_RADIUS / 2
         && game_state.ball.position.y > game_state.paddle.position.y - PADDLE_WIDTH / 2 - BALL_RADIUS / 2
         && game_state.ball.position.y < game_state.paddle.position.y + PADDLE_WIDTH / 2 + BALL_RADIUS / 2) {
-            ball_bounce((Vec3D){0., 0., -1.});
+            Vec3D base_normal = (Vec3D){0., 0., -1.};
+            Vec3D point_impact = (Vec3D){game_state.ball.position.x, game_state.ball.position.y, 0};
+            Vec3D center = (Vec3D){game_state.paddle.position.x, game_state.paddle.position.y, 0};
+            Vec3D impact_dir = normalize_Vec3D(sum_Vec3D(point_impact, mul_Vec3D(center, -1)));
+
+            double theta = acos(dot_Vec3D(impact_dir, base_normal));
+            Vec3D axis = normalize_Vec3D(cross_vec3D(base_normal, impact_dir));
+
+            double angle_factor = sin(theta) * 2;
+            double rotation_angle = angle_factor * M_PI / 2;
+
+            // Calculate rotation
+            Vec3D normal = base_normal;
+
+            printf("Calculated normal: %f, %f, %f\n", normal.x, normal.y, normal.z);
+            ball_bounce(normal);
         }
     return 0;
 }
@@ -86,9 +106,6 @@ void game_free() {
 }
 
 int game_tick() {
-    // Test
-    game_state.camera_pos += 1. / 5;
-
     ball_tick();
     return 0;
 }
