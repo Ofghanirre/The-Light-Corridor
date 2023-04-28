@@ -13,47 +13,74 @@ static void draw_corridor() {
     y1 = -CORRIDOR_HEIGHT / 2;
     y2 = CORRIDOR_HEIGHT / 2;
 
-    glBegin(GL_QUADS);
-        glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){0.01, 0.01, 0.01});
-        glMaterialf(GL_FRONT, GL_SHININESS, 1.);
-        glColor3f(1., 0., 0.);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){0., 0., 0});
+    glMaterialf(GL_FRONT, GL_SHININESS, 0.);
+    glColor3f(1., 0., 0.);
+
+    // need subdividing the surfaces so that lighting looks okay
+    glNormal3f(0., 1., 0.);
+    for (double x = x1 ; x < x2 ; x += 5) {
+        for (double z = 50 ; z > -200 ; z -= 5) { 
+            glBegin(GL_TRIANGLE_FAN);
+                glVertex3f(x, y1, z);
+                glVertex3f(x+5, y1, z);
+                glVertex3f(x+5, y1, z + 5);
+                glVertex3f(x, y1, z + 5);
+            glEnd();
+        }
+    }
+ 
+    glNormal3f(0., -1., 0.);
+    for (double x = x1 ; x < x2 ; x += 5) {
+        for (double z = 50 ; z > -200 ; z -= 5) { 
+            glBegin(GL_TRIANGLE_FAN); 
+                glVertex3f(x+5, y2, z);
+                glVertex3f(x, y2, z);
+                glVertex3f(x, y2, z-5);
+                glVertex3f(x+5, y2, z-5);
+            glEnd();
+        }
+    }
+
+    glColor3f(0.5, 0., 0.5);
+    glNormal3f(1., 0., 0.);
+    for (double y = y1 ; y< y2 ; y += 5) {
+        for (double z = 50 ; z > -200 ; z -= 5) { 
+            glBegin(GL_TRIANGLE_FAN);
+                glVertex3f(x1, y, z);
+                glVertex3f(x1, y+5, z);
+                glVertex3f(x1, y+5, z-5);
+                glVertex3f(x1, y, z-5);
+            glEnd();
+        }
+    }
         
-        glNormal3f(0., 1., 0.);
-        glVertex3f(x1, y1, 50.);
-        glVertex3f(x2, y1, 50.);
-        glVertex3f(x2, y1, -200.);
-        glVertex3f(x1, y1, -200.);
+    glNormal3f(-1., 0., 0.);
+    for (double y = y1 ; y< y2 ; y += 5) {
+        for (double z = 50 ; z > -200 ; z -= 5) { 
+            glBegin(GL_TRIANGLE_FAN);
+                glVertex3f(x2, y, z);
+                glVertex3f(x2, y+5, z);
+                glVertex3f(x2, y+5, z-5);
+                glVertex3f(x2, y, z-5);
+            glEnd();
+        }
+    }
         
-        glNormal3f(0., -1., 0.);
-        glVertex3f(x2, y2, 50.);
-        glVertex3f(x1, y2, 50.);
-        glVertex3f(x1, y2, -200.);
-        glVertex3f(x2, y2, -200.);
-
-        glColor3f(0.5, 0., 0.5);
-        glNormal3f(1., 0., 0.);
-        glVertex3f(x1, y1, 50.);
-        glVertex3f(x1, y2, 50.);
-        glVertex3f(x1, y2, -200.);
-        glVertex3f(x1, y1, -200.);
-
-        glNormal3f(-1., 0., 0.);
-        glVertex3f(x2, y1, 50.);
-        glVertex3f(x2, y2, 50.);
-        glVertex3f(x2, y2, -200.);
-        glVertex3f(x2, y1, -200.);
-    glEnd();
-
-    // Lines test
+    // Lines
     glLineWidth(5);
     glColor3f(.5, .5, .5);
-    glNormal3f(0., 0., 1.);
+    
     for (double i = fmod(-game_state.paddle_z_pos, 20.); i > -200 ; i -= 20) {
         glBegin(GL_LINE_LOOP);
+            glNormal3f(0., 1., 0.);
             glVertex3f(-24.9, -14.9, i);
             glVertex3f(24.9, -14.9, i);
+            glNormal3f(-1., 0., 0.);
             glVertex3f(24.9, 14.9, i);
+            glNormal3f(0., -1., 0.);
             glVertex3f(-24.9, 14.9, i);
+            glNormal3f(1., 0., 0.);
         glEnd();
     }
 }
@@ -72,7 +99,7 @@ static void draw_paddle() {
 }
 
 static void draw_base_ball() {
-    glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){1., 1., 1.});
+    glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){.8, .8, .8});
     glMaterialf(GL_FRONT, GL_SHININESS, 16.);
     glColor3f(0.5, 0.5, 0.5);
     gluSphere(gluNewQuadric(), BALL_RADIUS, 64, 64);
@@ -143,27 +170,45 @@ int render_tick() {
     // Camera setup
     gluLookAt(0., 0., CAMERA_OFFSET, 0., 0., 0., 0., 1., 0.);
 
+    // glColor is used for ambient and diffuse lighting
+    glEnable(GL_COLOR_MATERIAL);
+
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+
+    GLfloat lmodel_ambient[] = { 0.01, 0.01, 0.01, 1.0 };
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
     
-    // Lighting
-    float position[4] = {0., 0., 40., 1.0};
-    float intensity[3] = {2.5, 2.5, 2.5};
-    float quadratic_attenuation = 0.001;
+    // Camera light
+    float position_0[4] = {0., 0., 30., 1.0};
+    float intensity_0[3] = {.8, .8, .8};
+    float quadratic_attenuation_0 = 0.00005;
     glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
-    glLightfv(GL_LIGHT0, GL_POSITION, position);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, intensity);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, intensity);
-    glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, &quadratic_attenuation);
+    glLightfv(GL_LIGHT0, GL_POSITION, position_0);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, intensity_0);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, intensity_0);
+    glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, &quadratic_attenuation_0);
 
-    // Set material properties
-    glEnable(GL_COLOR_MATERIAL);
-
+    // Ball light
+    glEnable(GL_LIGHT1);
+    glPushMatrix();
+        glTranslated(0., 0., -game_state.paddle_z_pos);
+        glTranslated(game_state.ball.position.x, game_state.ball.position.y, game_state.ball.position.z);
+        float position_1[4] = {0., 0., 0., 1.0};
+        float intensity_1[3] = {.5, .5, .5};
+        float quadratic_attenuation_1 = 0.001;
+        
+        glLightfv(GL_LIGHT1, GL_POSITION, position_1);
+        glLightfv(GL_LIGHT1, GL_DIFFUSE, intensity_1);
+        glLightfv(GL_LIGHT1, GL_SPECULAR, intensity_1);
+        glLightfv(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, &quadratic_attenuation_1);
+    glPopMatrix();
+    
     // Start drawing
 
-    // Draw corridor first
+    // Draw corridor
     draw_corridor();
 
     // Ball, obstacles and walls must be translated according to how far into the level we are

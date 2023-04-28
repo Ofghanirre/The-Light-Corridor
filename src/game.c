@@ -80,7 +80,7 @@ int static ball_detect_paddle_collision() {
 
 // Temp, there won't actually be a back wall in the actual game
 void static ball_detect_back() {
-    if (game_state.ball.position.z < game_state.paddle_z_pos - 50) {
+    if (game_state.ball.position.z < game_state.paddle_z_pos - 150) {
         ball_bounce((Vec3D){0., 0., 1.});
     }
 }
@@ -125,7 +125,7 @@ void game_init() {
     scenery_init(&(game_state.scenery));
 
     // Test
-    GOL_append_node(&(game_state.scenery.obstacles), new_obstacle(25, 30, (Point3D){-12.5, 0, -40}, (ColorRGBA){0.5, 0.5, 0.5, .5}));
+    GOL_append_node(&(game_state.scenery.obstacles), new_obstacle(20, 30, (Point3D){-15, 0, -40}, (ColorRGBA){0.5, 0.5, 0.5, .5}));
     GOL_append_node(&(game_state.scenery.obstacles), new_obstacle(50, 15, (Point3D){0, 7.5, -100}, (ColorRGBA){0.5, 0.5, 0.5, 1.}));
 }
 
