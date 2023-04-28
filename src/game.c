@@ -1,6 +1,7 @@
 #include "game.h"
 #include "controller.h"
 #include "structs/vectors.h"
+#include "scenery.h"
 #include <stdio.h>
 #include <math.h>
 
@@ -119,8 +120,9 @@ void game_init() {
     game_state.ball.glued = 1;
     game_state.ball.glued_offset = (Vec2D){0., 0.};
     
-    // Test: glue mode on
     game_state.glue_enabled = 0;
+
+    
 }
 
 void game_free() {

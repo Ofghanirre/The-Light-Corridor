@@ -46,16 +46,11 @@ typedef struct Graphic_Object_List {
  * 
  */
 typedef struct Scenery {
-    Graphic_Object paddle;
-    Graphic_Object ball;
     Graphic_Object_List obstacles;
     Graphic_Object_List bonus;
 } Scenery;
 
 /* ------ Functions ------ */
-
-Graphic_Object new_ball();
-Graphic_Object new_paddle();
 
 /**
  * @brief Returns a new, empty GOL

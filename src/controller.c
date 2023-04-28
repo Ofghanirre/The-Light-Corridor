@@ -9,8 +9,8 @@
 #include "render.h"
 
 /* Window properties */
-const unsigned int WINDOW_WIDTH = 1000;
-const unsigned int WINDOW_HEIGHT = 600;
+const unsigned int WINDOW_WIDTH = 1200;
+const unsigned int WINDOW_HEIGHT = 720;
 const char WINDOW_TITLE[] = "The Light Corridor";
 static float aspectRatio = 1.0;
 

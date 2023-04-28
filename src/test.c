@@ -21,16 +21,16 @@ void d() {
 void test_scenery() {
     printf("=== Scenery Initialisation ===\n");
     scenery_init();
-    scenery_append_obstacle(new_ball());
-    scenery_append_obstacle(new_ball());
+    //scenery_append_obstacle(new_ball());
+    //scenery_append_obstacle(new_ball());
     printf("=== Added 2 Elems ===\n");
     d();
 
     scenery_remove_first_obstacle();
     printf("=== Removed 1 Elems ===\n");
     d();
-    scenery_append_obstacle(new_ball());
-    scenery_append_obstacle(new_ball());
+    //scenery_append_obstacle(new_ball());
+    //scenery_append_obstacle(new_ball());
     printf("=== Added 2 Elems ===\n");
     d();
     scenery_clear();
