@@ -45,7 +45,7 @@ static void draw_corridor() {
     glLineWidth(5);
     glColor3f(.5, .5, .5);
     glNormal3f(0., 0., 1.);
-    for (double i = fmod(-game_state.camera_pos, 20.); i > -200 ; i -= 20) {
+    for (double i = fmod(-game_state.paddle_z_pos, 20.); i > -200 ; i -= 20) {
         glBegin(GL_LINE_LOOP);
             glVertex3f(-24.9, -14.9, i);
             glVertex3f(24.9, -14.9, i);
@@ -56,8 +56,9 @@ static void draw_corridor() {
 }
 
 static void draw_paddle() {
-    glColor3f(1., 1., 1.);
-    glBegin(GL_LINE_LOOP);
+    glColor4f(0.00710, 0.277, 0.710, 0.6);
+    glBegin(GL_TRIANGLE_FAN);
+        glNormal3d(0, 0, 1);
         glVertex3f(-PADDLE_WIDTH / 2, -PADDLE_HEIGHT / 2, 0);
         glVertex3f(-PADDLE_WIDTH / 2, PADDLE_HEIGHT / 2, 0);
         glVertex3f(PADDLE_WIDTH / 2, PADDLE_HEIGHT / 2, 0);
@@ -65,9 +66,51 @@ static void draw_paddle() {
     glEnd();
 }
 
-static void draw_ball() {
+static void draw_base_ball() {
     glColor3f(0.5, 0.5, 0.5);
     gluSphere(gluNewQuadric(), BALL_RADIUS, 64, 64);
+}
+
+static void draw_ball() {
+    glPushMatrix();
+        glTranslated(game_state.ball.position.x, game_state.ball.position.y, game_state.ball.position.z);
+        draw_base_ball();
+    glPopMatrix();
+}
+
+static void draw_obstacle(Graphic_Object *obstacle) {
+    /* Here we assume obstacles are necessarily flat rectangles facing the camera.
+    The structure for Graphic_Object can allow for more flexibility but we leave it at that
+    */
+    double x1 = obstacle->figure.fig.rectangle.p1.x;
+    double x2 = obstacle->figure.fig.rectangle.p2.x;
+    double y1 = obstacle->figure.fig.rectangle.p1.y;
+    double y2 = obstacle->figure.fig.rectangle.p2.y;
+
+    if (game_state.paddle_z_pos - obstacle->position.z < 0) { 
+        return;
+    }
+
+    glPushMatrix();
+        glTranslated(obstacle->position.x, obstacle->position.y, obstacle->position.z);
+        glColor3d(obstacle->figure.color.r, obstacle->figure.color.g, obstacle->figure.color.b);
+        
+        glBegin(GL_TRIANGLE_FAN);
+        glNormal3d(0, 0, 1);
+        glVertex3d(x1, y1, 0);
+        glVertex3d(x1, y2, 0);
+        glVertex3d(x2, y2, 0);
+        glVertex3d(x2, y1, 0);
+        glEnd();
+
+    glPopMatrix();
+}
+
+static void draw_obstacles() {
+    Node *obstacle = game_state.scenery.obstacles.head;
+    for (; obstacle != NULL ; obstacle = obstacle->next) {
+        draw_obstacle(&(obstacle->elem));
+    }
 }
 
 void render_init() {
@@ -88,8 +131,11 @@ int render_tick() {
     glLoadIdentity();
     
     // Camera setup
-    gluLookAt(0., 0., 30., 0., 0., 0., 0., 1., 0.);
+    gluLookAt(0., 0., CAMERA_OFFSET, 0., 0., 0., 0., 1., 0.);
 
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    
     // Lighting
     float position[4] = {0., 0., 40., 1.0};
     float intensity[3] = {3., 3., 3.};
@@ -102,29 +148,32 @@ int render_tick() {
     glLightfv(GL_LIGHT0, GL_SPECULAR, intensity);
     glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, &quadratic_attenuation);
 
+    glColorMaterial(GL_FRONT, GL_AMBIENT);
     glColorMaterial(GL_FRONT, GL_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
 
     // Start drawing
 
-    // Corridor and paddle are at fixed position on screen
+    // Draw corridor first
     draw_corridor();
+
+    // Ball, obstacles and walls must be translated according to how far into the level we are
+    glPushMatrix();
+        glTranslated(0., 0., -game_state.paddle_z_pos);
+        draw_ball();
+        draw_obstacles();
+    glPopMatrix();
+
+    // Draw paddle after opaque objects, for transparency to work!
     glPushMatrix();
         glTranslated(game_state.paddle.position.x, game_state.paddle.position.y, PADDLE_Z);
         draw_paddle();
     glPopMatrix();
-
-    // Ball, obstacles and walls must be translated according to how far into the level we are
-    glPushMatrix();
-        glTranslated(0., 0., -game_state.camera_pos);
-        glPushMatrix();
-            glTranslated(game_state.ball.position.x, game_state.ball.position.y, game_state.ball.position.z);
-            draw_ball();
-        glPopMatrix();
-    glPopMatrix();
     
     glDisable(GL_COLOR_MATERIAL);
     glDisable(GL_LIGHTING);
+
+    glDisable(GL_BLEND);
 
     glFinish();
     return 0;

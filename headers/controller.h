@@ -41,7 +41,7 @@ typedef struct ball_s {
 } ball_t;
 
 typedef struct game_state_s {
-    double camera_pos;
+    double paddle_z_pos;
     int moving_forward;
     paddle_t paddle;
     ball_t ball;

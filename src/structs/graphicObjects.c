@@ -56,8 +56,8 @@ Graphic_Object new_obstacle(double width, double height, Point3D position, Color
     Graphic_Object result;
     result.figure.type = RECTANGLE;
     result.figure.color = color;
-    result.figure.fig.rectangle.p1 = (Point3D){position.x - width / 2, position.y - height / 2, position.z};
-    result.figure.fig.rectangle.p2 = (Point3D){position.x + width / 2, position.y + height / 2, position.z};
+    result.figure.fig.rectangle.p1 = (Point3D){-width / 2., height / 2., 0};
+    result.figure.fig.rectangle.p2 = (Point3D){width / 2., -height / 2., 0};
     result.position = position;
     result.orientation = (Vec3D){0., 0., 1.};
     return result;
