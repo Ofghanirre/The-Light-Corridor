@@ -87,4 +87,11 @@ int GOL_append_node(Graphic_Object_List * list, Graphic_Object obj);
  * @return int 
  */
 int GOL_remove_first(Graphic_Object_List * list);
+
+/**
+ * Creates a graphic_object corresponding to an obstacle. Its orientation is directly facing the camera
+ * and its origin is in the center
+*/
+Graphic_Object new_obstacle(double width, double height, Point3D position, ColorRGBA color);
+
 #endif

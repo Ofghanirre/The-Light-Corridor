@@ -1,4 +1,5 @@
 #include "structs/graphicObjects.h"
+#include "structs/figures.h"
 
 Graphic_Object_List new_graphic_object_list() {
     return (Graphic_Object_List){NULL, NULL, 0};
@@ -49,4 +50,15 @@ int GOL_remove_first(Graphic_Object_List * list) {
     free(temp);
     list->size--;
     return CLEAR;
+}
+
+Graphic_Object new_obstacle(double width, double height, Point3D position, ColorRGBA color) {
+    Graphic_Object result;
+    result.figure.type = RECTANGLE;
+    result.figure.color = color;
+    result.figure.fig.rectangle.p1 = (Point3D){position.x - width / 2, position.y - height / 2, position.z};
+    result.figure.fig.rectangle.p2 = (Point3D){position.x + width / 2, position.y + height / 2, position.z};
+    result.position = position;
+    result.orientation = (Vec3D){0., 0., 1.};
+    return result;
 }
