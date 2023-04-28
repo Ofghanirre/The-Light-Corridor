@@ -125,8 +125,9 @@ void game_init() {
     scenery_init(&(game_state.scenery));
 
     // Test
-    GOL_append_node(&(game_state.scenery.obstacles), new_obstacle(20, 30, (Point3D){-15, 0, -40}, (ColorRGBA){0.5, 0.5, 0.5, .5}));
     GOL_append_node(&(game_state.scenery.obstacles), new_obstacle(50, 15, (Point3D){0, 7.5, -100}, (ColorRGBA){0.5, 0.5, 0.5, 1.}));
+    GOL_append_node(&(game_state.scenery.obstacles), new_obstacle(20, 30, (Point3D){-15, 0, -40}, (ColorRGBA){0.5, 0.5, 0.5, .5}));
+    
 }
 
 void game_free() {

@@ -15,9 +15,10 @@ static void draw_corridor() {
 
     glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){0., 0., 0});
     glMaterialf(GL_FRONT, GL_SHININESS, 0.);
-    glColor3f(1., 0., 0.);
+    
 
     // need subdividing the surfaces so that lighting looks okay
+    glColor3f(0.118, 0.382, 0.840);
     glNormal3f(0., 1., 0.);
     for (double x = x1 ; x < x2 ; x += 5) {
         for (double z = 50 ; z > -200 ; z -= 5) { 
@@ -42,7 +43,7 @@ static void draw_corridor() {
         }
     }
 
-    glColor3f(0.5, 0., 0.5);
+    glColor3f(0.146, 0.515, 0.860);
     glNormal3f(1., 0., 0.);
     for (double y = y1 ; y< y2 ; y += 5) {
         for (double z = 50 ; z > -200 ; z -= 5) { 
@@ -69,7 +70,7 @@ static void draw_corridor() {
         
     // Lines
     glLineWidth(5);
-    glColor3f(.5, .5, .5);
+    glColor3f(1., 1., 1.);
     
     for (double i = fmod(-game_state.paddle_z_pos, 20.); i > -200 ; i -= 20) {
         glBegin(GL_LINE_LOOP);
@@ -88,7 +89,7 @@ static void draw_corridor() {
 static void draw_paddle() {
     glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){0.01, 0.01, 0.01});
     glMaterialf(GL_FRONT, GL_SHININESS, 1.);
-    glColor4f(0.00710, 0.277, 0.710, 0.6);
+    glColor4f(0.0140, 0.700, 0.243, 0.6);
     glBegin(GL_TRIANGLE_FAN);
         glNormal3d(0, 0, 1);
         glVertex3f(-PADDLE_WIDTH / 2, -PADDLE_HEIGHT / 2, 0);
