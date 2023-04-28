@@ -14,7 +14,10 @@ static void draw_corridor() {
     y2 = CORRIDOR_HEIGHT / 2;
 
     glBegin(GL_QUADS);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){0.01, 0.01, 0.01});
+        glMaterialf(GL_FRONT, GL_SHININESS, 1.);
         glColor3f(1., 0., 0.);
+        
         glNormal3f(0., 1., 0.);
         glVertex3f(x1, y1, 50.);
         glVertex3f(x2, y1, 50.);
@@ -56,6 +59,8 @@ static void draw_corridor() {
 }
 
 static void draw_paddle() {
+    glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){0.01, 0.01, 0.01});
+    glMaterialf(GL_FRONT, GL_SHININESS, 1.);
     glColor4f(0.00710, 0.277, 0.710, 0.6);
     glBegin(GL_TRIANGLE_FAN);
         glNormal3d(0, 0, 1);
@@ -67,6 +72,8 @@ static void draw_paddle() {
 }
 
 static void draw_base_ball() {
+    glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){1., 1., 1.});
+    glMaterialf(GL_FRONT, GL_SHININESS, 16.);
     glColor3f(0.5, 0.5, 0.5);
     gluSphere(gluNewQuadric(), BALL_RADIUS, 64, 64);
 }
@@ -93,6 +100,9 @@ static void draw_obstacle(Graphic_Object *obstacle) {
 
     glPushMatrix();
         glTranslated(obstacle->position.x, obstacle->position.y, obstacle->position.z);
+
+        glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){0.01, 0.01, 0.01});
+        glMaterialf(GL_FRONT, GL_SHININESS, 1.);
         glColor3d(obstacle->figure.color.r, obstacle->figure.color.g, obstacle->figure.color.b);
         
         glBegin(GL_TRIANGLE_FAN);
@@ -138,7 +148,7 @@ int render_tick() {
     
     // Lighting
     float position[4] = {0., 0., 40., 1.0};
-    float intensity[3] = {3., 3., 3.};
+    float intensity[3] = {2.5, 2.5, 2.5};
     float quadratic_attenuation = 0.001;
     glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
@@ -148,8 +158,7 @@ int render_tick() {
     glLightfv(GL_LIGHT0, GL_SPECULAR, intensity);
     glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, &quadratic_attenuation);
 
-    glColorMaterial(GL_FRONT, GL_AMBIENT);
-    glColorMaterial(GL_FRONT, GL_DIFFUSE);
+    // Set material properties
     glEnable(GL_COLOR_MATERIAL);
 
     // Start drawing
