@@ -78,6 +78,54 @@ int static ball_detect_paddle_collision() {
     return 0;
 }
 
+void static ball_detect_obstacle(Graphic_Object *obstacle) {
+    double z_distance = game_state.ball.position.z - obstacle->position.z;
+    if (fabs(z_distance) > BALL_RADIUS) {
+        return;
+    }
+
+    double x1 = obstacle->figure.fig.rectangle.p1.x + obstacle->position.x;
+    double x2 = obstacle->figure.fig.rectangle.p2.x + obstacle->position.x;
+    double y1 = obstacle->figure.fig.rectangle.p1.y + obstacle->position.y;
+    double y2 = obstacle->figure.fig.rectangle.p2.y + obstacle->position.y;
+
+    if (x1 > x2) { 
+        double temp = x1;
+        x1 = x2;
+        x2 = temp;
+    }
+    if (y1 > y2) { 
+        double temp = y1;
+        y1 = y2;
+        y2 = temp;
+    }
+
+    if (game_state.ball.position.x > x1 - BALL_RADIUS / 2 && game_state.ball.position.x < x2 + BALL_RADIUS / 2 
+        && game_state.ball.position.y > y1 - BALL_RADIUS / 2 && game_state.ball.position.y < y2 + - BALL_RADIUS / 2) {
+            
+        Vec3D normal;
+        double offset;
+        if (z_distance > 0) {
+            // Ball hit from the front
+            normal = (Vec3D){0., 0., 1.};
+            offset = BALL_RADIUS - z_distance;
+        } else {
+            // Ball hit from the back
+            normal = (Vec3D){0., 0., -1.};
+            offset = -BALL_RADIUS - z_distance;
+        }
+        game_state.ball.position.z += offset;
+        ball_bounce(normal);
+    }
+}
+
+void static ball_detect_obstacles() {
+    Node *obstacle = game_state.scenery.obstacles.head;
+    for (; obstacle != NULL ; obstacle = obstacle->next) {
+        ball_detect_obstacle(&(obstacle->elem));
+    }
+}
+
 // Temp, there won't actually be a back wall in the actual game
 void static ball_detect_back() {
     if (game_state.ball.position.z < game_state.paddle_z_pos - 150) {
@@ -95,6 +143,7 @@ void static ball_tick() {
 
     game_state.ball.position = sum_Vec3D(game_state.ball.position, mul_Vec3D(game_state.ball.direction, game_state.ball.speed));
     ball_detect_wall_collision();
+    ball_detect_obstacles();
     ball_detect_back();
     int lost_ball = ball_detect_paddle_collision();
     

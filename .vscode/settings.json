@@ -4,6 +4,8 @@
         "controller.h": "c",
         "math.h": "c",
         "glu.h": "c",
-        "vectors.h": "c"
+        "vectors.h": "c",
+        "cmath": "c",
+        "iterator": "c"
     }
 }
