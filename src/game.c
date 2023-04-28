@@ -60,7 +60,7 @@ int static ball_detect_paddle_collision() {
             Vec3D center = (Vec3D){game_state.paddle.position.x, game_state.paddle.position.y, 0};
             Vec3D impact = sum_Vec3D(point_impact, mul_Vec3D(center, -1));
 
-            double max_angle = M_PI / 4;
+            double max_angle = M_PI / 5;
             double x_theta = impact.x / (PADDLE_WIDTH / 2) * max_angle;
             double y_theta = impact.y / (PADDLE_HEIGHT / 2) * max_angle;
 
