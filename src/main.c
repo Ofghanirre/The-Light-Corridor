@@ -40,7 +40,7 @@ static void args_parser(int argc, char * const *argv) {
                 set_logging_file(optarg);
                 break;
             default:
-                printf("Usage : -L -l [logging_file]\n\t-L : activate logging on stdout\n\t -l [logging_file] activate logging on a given logging_file\n\n");
+                printf("Usage : -L -l [logging_file]\n\t-L : activate logging on stdout\n\t-l [logging_file] activate logging on a given logging_file\n\n");
                 exit(EXIT_FAILURE);
         }
     }
