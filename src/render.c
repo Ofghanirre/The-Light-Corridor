@@ -121,6 +121,7 @@ static void draw_obstacle(Graphic_Object *obstacle) {
     double x2 = obstacle->figure.fig.rectangle.p2.x;
     double y1 = obstacle->figure.fig.rectangle.p1.y;
     double y2 = obstacle->figure.fig.rectangle.p2.y;
+    double alpha = 1.;
 
     if (x1 > x2) { 
         double temp = x1;
@@ -133,8 +134,11 @@ static void draw_obstacle(Graphic_Object *obstacle) {
         y2 = temp;
     }
 
-    if (game_state.paddle_z_pos - obstacle->position.z < 0) { 
+    if (game_state.paddle_z_pos - obstacle->position.z < 0.1) { 
         return;
+    }
+    if (game_state.paddle_z_pos - obstacle->position.z < 20) {
+        alpha = (game_state.paddle_z_pos - obstacle->position.z) / 20 + 0.5;
     }
 
     glPushMatrix();
@@ -142,7 +146,7 @@ static void draw_obstacle(Graphic_Object *obstacle) {
 
         glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){0.01, 0.01, 0.01});
         glMaterialf(GL_FRONT, GL_SHININESS, 1.);
-        glColor3d(obstacle->figure.color.r, obstacle->figure.color.g, obstacle->figure.color.b);
+        glColor4d(obstacle->figure.color.r, obstacle->figure.color.g, obstacle->figure.color.b, alpha);
         
         glNormal3d(0, 0, 1);
         for (double x = x1 ; x < x2 ; x += 5) {
@@ -230,8 +234,8 @@ int render_tick() {
     // Ball, obstacles and walls must be translated according to how far into the level we are
     glPushMatrix();
         glTranslated(0., 0., -game_state.paddle_z_pos);
-        draw_obstacles();
         draw_ball();
+        draw_obstacles();
     glPopMatrix();
 
     // Draw paddle after opaque objects, for transparency to work!
