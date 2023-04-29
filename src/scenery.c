@@ -46,3 +46,11 @@ int scenery_remove_first_bonus() {
     if (!is_initialized) return -1;
     return GOL_remove_first(&(GLOBAL_scenery.bonus));
 }
+
+void print_scenery() {
+    printf("Scenery{Obstacles:");
+    print_GOL(GLOBAL_scenery.obstacles);
+    printf(",\nBonus:");
+    print_GOL(GLOBAL_scenery.bonus);
+    printf("\n}");
+}

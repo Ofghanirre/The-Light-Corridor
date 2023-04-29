@@ -67,4 +67,5 @@ Figure make_circle(float radius, ColorRGBA color);
 Figure make_sphere(float radius, ColorRGBA color);
 Figure make_label(const char* text, int font_size, ColorRGBA color);
 
+void print_figure(Figure object);
 #endif

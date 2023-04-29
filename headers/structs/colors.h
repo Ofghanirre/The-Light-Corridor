@@ -18,4 +18,7 @@ typedef struct ColorRGBA {
 ColorRGBA rgb_to_rgba(ColorRGB color);
 ColorRGB rgba_to_rgb(ColorRGBA color);
 
+
+void print_colorRGBA(ColorRGBA color);
+void print_colorRGB(ColorRGBA color);
 #endif

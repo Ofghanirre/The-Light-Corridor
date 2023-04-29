@@ -53,4 +53,8 @@ Vec3D rotate_x(Vec3D u, double angle);
 // Rotates on y axis
 Vec3D rotate_y(Vec3D u, double angle);
 
+void print_vec3D(Vec3D v);
+
+void print_vec2D(Vec2D v);
+
 #endif

@@ -92,4 +92,10 @@ int GOL_append_node(Graphic_Object_List * list, Graphic_Object obj);
  * @return int 
  */
 int GOL_remove_first(Graphic_Object_List * list);
+
+
+void print_graphic_object(Graphic_Object object);
+
+void print_GOL(Graphic_Object_List object);
+
 #endif

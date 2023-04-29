@@ -1,5 +1,7 @@
 #include "structs/vectors.h"
 #include <math.h>
+#include <stdio.h>
+
 
 /*------ VEC 2D ------ */
 Vec2D sum_Vec2D(Vec2D a, Vec2D b) {
@@ -50,4 +52,12 @@ Vec3D rotate_x(Vec3D u, double angle) {
 
 Vec3D rotate_y(Vec3D u, double angle) {
     return (Vec3D){cos(angle) * u.x + sin(angle) * u.z, u.y, -sin(angle) * u.x + cos(angle) * u.z};
+}
+
+void print_vec3D(Vec3D v) {
+    printf("vec3D{%f, %f, %f}", v.x, v.y, v.z);
+}
+
+void print_vec2D(Vec2D v) {
+    printf("vec2D{%f, %f}", v.x, v.y);
 }

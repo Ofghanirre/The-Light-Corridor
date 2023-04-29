@@ -1,4 +1,6 @@
 #include "structs/graphicObjects.h"
+#include <stdio.h>
+
 
 Graphic_Object new_ball() {
     return  (Graphic_Object){{0., 0., 0.}, {0., 0., 0.}, make_sphere(1., (ColorRGBA){1., 0., 0., 1.}) };
@@ -57,4 +59,26 @@ int GOL_remove_first(Graphic_Object_List * list) {
     free(temp);
     list->size--;
     return CLEAR;
+}
+
+void print_graphic_object(Graphic_Object object) {
+    printf("Graphic_Object{");
+    print_vec3D(object.position);
+    printf(",");
+    print_vec3D(object.orientation);
+    printf(",");
+    print_figure(object.figure);
+    printf("}");
+}
+
+void print_GOL(Graphic_Object_List object) {
+    printf("List[%d]{\n",object.size);
+    Node * iter = object.head;
+    while (iter != NULL) {
+        printf("\t");
+        print_graphic_object(iter->elem);
+        printf("\n");
+        iter = iter->next;
+    }
+    printf("}");
 }

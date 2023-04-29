@@ -12,9 +12,17 @@
 #include "controller.h"
 
 #include "test.h"
+#include "parser.h"
+
+void test() {
+    scenery_init();
+    load_level("./resources/levels/test.level");
+    exit(1);
+}
 
 int main(int argc, char const *argv[])
 {
+    test();
     printf("Launching " PROJECT_NAME " ~ " PROJECT_VERSION "!\n");
     //test_scenery();
     /* GLFW initialisation */

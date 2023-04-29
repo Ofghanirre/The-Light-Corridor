@@ -1,0 +1,17 @@
+# Level's Name :
+Nom niveau 
+# Level's length:
+100 # distance from camera in z axes
+# ----------
+# Objects:
+# ----------
+# Objects are identified by a code :
+# 1 : OBSTACLES
+# 2 : BONUS
+# Format :
+# CODE: position3D, orientation3D, colorRGBA, figureType, figureInfo
+1:{10.0 10.0 10.0}, {0.0 0.0 1.0}, {1.0 0.0 0.0}, RECTANGLE, {{2.0 2.0 0.0}, {-2.0 -2.0 0.0}};
+1:{10.0 10.0 10.0}, {0.0 0.0 1.0}, {1.0 0.0 0.0}, RECTANGLE, {{2.0 2.0 0.0}, {-2.0 -2.0 0.0}};
+2:{10.0 10.0 10.0}, {0.0 0.0 1.0}, {1.0 0.0 0.0}, RECTANGLE, {{2.0 2.0 0.0}, {-2.0 -2.0 0.0}};
+2:{10.0 10.0 10.0}, {0.0 0.0 1.0}, {1.0 0.0 0.0}, RECTANGLE, {{2.0 2.0 0.0}, {-2.0 -2.0 0.0}};
+1:{10.0 10.0 10.0}, {0.0 0.0 1.0}, {1.0 0.0 0.0}, RECTANGLE, {{2.0 2.0 0.0}, {-2.0 -2.0 0.0}};

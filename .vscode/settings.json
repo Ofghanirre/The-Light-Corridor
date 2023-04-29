@@ -4,6 +4,15 @@
         "controller.h": "c",
         "math.h": "c",
         "glu.h": "c",
-        "vectors.h": "c"
+        "vectors.h": "c",
+        "figures.h": "c",
+        "*.tcc": "c",
+        "string": "c",
+        "istream": "c",
+        "streambuf": "c",
+        "graphicobjects.h": "c",
+        "string.h": "c",
+        "scenery.h": "c",
+        "parser.h": "c"
     }
 }

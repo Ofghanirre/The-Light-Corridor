@@ -17,6 +17,7 @@ OBJECTS = \
 	render.o \
 	scenery.o \
 	utils.o \
+	parser.o \
 	test.o \
 	structs/colors.o \
 	structs/vectors.o \

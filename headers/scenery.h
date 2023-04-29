@@ -69,5 +69,6 @@ int scenery_remove_first_obstacle();
  */
 int scenery_remove_first_bonus();
 
+void print_scenery();
 
 #endif
