@@ -46,16 +46,11 @@ typedef struct Graphic_Object_List {
  * 
  */
 typedef struct Scenery {
-    Graphic_Object paddle;
-    Graphic_Object ball;
     Graphic_Object_List obstacles;
     Graphic_Object_List bonus;
 } Scenery;
 
 /* ------ Functions ------ */
-
-Graphic_Object new_ball();
-Graphic_Object new_paddle();
 
 /**
  * @brief Returns a new, empty GOL
@@ -97,5 +92,11 @@ int GOL_remove_first(Graphic_Object_List * list);
 void print_graphic_object(Graphic_Object object);
 
 void print_GOL(Graphic_Object_List object);
+
+/**
+ * Creates a graphic_object corresponding to an obstacle. Its orientation is directly facing the camera
+ * and its origin is in the center
+*/
+Graphic_Object new_obstacle(double width, double height, Point3D position, ColorRGBA color);
 
 #endif

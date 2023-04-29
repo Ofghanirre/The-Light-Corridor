@@ -3,6 +3,7 @@
 
 #include <GLFW/glfw3.h>
 #include "structs/vectors.h"
+#include "structs/graphicObjects.h"
 
 /* Window properties */
 extern const unsigned int WINDOW_WIDTH;
@@ -40,11 +41,13 @@ typedef struct ball_s {
 } ball_t;
 
 typedef struct game_state_s {
-    double camera_pos;
+    double paddle_z_pos;
     int moving_forward;
     paddle_t paddle;
     ball_t ball;
     int glue_enabled;
+
+    Scenery scenery;
 } game_state_t;
 
 extern game_state_t game_state;

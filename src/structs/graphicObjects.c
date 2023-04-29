@@ -1,14 +1,5 @@
 #include "structs/graphicObjects.h"
-#include <stdio.h>
-
-
-Graphic_Object new_ball() {
-    return  (Graphic_Object){{0., 0., 0.}, {0., 0., 0.}, make_sphere(1., (ColorRGBA){1., 0., 0., 1.}) };
-}
-
-Graphic_Object new_paddle() {
-    return (Graphic_Object){{0., 0., 0.}, {0., 0., 0.}, make_rectangle((Point3D){-0.5, -0.5, 0.}, (Point3D){0.5, 0.5, 0.}, (ColorRGBA){0., 0., 1., 1.}) };
-}
+#include "structs/figures.h"
 
 Graphic_Object_List new_graphic_object_list() {
     return (Graphic_Object_List){NULL, NULL, 0};
@@ -81,4 +72,15 @@ void print_GOL(Graphic_Object_List object) {
         iter = iter->next;
     }
     printf("}");
+}
+
+Graphic_Object new_obstacle(double width, double height, Point3D position, ColorRGBA color) {
+    Graphic_Object result;
+    result.figure.type = RECTANGLE;
+    result.figure.color = color;
+    result.figure.fig.rectangle.p1 = (Point3D){-width / 2., -height / 2., 0};
+    result.figure.fig.rectangle.p2 = (Point3D){width / 2., height / 2., 0};
+    result.position = position;
+    result.orientation = (Vec3D){0., 0., 1.};
+    return result;
 }

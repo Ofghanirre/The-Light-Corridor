@@ -14,11 +14,6 @@
 #include "test.h"
 #include "parser.h"
 
-void test() {
-    scenery_init();
-    load_level("./resources/levels/test.level");
-    exit(1);
-}
 
 int main(int argc, char const *argv[])
 {

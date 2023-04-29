@@ -13,6 +13,8 @@
         "graphicobjects.h": "c",
         "string.h": "c",
         "scenery.h": "c",
-        "parser.h": "c"
+        "parser.h": "c",
+        "cmath": "c",
+        "iterator": "c"
     }
 }
