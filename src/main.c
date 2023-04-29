@@ -34,9 +34,10 @@ static void args_parser(int argc, char * const *argv) {
         }
         switch (c) {
             case 'L':
-                Lflag = 1;
+                set_logging();
                 break;
             case 'l':
+                set_logging();
                 set_logging_file(optarg);
                 break;
             default:
