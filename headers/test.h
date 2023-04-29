@@ -2,7 +2,7 @@
 #define __TEST_H__
 
 #include "utils.h"
-#include "scenery.h"
+#include "level.h"
 
 void test_scenery();
 

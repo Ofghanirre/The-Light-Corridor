@@ -164,7 +164,7 @@ static void draw_obstacle(Graphic_Object *obstacle) {
 }
 
 static void draw_obstacles() {
-    Node *obstacle = game_state.scenery.obstacles.head;
+    Node *obstacle = game_state.level.obstacles.head;
     for (; obstacle != NULL ; obstacle = obstacle->next) {
         draw_obstacle(&(obstacle->elem));
     }
@@ -179,6 +179,7 @@ void render_init() {
 
 void render_free() {
     printf("Render free\n");
+    glfwTerminate();
 }
 
 int render_tick() {    

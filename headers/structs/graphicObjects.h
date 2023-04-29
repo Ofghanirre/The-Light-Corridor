@@ -37,7 +37,7 @@ typedef struct Graphic_Object_List {
 } Graphic_Object_List, GO_List, GOL;
 
 /**
- * @brief Represents the scenery of the game
+ * @brief Represents the level of the game
  * Contains all non-const objects that will be displayed like 
  * - ball
  * - paddle
@@ -45,10 +45,12 @@ typedef struct Graphic_Object_List {
  * - bonuses
  * 
  */
-typedef struct Scenery {
+typedef struct Level {
+    char * name;
+    int depth;
     Graphic_Object_List obstacles;
     Graphic_Object_List bonus;
-} Scenery;
+} Level;
 
 /* ------ Functions ------ */
 

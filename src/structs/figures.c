@@ -1,5 +1,7 @@
 #include "structs/figures.h"
 #include <stdio.h>
+#include "utils.h"
+
 
 Figure make_rectangle(Point3D p1, Point3D p2, ColorRGBA color) {
     return (Figure){RECTANGLE, .fig.rectangle = (Figure_Rectangle){p1, p2}, color};
@@ -18,33 +20,33 @@ Figure make_label(const char* text, int font_size, ColorRGBA color) {
 }
 
 void print_figure_rectangle(Figure_Rectangle object) {
-    printf("Rectangle{");
+    print_log("Rectangle{");
     print_vec3D(object.p1);
-    printf(",");
+    print_log(",");
     print_vec3D(object.p2);
-    printf("}");
+    print_log("}");
 }
 
 void print_figure_circle(Figure_Circle object) {
-    printf("Circle{%f}",object.radius);
+    print_log("Circle{%f}",object.radius);
 }
 
 void print_figure_sphere(Figure_Sphere object) {
-    printf("Sphere{%f}",object.radius);
+    print_log("Sphere{%f}",object.radius);
 }
 
 void print_figure_label(Figure_Label object) {
-    printf("Label{%s, %d}", object.text, object.font_size);
+    print_log("Label{%s, %d}", object.text, object.font_size);
 }
 
 void print_figure(Figure object) {
-    printf("Figure{");
+    print_log("Figure{");
     switch(object.type) {
-        case RECTANGLE : printf("RECTANGLE,"); print_figure_rectangle(object.fig.rectangle); break;
-        case CIRCLE : printf("CIRCLE,"); print_figure_circle(object.fig.circle); break;
-        case SPHERE : printf("SPHERE,"); print_figure_sphere(object.fig.sphere); break;
-        case LABEL : printf("LABEL,"); print_figure_label(object.fig.label); break;
+        case RECTANGLE : print_log("RECTANGLE,"); print_figure_rectangle(object.fig.rectangle); break;
+        case CIRCLE : print_log("CIRCLE,"); print_figure_circle(object.fig.circle); break;
+        case SPHERE : print_log("SPHERE,"); print_figure_sphere(object.fig.sphere); break;
+        case LABEL : print_log("LABEL,"); print_figure_label(object.fig.label); break;
     }
-    printf(","); print_colorRGBA(object.color);
-    printf("}");
+    print_log(","); print_colorRGBA(object.color);
+    print_log("}");
 }

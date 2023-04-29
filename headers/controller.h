@@ -47,7 +47,7 @@ typedef struct game_state_s {
     ball_t ball;
     int glue_enabled;
 
-    Scenery scenery;
+    Level level;
 } game_state_t;
 
 extern game_state_t game_state;

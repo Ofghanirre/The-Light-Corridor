@@ -53,25 +53,25 @@ int GOL_remove_first(Graphic_Object_List * list) {
 }
 
 void print_graphic_object(Graphic_Object object) {
-    printf("Graphic_Object{");
+    print_log("Graphic_Object{");
     print_vec3D(object.position);
-    printf(",");
+    print_log(",");
     print_vec3D(object.orientation);
-    printf(",");
+    print_log(",");
     print_figure(object.figure);
-    printf("}");
+    print_log("}");
 }
 
 void print_GOL(Graphic_Object_List object) {
-    printf("List[%d]{\n",object.size);
+    print_log("List[%d]{\n",object.size);
     Node * iter = object.head;
     while (iter != NULL) {
-        printf("\t");
+        print_log("\t");
         print_graphic_object(iter->elem);
-        printf("\n");
+        print_log("\n");
         iter = iter->next;
     }
-    printf("}");
+    print_log("}");
 }
 
 Graphic_Object new_obstacle(double width, double height, Point3D position, ColorRGBA color) {

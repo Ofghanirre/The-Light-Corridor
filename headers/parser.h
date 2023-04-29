@@ -3,8 +3,6 @@
 
 #include "structs/graphicObjects.h"
 
-int load_graphic_object(Graphic_Object * result, const char * buffer);
-
-int load_level(const char * file_path);
+int load_level(const char * file_path, Level * level);
 
 #endif

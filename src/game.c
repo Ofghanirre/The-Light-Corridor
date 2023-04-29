@@ -1,9 +1,10 @@
 #include "game.h"
 #include "controller.h"
 #include "structs/vectors.h"
-#include "scenery.h"
+#include "level.h"
 #include <stdio.h>
 #include <math.h>
+#include "parser.h"
 
 #ifndef M_PI
 #define M_PI 3.141
@@ -120,7 +121,7 @@ void static ball_detect_obstacle(Graphic_Object *obstacle) {
 }
 
 void static ball_detect_obstacles() {
-    Node *obstacle = game_state.scenery.obstacles.head;
+    Node *obstacle = game_state.level.obstacles.head;
     for (; obstacle != NULL ; obstacle = obstacle->next) {
         ball_detect_obstacle(&(obstacle->elem));
     }
@@ -171,17 +172,14 @@ void game_init() {
     
     game_state.glue_enabled = 0;
 
-    scenery_init(&(game_state.scenery));
+    load_level("./resources/levels/test.level", &(game_state.level));
 
-    // Test
-    GOL_append_node(&(game_state.scenery.obstacles), new_obstacle(50, 15, (Point3D){0, 7.5, -100}, (ColorRGBA){0.5, 0.5, 0.5, 1.}));
-    GOL_append_node(&(game_state.scenery.obstacles), new_obstacle(20, 30, (Point3D){-15, 0, -40}, (ColorRGBA){0.5, 0.5, 0.5, .5}));
-    
+    print_level(&(game_state.level));
 }
 
 void game_free() {
     printf("Game free\n");
-    scenery_free(&(game_state.scenery));
+    level_free(&(game_state.level));
 }
 
 int game_tick() {

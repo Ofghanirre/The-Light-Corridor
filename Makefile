@@ -1,6 +1,6 @@
 # Compilation Flags
 CC		= gcc
-CFLAGS	= -Wall -O1 -g
+CFLAGS	= -Wall -O1 -g -D__LOGGING__=0
 LDFLAGS	= -lglfw -lGLU -lGL -lm
 
 # Compilation Folders:
@@ -15,7 +15,7 @@ OBJECTS = \
 	controller.o \
 	game.o \
 	render.o \
-	scenery.o \
+	level.o \
 	utils.o \
 	parser.o \
 	test.o \
