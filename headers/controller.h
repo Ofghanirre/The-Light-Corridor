@@ -9,6 +9,7 @@
 extern const unsigned int WINDOW_WIDTH;
 extern const unsigned int WINDOW_HEIGHT;
 extern const char WINDOW_TITLE[];
+extern float aspectRatio;
 
 /* Minimal time wanted between two images */
 extern const double FRAMERATE_IN_SECONDS;

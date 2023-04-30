@@ -12,7 +12,7 @@
 const unsigned int WINDOW_WIDTH = 1200;
 const unsigned int WINDOW_HEIGHT = 720;
 const char WINDOW_TITLE[] = "The Light Corridor";
-static float aspectRatio = 1.0;
+float aspectRatio = 1.0;
 
 /* Minimal time wanted between two images */
 const double FRAMERATE_IN_SECONDS = 1. / 60.;
@@ -28,14 +28,7 @@ static void onError(int error, const char* description)
 static void onWindowResized(GLFWwindow* window, int width, int height)
 {
 	aspectRatio = width / (float) height;
-
 	glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-    gluPerspective(60.0, aspectRatio, 1, 200);
-	glMatrixMode(GL_MODELVIEW);
-
 }
 
 static void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)

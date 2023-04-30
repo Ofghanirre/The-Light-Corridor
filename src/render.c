@@ -14,6 +14,9 @@
 #define M_PI 3.141
 #endif
 
+#define NB_TEXTURES 1
+static unsigned int textures[NB_TEXTURES];
+
 static void draw_corridor() {
     float x1, x2, y1, y2;
     x1 = -CORRIDOR_WIDTH / 2;
@@ -227,6 +230,57 @@ static void draw_obstacles() {
     }
 }
 
+// Based on https://stackoverflow.com/questions/14318/using-glut-bitmap-fonts
+static void drawHUD() {
+//     glMatrixMode(GL_PROJECTION);
+//     glPushMatrix();
+//     glLoadIdentity();
+//     gluOrtho2D(0.0, WINDOW_WIDTH, 0.0, WINDOW_HEIGHT);
+
+//     glMatrixMode(GL_MODELVIEW);
+//     glPushMatrix();
+//     glLoadIdentity();
+
+//     glColor3f(0.0, 1.0, 0.0); // Green
+
+//     glRasterPos2i(10, 10);
+
+//     char s[] = "Respect mah authoritah!";
+//     void *font = GLUT_BITMAP_9_BY_15;
+//     for (int i = 0 ; i < sizeof(s) ; i++) {
+//         glutBitmapCharacter(font, s[i]);
+//     }
+
+//     glMatrixMode(GL_MODELVIEW);
+//     glPopMatrix();
+
+//     glMatrixMode(GL_PROJECTION);
+//     glPopMatrix();
+}
+
+static void load_textures() {
+    // Allows to load textures of any sizes (not requiring powers of 2)
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+
+    glGenTextures(1, textures);
+
+    int x, y, n;
+	unsigned char* texture = stbi_load("resources/textures/fontmap.tga", &x, &y, &n, 0);
+
+	if (texture == NULL) {
+		fprintf(stderr, "Texture failed to load");
+		exit(1);
+	}
+
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void render_init() {
     printf("Render init\n");
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -242,7 +296,15 @@ void render_free() {
 int render_tick() {    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glMatrixMode(GL_MODELVIEW);
+    // Set up 3D projection
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+	glLoadIdentity();
+    gluPerspective(60.0, aspectRatio, 1, 200);
+
+    // Set up modelview matrix
+	glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
     glLoadIdentity();
     
     // Camera setup
@@ -258,12 +320,12 @@ int render_tick() {
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
     
     // Camera light
-    float position_0[4] = {0., 0., 30., 1.0};
-    float intensity_0[3] = {.8, .8, .8};
-    float quadratic_attenuation_0 = 0.00005;
     glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
+    float position_0[4] = {0., 0., 30., 1.0};
+    float intensity_0[3] = {.8, .8, .8};
+    float quadratic_attenuation_0 = 0.00005;
     glLightfv(GL_LIGHT0, GL_POSITION, position_0);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, intensity_0);
     glLightfv(GL_LIGHT0, GL_SPECULAR, intensity_0);
@@ -304,9 +366,17 @@ int render_tick() {
     
     glDisable(GL_COLOR_MATERIAL);
     glDisable(GL_LIGHTING);
-
     glDisable(GL_BLEND);
 
-    glFinish();
+    // Restore modelview matrix
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+    // Restore projection matrix
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+
+    drawHUD();
+
     return 0;
 }
