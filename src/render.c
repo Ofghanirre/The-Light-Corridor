@@ -5,6 +5,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <math.h>
+#include <stdint.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -15,6 +16,7 @@
 #endif
 
 static textures_t textures;
+static uint16_t fontMetrics[256];
 
 static void draw_corridor() {
     float x1, x2, y1, y2;
@@ -232,7 +234,36 @@ static void draw_obstacles() {
 }
 
 #define BITMAP_STEP 0.0625
+#define BASE_CHAR_SIZE 0.1
+// Draws a character from a fontmap with given line and column, must have the fontmap texture loaded already
+// The character is drawn on origin (top right corner), according to BASE_CHAR_SIZE
+static void drawFromFontmap(int i, int j) {
+    glBegin(GL_QUADS);
+        glTexCoord2f(j*BITMAP_STEP, (i+1)*BITMAP_STEP); glVertex2f(0., BASE_CHAR_SIZE);
+        glTexCoord2f(j*BITMAP_STEP, i*BITMAP_STEP); glVertex2f(0., 0.);
+        glTexCoord2f((j+1)*BITMAP_STEP, i*BITMAP_STEP); glVertex2f(BASE_CHAR_SIZE, 0.);
+        glTexCoord2f((j+1)*BITMAP_STEP, (i+1)*BITMAP_STEP); glVertex2f(BASE_CHAR_SIZE, BASE_CHAR_SIZE);
+    glEnd();
+}
+
+// Draws a char
+static void drawChar(char c) {
+    drawFromFontmap(c / 16, c % 16);
+}
+
+// Draws a string at coordinate x, y ; size is a factor to apply to the base size of each character
+static void drawString(char string[], float x, float y, float size) {
+    glScalef(size, size, 0);
+    glTranslatef(x, y, 0.);
+    for (char *c = string; *c != '\0'; c++) {
+        drawChar(*c);
+        float width = fontMetrics[(int)*c] / 128. * BASE_CHAR_SIZE;
+        glTranslatef(width, 0., 0.);
+    }
+}
+
 static void drawHUD() {
+    glDepthMask(GL_FALSE); 
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -252,10 +283,7 @@ static void drawHUD() {
     glColor3f(1., 1., 1.);
 
     glBegin(GL_QUADS);
-        glTexCoord2f(0.0, 4*BITMAP_STEP); glVertex2f(0., 0.1);
-        glTexCoord2f(0.0, 3*BITMAP_STEP); glVertex2f(0., 0.);
-        glTexCoord2f(BITMAP_STEP, 3*BITMAP_STEP); glVertex2f(0.1, 0.);
-        glTexCoord2f(BITMAP_STEP, 4*BITMAP_STEP); glVertex2f(0.1, 0.1);
+        drawString("Score: 42069", 0, 0, 1);
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -266,6 +294,7 @@ static void drawHUD() {
 
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
+    glDepthMask(GL_TRUE); 
 }
 
 static void load_textures() {
@@ -287,7 +316,7 @@ static void load_textures() {
 
     glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, textures.data[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, textures.data[0]);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -297,12 +326,25 @@ static void free_textures() {
     }
 }
 
+static void load_font_metrics() {
+    FILE *file = fopen("resources/font_metrics.dat", "rb");
+    if (file == NULL) {
+        fprintf(stderr, "Couldn't load font metrics, this will cause issues\n");
+        return;
+    }
+    if (fread(fontMetrics, sizeof(uint16_t), 256, file) != 256) {
+        fprintf(stderr, "Couldn't load font metrics properly, this will cause issues\n");
+    }
+    fclose(file);
+}
+
 void render_init() {
     printf("Render init\n");
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
     load_textures();
+    load_font_metrics();
     printf("Loaded textures\n");
 }
 
@@ -385,7 +427,7 @@ int render_tick() {
     
     glDisable(GL_COLOR_MATERIAL);
     glDisable(GL_LIGHTING);
-    glDisable(GL_BLEND);
+    
 
     // Restore modelview matrix
     glMatrixMode(GL_MODELVIEW);
@@ -396,6 +438,7 @@ int render_tick() {
     glPopMatrix();
 
     drawHUD();
+    glDisable(GL_BLEND);
 
     return 0;
 }
