@@ -9,6 +9,7 @@ Node * alloc_new_node(Graphic_Object obj) {
     Node * node = (Node*) malloc(sizeof(Node));
     node->elem = obj;
     node->next = NULL;
+    node->prev = NULL;
 
     if (node == NULL) {
         fprintf(stderr, "Allocation Error on alloc_new_node\n");
@@ -35,7 +36,10 @@ int GOL_append_node(Graphic_Object_List * list, Graphic_Object obj) {
     Node * node = alloc_new_node(obj);
     if (__FLAG_MEMORY_ERROR__) return MEMORY_ERROR;
     if (list->head == NULL) list->head = node;
-    if (list->tail != NULL) list->tail->next = node;
+    if (list->tail != NULL) {
+        list->tail->next = node;
+        node->prev = list->tail;
+    }
     list->tail = node;
 
     list->size++;
@@ -48,6 +52,7 @@ int GOL_remove_first(Graphic_Object_List * list) {
     Node * temp = list->head;
     list->head = temp->next;
     free(temp);
+    if (NULL != list->head) { list->head->prev = NULL; }
     list->size--;
     return CLEAR;
 }
