@@ -223,8 +223,8 @@ static void draw_obstacle(Graphic_Object *obstacle) {
 }
 
 static void draw_obstacles() {
-    Node *obstacle = game_state.level.obstacles.head;
-    for (; obstacle != NULL ; obstacle = obstacle->next) {
+    Node *obstacle = game_state.level.obstacles.tail;
+    for (; obstacle != NULL ; obstacle = obstacle->prev) {
         draw_obstacle(&(obstacle->elem));
     }
 }
