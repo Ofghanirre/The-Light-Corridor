@@ -204,6 +204,7 @@ void static ball_tick() {
 
 void game_init() {
     printf("Game init\n");
+    game_state.scene = GAME;
     game_state.paddle.position = (Vec2D){0., 0.};
 
     game_state.paddle_z_pos = 0;
@@ -231,11 +232,15 @@ void game_free() {
 }
 
 int game_tick() {
-    ball_tick();
+    if (game_state.paused || game_state.scene != GAME) return 0;
 
+    ball_tick();
     if (game_state.moving_forward && !game_state.ball.glued) {
         game_state.paddle_z_pos -= 0.5;
     }
+
+
+    
     return 0;
 }
 

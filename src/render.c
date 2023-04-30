@@ -250,7 +250,6 @@ static void drawFromFontmap(int i, int j) {
 static float drawString(char string[]) {
     float offset = 0;
     glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
-    glColor3f(1., 1., 1.);
     for (char *c = string; *c != '\0'; c++) {
         drawFromFontmap(*c / 16, *c % 16);
         float width = fontMetrics[(int)*c] / 128. * BASE_CHAR_SIZE;
@@ -259,50 +258,6 @@ static float drawString(char string[]) {
     }
     glBindTexture(GL_TEXTURE_2D, 0);
     return offset;
-}
-
-static void drawHUD() {
-    glDepthMask(GL_FALSE); 
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-
-    if (aspectRatio > 0) {
-        gluOrtho2D(0.0, 1.0 * aspectRatio, 1.0, 0.0);
-    } else {
-        gluOrtho2D(0.0, 1.0, 1.0 * aspectRatio, 0.0);
-    }
-
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-
-    glEnable(GL_TEXTURE_2D);
-    
-    // Draw life counter
-    glTranslatef(0.05, 0.88, 0.);
-    drawString("Lives:");
-    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[1]);
-    glColor3f(1., 1., 1.);
-    for (int i = 0 ; i < game_state.lives ; i++) {
-        glBegin(GL_QUADS);
-            glTexCoord2f(0., 1.); glVertex2f(0., BASE_CHAR_SIZE);
-            glTexCoord2f(0., 0.); glVertex2f(0., 0.);
-            glTexCoord2f(1., 0.); glVertex2f(BASE_CHAR_SIZE, 0.);
-            glTexCoord2f(1., 1.); glVertex2f(BASE_CHAR_SIZE, BASE_CHAR_SIZE);
-        glEnd();
-        glTranslatef(BASE_CHAR_SIZE / 2., 0., 0.);
-    }
-    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
-
-    glDisable(GL_TEXTURE_2D);
-
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glDepthMask(GL_TRUE); 
 }
 
 static void load_textures() {
@@ -338,7 +293,6 @@ static void load_textures() {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, textures.data[1]);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-
 }
 
 static void free_textures() {
@@ -375,9 +329,55 @@ void render_free() {
     glfwTerminate();
 }
 
-int render_tick() {    
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+static void draw_game_HUD() {
+    glDepthMask(GL_FALSE); 
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
 
+    if (aspectRatio > 0) {
+        gluOrtho2D(0.0, 1.0 * aspectRatio, 1.0, 0.0);
+    } else {
+        gluOrtho2D(0.0, 1.0, 1.0 * aspectRatio, 0.0);
+    }
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glEnable(GL_TEXTURE_2D);
+    
+    // Draw life counter
+    glTranslatef(0.05, 0.88, 0.);
+    glColor3f(1., 1., 1.);
+    drawString("Lives:");
+    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[1]);
+    glColor3f(1., 1., 1.);
+    for (int i = 0 ; i < game_state.lives ; i++) {
+        glBegin(GL_QUADS);
+            glTexCoord2f(0., 1.); glVertex2f(0., BASE_CHAR_SIZE);
+            glTexCoord2f(0., 0.); glVertex2f(0., 0.);
+            glTexCoord2f(1., 0.); glVertex2f(BASE_CHAR_SIZE, 0.);
+            glTexCoord2f(1., 1.); glVertex2f(BASE_CHAR_SIZE, BASE_CHAR_SIZE);
+        glEnd();
+        glTranslatef(BASE_CHAR_SIZE / 2., 0., 0.);
+    }
+    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
+
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glDepthMask(GL_TRUE); 
+}
+
+static void draw_game_scene() {
     // Set up 3D projection
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -446,6 +446,7 @@ int render_tick() {
         draw_paddle();
     glPopMatrix();
     
+    glDisable(GL_BLEND);
     glDisable(GL_COLOR_MATERIAL);
     glDisable(GL_LIGHTING);
     
@@ -457,9 +458,14 @@ int render_tick() {
     // Restore projection matrix
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
+}
 
-    drawHUD();
-    glDisable(GL_BLEND);
+
+
+int render_tick() {    
+    
+    draw_game_scene();
+    draw_game_HUD();
 
     return 0;
 }

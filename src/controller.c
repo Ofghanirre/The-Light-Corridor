@@ -108,6 +108,7 @@ int run_game(GLFWwindow * window) {
         if (0 != game_tick()) {
              // HANDLE GAME TICK ERROR  
         }
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         if (0 != render_tick()) {
              // HANDLE GAME TICK ERROR
         }

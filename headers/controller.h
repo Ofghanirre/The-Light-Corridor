@@ -41,7 +41,16 @@ typedef struct ball_s {
     int glued;
 } ball_t;
 
+typedef enum {
+    TITLE_SCREEN,
+    GAME,
+    GAME_OVER
+} Scene;
+
 typedef struct game_state_s {
+    Scene scene;
+    int paused;
+
     double paddle_z_pos;
     int moving_forward;
 
