@@ -78,24 +78,28 @@ int static ball_detect_paddle_collision() {
         }
     return 0;
 }
-void static handle_ball_bounce(double z_distance) {
+
+#define BOUNCE 1
+#define NO_BOUNCE 0
+
+int static obstacle_ball_bounce(double z_distance) {
     Vec3D normal;
     double offset;
     if (z_distance > 0) {
         // Ball hit from the front
+        if (game_state.ball.direction.z > 0) return NO_BOUNCE;
         normal = (Vec3D){0., 0., 1.};
         offset = BALL_RADIUS - z_distance;
     } else {
         // Ball hit from the back
+        if (game_state.ball.direction.z < 0) return NO_BOUNCE;
         normal = (Vec3D){0., 0., -1.};
         offset = -BALL_RADIUS - z_distance;
     }
     game_state.ball.position.z += offset;
     ball_bounce(normal);
+    return BOUNCE;
 }
-
-#define BOUNCE 1
-#define NO_BOUNCE 0
 
 int static ball_detect_rectangle(Graphic_Object *obstacle) {
     double z_distance = game_state.ball.position.z - obstacle->position.z;
@@ -121,8 +125,7 @@ int static ball_detect_rectangle(Graphic_Object *obstacle) {
 
     if (game_state.ball.position.x > x1 - BALL_RADIUS / 2 && game_state.ball.position.x < x2 + BALL_RADIUS / 2 
         && game_state.ball.position.y > y1 - BALL_RADIUS / 2 && game_state.ball.position.y < y2 + - BALL_RADIUS / 2) {
-        handle_ball_bounce(z_distance);
-        return BOUNCE;
+        return obstacle_ball_bounce(z_distance);
     }
     return NO_BOUNCE;
 }
@@ -136,8 +139,7 @@ int static ball_detecte_circle(Graphic_Object * obstacle) {
     float distance_carre = (game_state.ball.position.x - obstacle->position.x) * (game_state.ball.position.x - obstacle->position.x) 
                             + (game_state.ball.position.y - obstacle->position.y) * (game_state.ball.position.y - obstacle->position.y);
     if (distance_carre - obstacle->figure.fig.circle.radius <= obstacle->figure.fig.circle.radius * obstacle->figure.fig.circle.radius) { // Collision détectée !
-        handle_ball_bounce(z_distance);
-        return BOUNCE;
+        return obstacle_ball_bounce(z_distance);
     }
     return NO_BOUNCE;
 }
