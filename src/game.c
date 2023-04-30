@@ -192,7 +192,10 @@ void static ball_tick() {
     
     if (lost_ball) {
         printf("You lost the ball!\n");
-        game_state.paddle_z_pos = 0;
+        game_state.lives -= 1;
+        if (game_state.lives == 0) {
+            printf("Game over\n");
+        }
 
         game_state.ball.glued = 1;
         game_state.ball.direction = (Vec3D){0., 0., -1.};
@@ -214,6 +217,9 @@ void game_init() {
     
     game_state.glue_enabled = 0;
 
+    game_state.lives = 3;
+
+    game_state.n_level = 1;
     load_level("./resources/levels/test.level", &(game_state.level));
 
     print_level(&(game_state.level));

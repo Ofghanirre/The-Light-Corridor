@@ -44,10 +44,13 @@ typedef struct ball_s {
 typedef struct game_state_s {
     double paddle_z_pos;
     int moving_forward;
+
     paddle_t paddle;
     ball_t ball;
     int glue_enabled;
+    int lives;
 
+    int n_level;
     Level level;
 } game_state_t;
 

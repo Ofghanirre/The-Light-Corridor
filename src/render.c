@@ -238,7 +238,7 @@ static void draw_obstacles() {
 // Draws a character from a fontmap with given line and column, must have the fontmap texture loaded already
 // The character is drawn on origin (top right corner), according to BASE_CHAR_SIZE
 static void drawFromFontmap(int i, int j) {
-    glBegin(GL_QUADS);
+    glBegin(GL_TRIANGLE_FAN);
         glTexCoord2f(j*BITMAP_STEP, (i+1)*BITMAP_STEP); glVertex2f(0., BASE_CHAR_SIZE);
         glTexCoord2f(j*BITMAP_STEP, i*BITMAP_STEP); glVertex2f(0., 0.);
         glTexCoord2f((j+1)*BITMAP_STEP, i*BITMAP_STEP); glVertex2f(BASE_CHAR_SIZE, 0.);
@@ -246,20 +246,19 @@ static void drawFromFontmap(int i, int j) {
     glEnd();
 }
 
-// Draws a char
-static void drawChar(char c) {
-    drawFromFontmap(c / 16, c % 16);
-}
-
-// Draws a string at coordinate x, y ; size is a factor to apply to the base size of each character
-static void drawString(char string[], float x, float y, float size) {
-    glScalef(size, size, 0);
-    glTranslatef(x, y, 0.);
+// Draws a string with the origin as top left corner, with base character size (0.1)
+static float drawString(char string[]) {
+    float offset = 0;
+    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
+    glColor3f(1., 1., 1.);
     for (char *c = string; *c != '\0'; c++) {
-        drawChar(*c);
+        drawFromFontmap(*c / 16, *c % 16);
         float width = fontMetrics[(int)*c] / 128. * BASE_CHAR_SIZE;
+        offset += width;
         glTranslatef(width, 0., 0.);
     }
+    glBindTexture(GL_TEXTURE_2D, 0);
+    return offset;
 }
 
 static void drawHUD() {
@@ -279,14 +278,23 @@ static void drawHUD() {
     glLoadIdentity();
 
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
+    
+    // Draw life counter
+    glTranslatef(0.05, 0.88, 0.);
+    drawString("Lives:");
+    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[1]);
     glColor3f(1., 1., 1.);
+    for (int i = 0 ; i < game_state.lives ; i++) {
+        glBegin(GL_QUADS);
+            glTexCoord2f(0., 1.); glVertex2f(0., BASE_CHAR_SIZE);
+            glTexCoord2f(0., 0.); glVertex2f(0., 0.);
+            glTexCoord2f(1., 0.); glVertex2f(BASE_CHAR_SIZE, 0.);
+            glTexCoord2f(1., 1.); glVertex2f(BASE_CHAR_SIZE, BASE_CHAR_SIZE);
+        glEnd();
+        glTranslatef(BASE_CHAR_SIZE / 2., 0., 0.);
+    }
+    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
 
-    glBegin(GL_QUADS);
-        drawString("Score: 42069", 0, 0, 1);
-    glEnd();
-
-    glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
 
     glMatrixMode(GL_MODELVIEW);
@@ -304,20 +312,33 @@ static void load_textures() {
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
     glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
 
-    glGenTextures(1, textures.gl_texture);
+    glGenTextures(2, textures.gl_texture);
 
     int x, y, n;
-	textures.data[0] = stbi_load("resources/textures/fontmap.tga", &x, &y, &n, 0);
 
+    // Texture 1
+	textures.data[0] = stbi_load("resources/textures/fontmap.tga", &x, &y, &n, 0);
 	if (textures.data[0] == NULL) {
-		fprintf(stderr, "Texture failed to load");
+		fprintf(stderr, "Texture 0 failed to load");
 		exit(1);
 	}
-
     glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, textures.data[0]);
+
+    // Texture 2
+	textures.data[1] = stbi_load("resources/textures/life.tga", &x, &y, &n, 0);
+    
+	if (textures.data[1] == NULL) {
+		fprintf(stderr, "Texture 1 failed to load");
+		exit(1);
+	}
+    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[1]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, textures.data[1]);
+
 	glBindTexture(GL_TEXTURE_2D, 0);
+
 }
 
 static void free_textures() {
