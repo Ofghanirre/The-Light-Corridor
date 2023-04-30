@@ -6,6 +6,9 @@
 #include <GL/glu.h>
 #include <math.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #define NB_SEG_CIRCLE 64
 #ifndef M_PI
 #define M_PI 3.141
