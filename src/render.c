@@ -14,8 +14,7 @@
 #define M_PI 3.141
 #endif
 
-#define NB_TEXTURES 1
-static unsigned int textures[NB_TEXTURES];
+static textures_t textures;
 
 static void draw_corridor() {
     float x1, x2, y1, y2;
@@ -232,32 +231,41 @@ static void draw_obstacles() {
     }
 }
 
-// Based on https://stackoverflow.com/questions/14318/using-glut-bitmap-fonts
+#define BITMAP_STEP 0.0625
 static void drawHUD() {
-//     glMatrixMode(GL_PROJECTION);
-//     glPushMatrix();
-//     glLoadIdentity();
-//     gluOrtho2D(0.0, WINDOW_WIDTH, 0.0, WINDOW_HEIGHT);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
 
-//     glMatrixMode(GL_MODELVIEW);
-//     glPushMatrix();
-//     glLoadIdentity();
+    if (aspectRatio > 0) {
+        gluOrtho2D(0.0, 1.0 * aspectRatio, 1.0, 0.0);
+    } else {
+        gluOrtho2D(0.0, 1.0, 1.0 * aspectRatio, 0.0);
+    }
 
-//     glColor3f(0.0, 1.0, 0.0); // Green
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
 
-//     glRasterPos2i(10, 10);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
+    glColor3f(1., 1., 1.);
 
-//     char s[] = "Respect mah authoritah!";
-//     void *font = GLUT_BITMAP_9_BY_15;
-//     for (int i = 0 ; i < sizeof(s) ; i++) {
-//         glutBitmapCharacter(font, s[i]);
-//     }
+    glBegin(GL_QUADS);
+        glTexCoord2f(0.0, 4*BITMAP_STEP); glVertex2f(0., 0.1);
+        glTexCoord2f(0.0, 3*BITMAP_STEP); glVertex2f(0., 0.);
+        glTexCoord2f(BITMAP_STEP, 3*BITMAP_STEP); glVertex2f(0.1, 0.);
+        glTexCoord2f(BITMAP_STEP, 4*BITMAP_STEP); glVertex2f(0.1, 0.1);
+    glEnd();
 
-//     glMatrixMode(GL_MODELVIEW);
-//     glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
 
-//     glMatrixMode(GL_PROJECTION);
-//     glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
 }
 
 static void load_textures() {
@@ -267,20 +275,26 @@ static void load_textures() {
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
     glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
 
-    glGenTextures(1, textures);
+    glGenTextures(1, textures.gl_texture);
 
     int x, y, n;
-	unsigned char* texture = stbi_load("resources/textures/fontmap.tga", &x, &y, &n, 0);
+	textures.data[0] = stbi_load("resources/textures/fontmap.tga", &x, &y, &n, 0);
 
-	if (texture == NULL) {
+	if (textures.data[0] == NULL) {
 		fprintf(stderr, "Texture failed to load");
 		exit(1);
 	}
 
-    glBindTexture(GL_TEXTURE_2D, textures[0]);
+    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, textures.data[0]);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+static void free_textures() {
+    for (int i = 0 ; i < NB_TEXTURES ; i++) {
+        stbi_image_free(textures.data[0]);
+    }
 }
 
 void render_init() {
@@ -288,10 +302,13 @@ void render_init() {
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
+    load_textures();
+    printf("Loaded textures\n");
 }
 
 void render_free() {
     printf("Render free\n");
+    free_textures();
     glfwTerminate();
 }
 
