@@ -126,6 +126,7 @@ static void draw_sphere(Graphic_Object *obstacle) {
     if (game_state.paddle_z_pos - obstacle->position.z < 20) {
         alpha = (game_state.paddle_z_pos - obstacle->position.z) / 20 + 0.5;
     }
+    glNormal3d(0, 0, 1);
 
     glPushMatrix();
         glTranslated(obstacle->position.x, obstacle->position.y, obstacle->position.z);
@@ -144,6 +145,7 @@ static void draw_circle(Graphic_Object *obstacle) {
     if (game_state.paddle_z_pos - obstacle->position.z < 20) {
         alpha = (game_state.paddle_z_pos - obstacle->position.z) / 20 + 0.5;
     }
+    glNormal3d(0, 0, 1);
     glPushMatrix();
         glTranslated(obstacle->position.x, obstacle->position.y, obstacle->position.z);
         glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){0.01, 0.01, 0.01});
