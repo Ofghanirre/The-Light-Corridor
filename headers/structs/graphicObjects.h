@@ -28,6 +28,7 @@ typedef struct Graphic_Object {
 typedef struct Node {
     Graphic_Object elem;
     struct Node* next;
+    struct Node* prev;
 } Node;
 
 typedef struct Graphic_Object_List {
