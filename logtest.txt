@@ -1,0 +1,107 @@
+Level Name : Nom niveau 
+Level Length : 350
+Line (113): 1:{5.000000 3.500000 -50.000000}, {0.0 0.0 1.0}, {1.0 0.0 0.0}, RECTANGLE, {{15.0 25.0 0.0}, {-15.0 -25.0 0.0}};
+load_graphic_object buffer: {5.000000 3.500000 -50.000000}, {0.0 0.0 1.0}, {1.0 0.0 0.0}, RECTANGLE, {{15.0 25.0 0.0}, {-15.0 -25.0 0.0}};
+
+Parse :5.000000 3.500000 -50.000000 --- 0.0 0.0 1.0 --- 1.0 0.0 0.0 --- RECTANGLE --- {15.0 25.0 0.0}, {-15.0 -25.0 0.0}}
+load_vec3D buffer: 5.000000 3.500000 -50.000000
+load_vec3D buffer: 0.0 0.0 1.0
+load_colorsRGBA buffer: 1.0 0.0 0.0
+load_figureType buffer: RECTANGLE
+load_rectangle buffer: {15.0 25.0 0.0}, {-15.0 -25.0 0.0}}
+load_vec3D buffer: 15.0 25.0 0.0
+load_vec3D buffer: -15.0 -25.0 0.0
+New Obstacle Loaded:Graphic_Object{vec3D{5.000000, 3.500000, -50.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{RECTANGLE,Rectangle{vec3D{15.000000, 25.000000, 0.000000},vec3D{-15.000000, -25.000000, 0.000000}},ColorRGBA{1.000000, 0.000000, 0.000000, 1.000000}}}
+Line (81): 1:{5.000000 -3.500000 -70.000000}, {0.0 0.0 1.0}, {1.0 0.0 1.0}, CIRCLE, {10.0};
+load_graphic_object buffer: {5.000000 -3.500000 -70.000000}, {0.0 0.0 1.0}, {1.0 0.0 1.0}, CIRCLE, {10.0};
+
+Parse :5.000000 -3.500000 -70.000000 --- 0.0 0.0 1.0 --- 1.0 0.0 1.0 --- CIRCLE --- 10.0}
+load_vec3D buffer: 5.000000 -3.500000 -70.000000
+load_vec3D buffer: 0.0 0.0 1.0
+load_colorsRGBA buffer: 1.0 0.0 1.0
+load_figureType buffer: CIRCLE
+load_circle buffer: 10.0}
+New Obstacle Loaded:Graphic_Object{vec3D{5.000000, -3.500000, -70.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{CIRCLE,Circle{10.000000},ColorRGBA{1.000000, 0.000000, 1.000000, 1.000000}}}
+Line (113): 1:{0.000000 2.500000 -130.000000}, {0.0 0.0 1.0}, {1.0 0.5 0.0}, RECTANGLE, {{7.0 25.0 0.0}, {-15.0 -25.0 0.0}};
+load_graphic_object buffer: {0.000000 2.500000 -130.000000}, {0.0 0.0 1.0}, {1.0 0.5 0.0}, RECTANGLE, {{7.0 25.0 0.0}, {-15.0 -25.0 0.0}};
+
+Parse :0.000000 2.500000 -130.000000 --- 0.0 0.0 1.0 --- 1.0 0.5 0.0 --- RECTANGLE --- {7.0 25.0 0.0}, {-15.0 -25.0 0.0}}
+load_vec3D buffer: 0.000000 2.500000 -130.000000
+load_vec3D buffer: 0.0 0.0 1.0
+load_colorsRGBA buffer: 1.0 0.5 0.0
+load_figureType buffer: RECTANGLE
+load_rectangle buffer: {7.0 25.0 0.0}, {-15.0 -25.0 0.0}}
+load_vec3D buffer: 7.0 25.0 0.0
+load_vec3D buffer: -15.0 -25.0 0.0
+New Obstacle Loaded:Graphic_Object{vec3D{0.000000, 2.500000, -130.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{RECTANGLE,Rectangle{vec3D{7.000000, 25.000000, 0.000000},vec3D{-15.000000, -25.000000, 0.000000}},ColorRGBA{1.000000, 0.500000, 0.000000, 1.000000}}}
+Line (82): 1:{1.000000 -3.500000 -170.000000}, {0.0 0.0 1.0}, {1.0 0.5 1.0}, CIRCLE, {15.0};
+load_graphic_object buffer: {1.000000 -3.500000 -170.000000}, {0.0 0.0 1.0}, {1.0 0.5 1.0}, CIRCLE, {15.0};
+
+Parse :1.000000 -3.500000 -170.000000 --- 0.0 0.0 1.0 --- 1.0 0.5 1.0 --- CIRCLE --- 15.0}
+load_vec3D buffer: 1.000000 -3.500000 -170.000000
+load_vec3D buffer: 0.0 0.0 1.0
+load_colorsRGBA buffer: 1.0 0.5 1.0
+load_figureType buffer: CIRCLE
+load_circle buffer: 15.0}
+New Obstacle Loaded:Graphic_Object{vec3D{1.000000, -3.500000, -170.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{CIRCLE,Circle{15.000000},ColorRGBA{1.000000, 0.500000, 1.000000, 1.000000}}}
+Line (80): 2:{5.000000 -3.500000 -25.000000}, {0.0 0.0 1.0}, {0.0 1.0 0.0}, SPHERE, {3.0};
+load_graphic_object buffer: {5.000000 -3.500000 -25.000000}, {0.0 0.0 1.0}, {0.0 1.0 0.0}, SPHERE, {3.0};
+
+Parse :5.000000 -3.500000 -25.000000 --- 0.0 0.0 1.0 --- 0.0 1.0 0.0 --- SPHERE --- 3.0}
+load_vec3D buffer: 5.000000 -3.500000 -25.000000
+load_vec3D buffer: 0.0 0.0 1.0
+load_colorsRGBA buffer: 0.0 1.0 0.0
+load_figureType buffer: SPHERE
+load_sphere buffer: 3.0}
+New Bonus Loaded:Graphic_Object{vec3D{5.000000, -3.500000, -25.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{SPHERE,Sphere{3.000000},ColorRGBA{0.000000, 1.000000, 0.000000, 1.000000}}}
+Line (114): 1:{2.000000 5.500000 -200.000000}, {0.0 0.0 1.0}, {1.0 0.0 0.0}, RECTANGLE, {{15.0 25.0 0.0}, {-15.0 -25.0 0.0}};
+load_graphic_object buffer: {2.000000 5.500000 -200.000000}, {0.0 0.0 1.0}, {1.0 0.0 0.0}, RECTANGLE, {{15.0 25.0 0.0}, {-15.0 -25.0 0.0}};
+
+Parse :2.000000 5.500000 -200.000000 --- 0.0 0.0 1.0 --- 1.0 0.0 0.0 --- RECTANGLE --- {15.0 25.0 0.0}, {-15.0 -25.0 0.0}}
+load_vec3D buffer: 2.000000 5.500000 -200.000000
+load_vec3D buffer: 0.0 0.0 1.0
+load_colorsRGBA buffer: 1.0 0.0 0.0
+load_figureType buffer: RECTANGLE
+load_rectangle buffer: {15.0 25.0 0.0}, {-15.0 -25.0 0.0}}
+load_vec3D buffer: 15.0 25.0 0.0
+load_vec3D buffer: -15.0 -25.0 0.0
+New Obstacle Loaded:Graphic_Object{vec3D{2.000000, 5.500000, -200.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{RECTANGLE,Rectangle{vec3D{15.000000, 25.000000, 0.000000},vec3D{-15.000000, -25.000000, 0.000000}},ColorRGBA{1.000000, 0.000000, 0.000000, 1.000000}}}
+Line (113): 1:{0.000000 7.500000 -250.000000}, {0.0 0.0 1.0}, {1.0 0.0 0.0}, RECTANGLE, {{25.0 25.0 0.0}, {-25.0 -25.0 0.0}};
+load_graphic_object buffer: {0.000000 7.500000 -250.000000}, {0.0 0.0 1.0}, {1.0 0.0 0.0}, RECTANGLE, {{25.0 25.0 0.0}, {-25.0 -25.0 0.0}};
+
+Parse :0.000000 7.500000 -250.000000 --- 0.0 0.0 1.0 --- 1.0 0.0 0.0 --- RECTANGLE --- {25.0 25.0 0.0}, {-25.0 -25.0 0.0}}
+load_vec3D buffer: 0.000000 7.500000 -250.000000
+load_vec3D buffer: 0.0 0.0 1.0
+load_colorsRGBA buffer: 1.0 0.0 0.0
+load_figureType buffer: RECTANGLE
+load_rectangle buffer: {25.0 25.0 0.0}, {-25.0 -25.0 0.0}}
+load_vec3D buffer: 25.0 25.0 0.0
+load_vec3D buffer: -25.0 -25.0 0.0
+New Obstacle Loaded:Graphic_Object{vec3D{0.000000, 7.500000, -250.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{RECTANGLE,Rectangle{vec3D{25.000000, 25.000000, 0.000000},vec3D{-25.000000, -25.000000, 0.000000}},ColorRGBA{1.000000, 0.000000, 0.000000, 1.000000}}}
+
+Level{Name:Nom niveau ,Depth:350,
+Obstacles:List[6]{
+	Graphic_Object{vec3D{5.000000, 3.500000, -50.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{RECTANGLE,Rectangle{vec3D{15.000000, 25.000000, 0.000000},vec3D{-15.000000, -25.000000, 0.000000}},ColorRGBA{1.000000, 0.000000, 0.000000, 1.000000}}}
+	Graphic_Object{vec3D{5.000000, -3.500000, -70.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{CIRCLE,Circle{10.000000},ColorRGBA{1.000000, 0.000000, 1.000000, 1.000000}}}
+	Graphic_Object{vec3D{0.000000, 2.500000, -130.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{RECTANGLE,Rectangle{vec3D{7.000000, 25.000000, 0.000000},vec3D{-15.000000, -25.000000, 0.000000}},ColorRGBA{1.000000, 0.500000, 0.000000, 1.000000}}}
+	Graphic_Object{vec3D{1.000000, -3.500000, -170.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{CIRCLE,Circle{15.000000},ColorRGBA{1.000000, 0.500000, 1.000000, 1.000000}}}
+	Graphic_Object{vec3D{2.000000, 5.500000, -200.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{RECTANGLE,Rectangle{vec3D{15.000000, 25.000000, 0.000000},vec3D{-15.000000, -25.000000, 0.000000}},ColorRGBA{1.000000, 0.000000, 0.000000, 1.000000}}}
+	Graphic_Object{vec3D{0.000000, 7.500000, -250.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{RECTANGLE,Rectangle{vec3D{25.000000, 25.000000, 0.000000},vec3D{-25.000000, -25.000000, 0.000000}},ColorRGBA{1.000000, 0.000000, 0.000000, 1.000000}}}
+},
+Bonus:List[1]{
+	Graphic_Object{vec3D{5.000000, -3.500000, -25.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{SPHERE,Sphere{3.000000},ColorRGBA{0.000000, 1.000000, 0.000000, 1.000000}}}
+}
+}
+Level{Name:Nom niveau ,Depth:350,
+Obstacles:List[6]{
+	Graphic_Object{vec3D{5.000000, 3.500000, -50.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{RECTANGLE,Rectangle{vec3D{15.000000, 25.000000, 0.000000},vec3D{-15.000000, -25.000000, 0.000000}},ColorRGBA{1.000000, 0.000000, 0.000000, 1.000000}}}
+	Graphic_Object{vec3D{5.000000, -3.500000, -70.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{CIRCLE,Circle{10.000000},ColorRGBA{1.000000, 0.000000, 1.000000, 1.000000}}}
+	Graphic_Object{vec3D{0.000000, 2.500000, -130.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{RECTANGLE,Rectangle{vec3D{7.000000, 25.000000, 0.000000},vec3D{-15.000000, -25.000000, 0.000000}},ColorRGBA{1.000000, 0.500000, 0.000000, 1.000000}}}
+	Graphic_Object{vec3D{1.000000, -3.500000, -170.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{CIRCLE,Circle{15.000000},ColorRGBA{1.000000, 0.500000, 1.000000, 1.000000}}}
+	Graphic_Object{vec3D{2.000000, 5.500000, -200.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{RECTANGLE,Rectangle{vec3D{15.000000, 25.000000, 0.000000},vec3D{-15.000000, -25.000000, 0.000000}},ColorRGBA{1.000000, 0.000000, 0.000000, 1.000000}}}
+	Graphic_Object{vec3D{0.000000, 7.500000, -250.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{RECTANGLE,Rectangle{vec3D{25.000000, 25.000000, 0.000000},vec3D{-25.000000, -25.000000, 0.000000}},ColorRGBA{1.000000, 0.000000, 0.000000, 1.000000}}}
+},
+Bonus:List[1]{
+	Graphic_Object{vec3D{5.000000, -3.500000, -25.000000},vec3D{0.000000, 0.000000, 1.000000},Figure{SPHERE,Sphere{3.000000},ColorRGBA{0.000000, 1.000000, 0.000000, 1.000000}}}
+}
+}

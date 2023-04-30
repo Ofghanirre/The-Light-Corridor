@@ -15,6 +15,7 @@
         "scenery.h": "c",
         "parser.h": "c",
         "cmath": "c",
-        "iterator": "c"
+        "iterator": "c",
+        "render.h": "c"
     }
 }

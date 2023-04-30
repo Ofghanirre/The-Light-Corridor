@@ -41,6 +41,9 @@ double dot_Vec3D(Vec3D u, Vec3D v);
 // Norm
 double norm_Vec3D(Vec3D u);
 
+// Distance
+double distance_Vec3D(Vec3D u, Vec3D v);
+
 // Normalized vector
 Vec3D normalize_Vec3D(Vec3D u);
 

@@ -39,6 +39,13 @@ double norm_Vec3D(Vec3D u) {
     return sqrt(dot_Vec3D(u, u));
 }
 
+double distance_Vec3D(Vec3D u, Vec3D v) {
+    float dx = u.x - v.x;
+    float dy = u.y - v.y;
+    float dz = u.z - v.z;
+    return sqrt(dx*dx + dy*dy + dz*dz);
+}
+
 Vec3D normalize_Vec3D(Vec3D u) {
     return mul_Vec3D(u, 1. / norm_Vec3D(u));
 }

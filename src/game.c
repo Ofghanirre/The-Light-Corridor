@@ -78,11 +78,29 @@ int static ball_detect_paddle_collision() {
         }
     return 0;
 }
+void static handle_ball_bounce(double z_distance) {
+    Vec3D normal;
+    double offset;
+    if (z_distance > 0) {
+        // Ball hit from the front
+        normal = (Vec3D){0., 0., 1.};
+        offset = BALL_RADIUS - z_distance;
+    } else {
+        // Ball hit from the back
+        normal = (Vec3D){0., 0., -1.};
+        offset = -BALL_RADIUS - z_distance;
+    }
+    game_state.ball.position.z += offset;
+    ball_bounce(normal);
+}
 
-void static ball_detect_obstacle(Graphic_Object *obstacle) {
+#define BOUNCE 1
+#define NO_BOUNCE 0
+
+int static ball_detect_rectangle(Graphic_Object *obstacle) {
     double z_distance = game_state.ball.position.z - obstacle->position.z;
     if (fabs(z_distance) > BALL_RADIUS) {
-        return;
+        return NO_BOUNCE;
     }
 
     double x1 = obstacle->figure.fig.rectangle.p1.x + obstacle->position.x;
@@ -103,21 +121,43 @@ void static ball_detect_obstacle(Graphic_Object *obstacle) {
 
     if (game_state.ball.position.x > x1 - BALL_RADIUS / 2 && game_state.ball.position.x < x2 + BALL_RADIUS / 2 
         && game_state.ball.position.y > y1 - BALL_RADIUS / 2 && game_state.ball.position.y < y2 + - BALL_RADIUS / 2) {
-            
-        Vec3D normal;
-        double offset;
-        if (z_distance > 0) {
-            // Ball hit from the front
-            normal = (Vec3D){0., 0., 1.};
-            offset = BALL_RADIUS - z_distance;
-        } else {
-            // Ball hit from the back
-            normal = (Vec3D){0., 0., -1.};
-            offset = -BALL_RADIUS - z_distance;
-        }
-        game_state.ball.position.z += offset;
-        ball_bounce(normal);
+        handle_ball_bounce(z_distance);
+        return BOUNCE;
     }
+    return NO_BOUNCE;
+}
+
+int static ball_detecte_circle(Graphic_Object * obstacle) {
+    double z_distance = game_state.ball.position.z - obstacle->position.z;
+    if (fabs(z_distance) > BALL_RADIUS) {
+        return NO_BOUNCE;
+    }
+
+    float distance_carre = (game_state.ball.position.x - obstacle->position.x) * (game_state.ball.position.x - obstacle->position.x) 
+                            + (game_state.ball.position.y - obstacle->position.y) * (game_state.ball.position.y - obstacle->position.y);
+    if (distance_carre - obstacle->figure.fig.circle.radius <= obstacle->figure.fig.circle.radius * obstacle->figure.fig.circle.radius) { // Collision détectée !
+        handle_ball_bounce(z_distance);
+        return BOUNCE;
+    }
+    return NO_BOUNCE;
+}
+
+int static ball_detecte_sphere(Graphic_Object * obstacle) {
+    double distance_centre = distance_Vec3D(obstacle->position, game_state.ball.position);
+    if (distance_centre <= (obstacle->figure.fig.sphere.radius + BALL_RADIUS)) {
+        return BOUNCE;
+    }
+    return NO_BOUNCE;
+}
+
+int static ball_detect_obstacle(Graphic_Object *obstacle) {
+    switch(obstacle->figure.type) {
+        case RECTANGLE : return ball_detect_rectangle(obstacle);
+        case SPHERE: return ball_detecte_sphere(obstacle); // NO BOUNCE
+        case CIRCLE: return ball_detecte_circle(obstacle);
+        case LABEL: return NO_BOUNCE;
+    }
+    return NO_BOUNCE;
 }
 
 void static ball_detect_obstacles() {

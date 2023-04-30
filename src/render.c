@@ -6,6 +6,11 @@
 #include <GL/glu.h>
 #include <math.h>
 
+#define NB_SEG_CIRCLE 64
+#ifndef M_PI
+#define M_PI 3.141
+#endif
+
 static void draw_corridor() {
     float x1, x2, y1, y2;
     x1 = -CORRIDOR_WIDTH / 2;
@@ -113,7 +118,47 @@ static void draw_ball() {
     glPopMatrix();
 }
 
-static void draw_obstacle(Graphic_Object *obstacle) {
+static void draw_sphere(Graphic_Object *obstacle) {
+    double alpha = 1.;
+    if (game_state.paddle_z_pos - obstacle->position.z < 0.1) { 
+        return;
+    }
+    if (game_state.paddle_z_pos - obstacle->position.z < 20) {
+        alpha = (game_state.paddle_z_pos - obstacle->position.z) / 20 + 0.5;
+    }
+
+    glPushMatrix();
+        glTranslated(obstacle->position.x, obstacle->position.y, obstacle->position.z);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){.8, .8, .8});
+        glMaterialf(GL_FRONT, GL_SHININESS, 16.);
+        glColor4d(obstacle->figure.color.r,obstacle->figure.color.g,obstacle->figure.color.b, alpha);
+        gluSphere(gluNewQuadric(), obstacle->figure.fig.sphere.radius, 64, 64);
+    glPopMatrix();
+}
+
+static void draw_circle(Graphic_Object *obstacle) {
+    double alpha = 1.;
+    if (game_state.paddle_z_pos - obstacle->position.z < 0.1) { 
+        return;
+    }
+    if (game_state.paddle_z_pos - obstacle->position.z < 20) {
+        alpha = (game_state.paddle_z_pos - obstacle->position.z) / 20 + 0.5;
+    }
+    glPushMatrix();
+        glTranslated(obstacle->position.x, obstacle->position.y, obstacle->position.z);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){0.01, 0.01, 0.01});
+        glMaterialf(GL_FRONT, GL_SHININESS, 1.);
+        glBegin(GL_TRIANGLE_FAN);
+            glColor4d(obstacle->figure.color.r,obstacle->figure.color.g,obstacle->figure.color.b, alpha);
+            glVertex3f(0.0,0.0,0.0);
+            float step_rad = 2*M_PI/(float)NB_SEG_CIRCLE;
+            for(int i=0;i<=NB_SEG_CIRCLE;i++) {
+                glVertex3f(cos(i*step_rad)*obstacle->figure.fig.circle.radius,sin(i*step_rad)*obstacle->figure.fig.circle.radius,0.0f);
+            }
+        glEnd();
+    glPopMatrix();
+}
+static void draw_rectangle(Graphic_Object *obstacle) {
     /* Here we assume obstacles are necessarily flat rectangles facing the camera.
     The structure for Graphic_Object can allow for more flexibility but we leave it at that
     */
@@ -161,6 +206,15 @@ static void draw_obstacle(Graphic_Object *obstacle) {
         }
         
     glPopMatrix();
+}
+
+static void draw_obstacle(Graphic_Object *obstacle) {
+    switch(obstacle->figure.type) {
+        case RECTANGLE : draw_rectangle(obstacle); break;
+        case SPHERE: draw_sphere(obstacle); break;
+        case CIRCLE: draw_circle(obstacle); break;
+        case LABEL: break;
+    }
 }
 
 static void draw_obstacles() {
