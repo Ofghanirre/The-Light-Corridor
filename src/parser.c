@@ -114,7 +114,7 @@ print_log("load_label buffer: %s\n", buffer);
 int load_graphic_object(Graphic_Object * result, const char * buffer) {
     char position3D_bfr[256], orientation3D_bfr[256], colorRGBA_bfr[256], figureType_bfr[256], figureData_bfr[5000];
 #ifdef __LOGGING__
-print_log("load_graphic_object buffer: %s\n", buffer);
+print_log("load_graphic_object's buffer: %s\n", buffer);
 #endif
     if (EOF == sscanf(buffer, "{%[^}]}, {%[^}]}, {%[^}]}, %[^,], {%[^;];", position3D_bfr, orientation3D_bfr, colorRGBA_bfr, figureType_bfr, figureData_bfr)) {
         memset(position3D_bfr, 0, sizeof(position3D_bfr));
@@ -125,7 +125,7 @@ print_log("load_graphic_object buffer: %s\n", buffer);
     }
 #ifdef __LOGGING__
 print_log("\n");
-print_log("Parse :%s --- %s --- %s --- %s --- %s\n", position3D_bfr, orientation3D_bfr, colorRGBA_bfr, figureType_bfr, figureData_bfr);
+print_log("Line to be Parsed :%s --- %s --- %s --- %s --- %s\n", position3D_bfr, orientation3D_bfr, colorRGBA_bfr, figureType_bfr, figureData_bfr);
 #endif
 
     Vec3D position3D, orientation3D;
@@ -274,13 +274,13 @@ int load_level_objects(FILE * istream, Level* level) {
 
             if (object_type != 1 && object_type != 2) {
                 #ifdef __LOGGING__
-                    print_log("Could not recognized the line as an Obstacle or Bonus (INVALID CODE: %d)\n", object_type);
+                    print_log("WARNING : Could not recognized the line as an Obstacle or Bonus (INVALID CODE: %d)\n", object_type);
                 #endif
             } else {
                 Graphic_Object object;
                 if (load_graphic_object(&object, line2)) {
                     #ifdef __LOGGING__
-                    print_log("Could not load the line as an Obstacle or Bonus : %s\n", line2);
+                    print_log("WARNING :Could not load the line as an Obstacle or Bonus : %s\n", line2);
                 #endif
                     free(line);
                     continue;
@@ -288,16 +288,16 @@ int load_level_objects(FILE * istream, Level* level) {
                 
                 if (object_type == 1) {
                     #ifdef __LOGGING__
-                    print_log("New Obstacle Loaded:");
+                    print_log("[New Obstacle Loaded]:");
                     print_graphic_object(object);
-                    print_log("\n");
+                    print_log("\n----\n\n");
                     #endif
                     level_append_obstacle(level, object);
                 } else {
                     #ifdef __LOGGING__
-                    print_log("New Bonus Loaded:");
+                    print_log("[New Bonus Loaded]:");
                     print_graphic_object(object);
-                    print_log("\n");
+                    print_log("\n----\n\n");
                     #endif
                     level_append_bonus(level, object);
                 }
@@ -326,7 +326,7 @@ int load_level(const char * file_path, Level * level) {
     load_level_objects(file, level);
 
     #ifdef __LOGGING__
-    print_log("\n");
+    print_log("\n >>>>> LEVEL LOADED <<<<<\n");
     print_level(level);
     print_log("\n");
     #endif
