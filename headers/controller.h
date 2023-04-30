@@ -49,8 +49,12 @@ typedef enum {
 
 typedef struct game_state_s {
     Scene scene;
-    int paused;
 
+    // Information about title screen:
+    int level_selected;
+    
+    // Information about game
+    int paused;
     double paddle_z_pos;
     int moving_forward;
 
@@ -59,8 +63,11 @@ typedef struct game_state_s {
     int glue_enabled;
     int lives;
 
+    // Information about level
     int n_level;
     Level level;
+
+    int selected_level;
 } game_state_t;
 
 extern game_state_t game_state;

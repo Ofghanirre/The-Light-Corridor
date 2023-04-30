@@ -204,7 +204,10 @@ void static ball_tick() {
 
 void game_init() {
     printf("Game init\n");
-    game_state.scene = GAME;
+    game_state.scene = TITLE_SCREEN;
+
+    game_state.level_selected = 1;
+
     game_state.paddle.position = (Vec2D){0., 0.};
 
     game_state.paddle_z_pos = 0;
@@ -218,12 +221,7 @@ void game_init() {
     
     game_state.glue_enabled = 0;
 
-    game_state.lives = 3;
-
-    game_state.n_level = 1;
-    load_level("./resources/levels/test.level", &(game_state.level));
-
-    print_level(&(game_state.level));
+    game_state.lives = 3;   
 }
 
 void game_free() {
@@ -238,10 +236,15 @@ int game_tick() {
     if (game_state.moving_forward && !game_state.ball.glued) {
         game_state.paddle_z_pos -= 0.5;
     }
-
-
-    
     return 0;
+}
+
+void game_start() {
+    game_state.n_level = 1;
+    load_level("./resources/levels/test.level", &(game_state.level));
+    print_level(&(game_state.level));
+
+    game_state.scene = GAME;
 }
 
 void clamp_paddle_position() {

@@ -45,6 +45,15 @@ static void onKey(GLFWwindow* window, int key, int scancode, int action, int mod
 			case GLFW_KEY_P :
 				glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 				break;
+            case GLFW_KEY_LEFT:
+                game_state.level_selected -= 1;
+                break;
+            case GLFW_KEY_RIGHT:
+                game_state.level_selected += 1;
+                break;
+            case GLFW_KEY_ENTER:
+                game_start();
+                break;
 			default: fprintf(stdout, "Unhandled key : %d\n", key);
 		}
 	}

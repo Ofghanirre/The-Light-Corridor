@@ -13,4 +13,6 @@ int game_tick();
 */
 void clamp_paddle_position();
 
+void game_start();
+
 #endif

@@ -267,7 +267,7 @@ static void load_textures() {
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
     glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
 
-    glGenTextures(2, textures.gl_texture);
+    glGenTextures(NB_TEXTURES, textures.gl_texture);
 
     int x, y, n;
 
@@ -292,6 +292,17 @@ static void load_textures() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, textures.data[1]);
 
+    // Texture 3
+	textures.data[2] = stbi_load("resources/textures/title_screen.tga", &x, &y, &n, 0);
+    
+	if (textures.data[2] == NULL) {
+		fprintf(stderr, "Texture 2 failed to load");
+		exit(1);
+	}
+    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[2]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, textures.data[2]);
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -311,22 +322,6 @@ static void load_font_metrics() {
         fprintf(stderr, "Couldn't load font metrics properly, this will cause issues\n");
     }
     fclose(file);
-}
-
-void render_init() {
-    printf("Render init\n");
-    glClearColor(0.0, 0.0, 0.0, 0.0);
-    glEnable(GL_DEPTH_TEST);
-    glShadeModel(GL_SMOOTH);
-    load_textures();
-    load_font_metrics();
-    printf("Loaded textures\n");
-}
-
-void render_free() {
-    printf("Render free\n");
-    free_textures();
-    glfwTerminate();
 }
 
 static void draw_game_HUD() {
@@ -460,12 +455,88 @@ static void draw_game_scene() {
     glPopMatrix();
 }
 
+static void draw_title_screen() {
+    glDepthMask(GL_FALSE); 
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
 
+    float width = 1.0, height = 1.0;
 
-int render_tick() {    
+    if (aspectRatio > 0) {
+        width = aspectRatio;
+        gluOrtho2D(0.0, 1.0 * aspectRatio, 1.0, 0.0);
+    } else {
+        height = aspectRatio;
+        gluOrtho2D(0.0, 1.0, 1.0 * aspectRatio, 0.0);
+    }
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
     
-    draw_game_scene();
-    draw_game_HUD();
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glEnable(GL_TEXTURE_2D);
+    
+    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[2]);
+    // Draw now
+    glBegin(GL_TRIANGLE_FAN);
+        glTexCoord2f(0., 1.); glVertex3f(0., height, 0.);
+        glTexCoord2f(1., 1.); glVertex3f(width, height, 0.);
+        glTexCoord2f(1., 0.); glVertex3f(width, 0., 0.);
+        glTexCoord2f(0., 0.); glVertex3f(0., 0., 0.);
+    glEnd();
+
+    glPushMatrix();
+        glTranslatef(0.553 * width, 0.633 * height, 0.);
+        glScalef(0.7, 0.7, 1.);
+        glColor3f(1., 1., 1.);
+
+        char level_number_string[8];
+        snprintf(level_number_string, 8, "%d", game_state.level_selected);
+        drawString(level_number_string);
+    glPopMatrix();
+    
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glDepthMask(GL_TRUE); 
+}
+
+void render_init() {
+    printf("Render init\n");
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glEnable(GL_DEPTH_TEST);
+    glShadeModel(GL_SMOOTH);
+    load_textures();
+    load_font_metrics();
+    printf("Loaded textures\n");
+}
+
+void render_free() {
+    printf("Render free\n");
+    free_textures();
+    glfwTerminate();
+}
+
+int render_tick() {
+    switch (game_state.scene) {
+        case TITLE_SCREEN:
+            draw_title_screen();
+            break;
+        case GAME:
+            draw_game_scene();
+            draw_game_HUD();
+            break;
+        case GAME_OVER:
+            break;
+    }    
 
     return 0;
 }
