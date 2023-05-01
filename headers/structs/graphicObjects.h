@@ -107,6 +107,14 @@ int GOL_append_node(Graphic_Object_List * list, Graphic_Object obj);
  */
 int GOL_remove_first(Graphic_Object_List * list);
 
+/**
+ * @brief Find and removes a Node of the list
+ * 
+ * @param list 
+ * @param object 
+ * @return int 
+ */
+int GOL_remove(Graphic_Object_List * list, Node * object);
 
 void print_graphic_object(Graphic_Object object);
 

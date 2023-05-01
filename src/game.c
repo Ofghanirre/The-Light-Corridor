@@ -171,23 +171,33 @@ void static ball_detect_obstacles() {
 
 void static ball_detect_bonus() {
     Node *bonus = game_state.level.bonus.head;
+    Node ** to_remove = (Node**) malloc(sizeof(Node*) * game_state.level.bonus.size);
+    if (to_remove == NULL) {
+        __FLAG_MEMORY_ERROR__ = 1;
+        return;
+    }
+    int to_remove_size = 0;
     for (; bonus != NULL ; bonus = bonus->next) {
         if (BOUNCE == ball_detect_object(&(bonus->elem))) {
+            to_remove[to_remove_size] = bonus;
+            to_remove_size++;
             switch (bonus->elem.effect) {
                 case GLUE : {
                     game_state.glue_enabled += GLUE_TICK_BONUS_DURATION;
-                    printf("Glue Bonus!\n");
                     break;
                 }
                 case EXTRALIFE : {
                     game_state.lives++;
-                    printf("Extra Life Bonus!\n");
                     break;
                 } 
                 default : {}
             }
         }
     }
+    for (int i = 0; i < to_remove_size; i++) {
+        GOL_remove(&(game_state.level.bonus), to_remove[i]);
+    }
+    free(to_remove);
 }
 
 void static ball_detect_back() {
