@@ -310,8 +310,7 @@ static void paddle_tick() {
 
     
     if (game_state.moving_forward && !game_state.ball.glued 
-        && game_state.paddle_z_pos - PADDLE_SPEED > game_state.ball.position.z && !paddle_detect_obstacles_ahead()) {
-        // TODO paddle collisions
+        && game_state.paddle_z_pos - PADDLE_SPEED * 2 > game_state.ball.position.z + BALL_RADIUS && !paddle_detect_obstacles_ahead()) {
         game_state.paddle_z_pos -= PADDLE_SPEED;
         game_state.score += PADDLE_SPEED;
     }
