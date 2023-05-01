@@ -10,7 +10,7 @@
 /**
  * Initializes the game
 */
-void game_init(const char * game_path);
+int game_init(const char * game_path);
 
 /**
  * Freeds the data used by the game

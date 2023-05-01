@@ -6,5 +6,4 @@ Custom Game File
 # One per line, separated by \n
 # give path from folder ./resources/levels/
 si.level
-test2.level
 test.level

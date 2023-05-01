@@ -347,12 +347,12 @@ static void paddle_tick() {
     }
 }
 
-void game_init(const char * game_path) {
+int game_init(const char * game_path) {
     printf("Game init\n");
     game_state.scene = TITLE_SCREEN;
     game_state.level_selected = 1;
     game_state.game_path = game_path;
-    load_level_loader(game_state.game_path, &(game_state.levelLoader));
+    return load_level_loader(game_state.game_path, &(game_state.levelLoader));
 }
 
 void game_free() {

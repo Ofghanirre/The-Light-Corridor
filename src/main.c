@@ -74,10 +74,12 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
-    game_init(main_game_file_path);
-    render_init();
+    if (!game_init(main_game_file_path)) {
+        render_init();
 
-    run_game(window);
+        run_game(window);
+    }
+
 
     game_free();
     render_free();
