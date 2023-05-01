@@ -9,6 +9,7 @@
 #define PROJECT_NAME "The Light Corridor"
 #define PROJECT_VERSION "v0.0.0"
 
+#define DEFAULT_GAME_PATH "./resources/levels/default.game"
 #include "game.h"
 #include "render.h"
 #include "controller.h"
@@ -17,7 +18,7 @@
 
 int Lflag = 0;
 char *lvalue = NULL;
-char * main_game_file_path = "./resources/levels/default.game";
+char * main_game_file_path = DEFAULT_GAME_PATH;
 
 static void args_parser(int argc, char * const *argv) {
     int c;
@@ -46,7 +47,11 @@ static void args_parser(int argc, char * const *argv) {
                 main_game_file_path = optarg;
                 break;
             default:
-                printf("Usage : -L -l [logging_file]\n\t-L : activate logging on stdout\n\t-l [logging_file] activate logging on a given logging_file\n\n");
+                printf("Usage : -L -l [logging_file] -g [game_file_path]\n"
+                "\t-L : activate logging on stdout\n"
+                "\t-l [logging_file] activate logging on a given logging_file\n"
+                "\t-g [game_file_path] specify which .game file to take for the game, default is " DEFAULT_GAME_PATH
+                "\n");
                 exit(EXIT_FAILURE);
         }
     }
