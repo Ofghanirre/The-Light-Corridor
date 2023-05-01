@@ -357,12 +357,15 @@ static void draw_life_counter() {
 }
 
 static void draw_glue_bonus() {
+    float width = 1.0;
+    if (aspectRatio > 0) width = aspectRatio; 
+
     static float max_glue_value = 0;
     if (game_state.glue_enabled > max_glue_value) {
         max_glue_value = game_state.glue_enabled;
     }
     glPushMatrix();
-        glTranslatef(1.05, 0.88, 0.);
+        glTranslatef(width - 0.6, 0.88, 0.);
         glColor3f(1., 1., 1.);
         drawString("Glue:");
         glBindTexture(GL_TEXTURE_2D, textures.gl_texture[1]);
