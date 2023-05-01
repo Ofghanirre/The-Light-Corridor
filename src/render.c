@@ -358,9 +358,6 @@ static void draw_life_counter() {
             glTranslatef(BASE_CHAR_SIZE / 2., 0., 0.);
         }
         glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
-
-        glDisable(GL_TEXTURE_2D);
-        glDisable(GL_BLEND);
     glPopMatrix();
 }
 
@@ -402,6 +399,9 @@ static void draw_game_HUD() {
 
     // New level info
     draw_new_level();
+
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
 
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
