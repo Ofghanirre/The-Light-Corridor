@@ -64,7 +64,7 @@ void print_graphic_object(Graphic_Object object) {
     print_vec3D(object.orientation);
     print_log(",");
     print_figure(object.figure);
-    print_log("}");
+    print_log(", effect : %d}", object.effect);
 }
 
 void print_GOL(Graphic_Object_List object) {
@@ -87,5 +87,18 @@ Graphic_Object new_obstacle(double width, double height, Point3D position, Color
     result.figure.fig.rectangle.p2 = (Point3D){width / 2., height / 2., 0};
     result.position = position;
     result.orientation = (Vec3D){0., 0., 1.};
+    result.effect = OBSTACLE;
+    return result;
+}
+
+Graphic_Object new_bonus(double width, double height, Point3D position, ColorRGBA color, Effect effect) {
+    Graphic_Object result;
+    result.figure.type = RECTANGLE;
+    result.figure.color = color;
+    result.figure.fig.rectangle.p1 = (Point3D){-width / 2., -height / 2., 0};
+    result.figure.fig.rectangle.p2 = (Point3D){width / 2., height / 2., 0};
+    result.position = position;
+    result.orientation = (Vec3D){0., 0., 1.};
+    result.effect = effect;
     return result;
 }

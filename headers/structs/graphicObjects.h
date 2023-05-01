@@ -6,6 +6,11 @@
 #include "utils.h"
 
 /* ------ Structs ------ */
+typedef enum Effect {
+    OBSTACLE = 0,
+    GLUE = 1,
+    EXTRALIFE = 2
+} Effect;
 
 /**
  * @brief Represents an Object that can be displayed in the scene
@@ -18,6 +23,7 @@ typedef struct Graphic_Object {
     Point3D position;
     Vec3D orientation; 
     Figure figure;
+    Effect effect;
 } Graphic_Object;
 
 
@@ -112,4 +118,5 @@ void print_GOL(Graphic_Object_List object);
 */
 Graphic_Object new_obstacle(double width, double height, Point3D position, ColorRGBA color);
 
+Graphic_Object new_bonus(double width, double height, Point3D position, ColorRGBA color, Effect bonuseffect);
 #endif

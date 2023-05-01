@@ -218,7 +218,7 @@ static void draw_rectangle(Graphic_Object *obstacle) {
     glPopMatrix();
 }
 
-static void draw_obstacle(Graphic_Object *obstacle) {
+static void draw_graphic_object(Graphic_Object *obstacle) {
     switch(obstacle->figure.type) {
         case RECTANGLE : draw_rectangle(obstacle); break;
         case SPHERE: draw_sphere(obstacle); break;
@@ -230,7 +230,14 @@ static void draw_obstacle(Graphic_Object *obstacle) {
 static void draw_obstacles() {
     Node *obstacle = game_state.level.obstacles.tail;
     for (; obstacle != NULL ; obstacle = obstacle->prev) {
-        draw_obstacle(&(obstacle->elem));
+        draw_graphic_object(&(obstacle->elem));
+    }
+}
+
+static void draw_bonus() {
+    Node *bonus = game_state.level.bonus.tail;
+    for (; bonus != NULL ; bonus = bonus->prev) {
+        draw_graphic_object(&(bonus->elem));
     }
 }
 
@@ -341,6 +348,42 @@ static void draw_life_counter() {
     glPopMatrix();
 }
 
+static void draw_glue_bonus() {
+    static float max_glue_value = 0;
+    if (game_state.glue_enabled > max_glue_value) {
+        max_glue_value = game_state.glue_enabled;
+    }
+    glPushMatrix();
+        glTranslatef(1.05, 0.88, 0.);
+        glColor3f(1., 1., 1.);
+        drawString("Glue:");
+        glBindTexture(GL_TEXTURE_2D, textures.gl_texture[1]);
+        glColor3f(0.8, 0.8, 0.8);
+        glTranslatef(0.0, 0.0275, 0.);
+
+        glBegin(GL_TRIANGLE_FAN);
+            glVertex3f(0., 0., 0.);
+            glVertex3f(0.3,0.,0.0);
+            glVertex3f(0.3,0.05,0.0);
+            glVertex3f(0.0,0.05,0.0);
+	    glEnd();
+        glColor3f(1.0, 1.0, 1.0);
+        float percentage = 0.0;
+        if (game_state.glue_enabled == TIMELESS_GLUE) percentage = 1.0;
+        else {
+            percentage = game_state.glue_enabled / max_glue_value;
+        }
+        glBegin(GL_TRIANGLE_FAN);
+            glVertex3f(0., 0., 0.);
+            glVertex3f(0.3*percentage,0.0,0.0);
+            glVertex3f(0.3*percentage,0.05,0.0);
+            glVertex3f(0.0,0.05,0.0);
+	    glEnd();
+
+        glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
+    glPopMatrix();
+}
+
 static void draw_new_level() {
     if (game_state.paddle_z_pos <= TRANSITION_LEVEL_DISTANCE && game_state.paddle_z_pos >= 0) {
         glPushMatrix();
@@ -379,6 +422,9 @@ static void draw_game_HUD() {
 
     // New level info
     draw_new_level();
+
+    // Bonus Glue info
+    if (game_state.glue_enabled) draw_glue_bonus();
 
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);
@@ -452,6 +498,7 @@ static void draw_game_scene() {
         glTranslated(0., 0., -game_state.paddle_z_pos);
         draw_ball();
         draw_obstacles();
+        draw_bonus();
     glPopMatrix();
 
     // Draw paddle after opaque objects, for transparency to work!

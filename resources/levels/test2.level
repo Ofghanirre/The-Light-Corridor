@@ -6,8 +6,11 @@ Green First Level
 # Objects:
 # ----------
 # Objects are identified by a code :
-# 1 : OBSTACLES
-# 2 : BONUS
+# 0 : OBSTACLE
+# 1 : BONUS GLUE
+# 2 : BONUS EXTRALIFE
 # Format :
 # CODE: position3D, orientation3D, colorRGBA, figureType, figureInfo
-1:{5.000000 3.500000 -45.000000}, {0.0 0.0 1.0}, {0.0 1.0 0.0}, RECTANGLE, {{15.0 25.0 0.0}, {-15.0 -25.0 0.0}};
+0:{5.000000 3.500000 -45.000000}, {0.0 0.0 1.0}, {0.0 1.0 0.0}, RECTANGLE, {{15.0 25.0 0.0}, {-15.0 -25.0 0.0}};
+1:{5.000000 3.500000 -20.000000}, {0.0 0.0 1.0}, {0.0 1.0 1.0}, SPHERE, {1};
+2:{-5.000000 3.500000 -10.000000}, {0.0 0.0 1.0}, {1.0 0.0 1.0}, SPHERE, {1};

@@ -152,7 +152,7 @@ int static ball_detecte_sphere(Graphic_Object * obstacle) {
     return NO_BOUNCE;
 }
 
-int static ball_detect_obstacle(Graphic_Object *obstacle) {
+int static ball_detect_object(Graphic_Object *obstacle) {
     switch(obstacle->figure.type) {
         case RECTANGLE : return ball_detect_rectangle(obstacle);
         case SPHERE: return ball_detecte_sphere(obstacle); // NO BOUNCE
@@ -165,7 +165,28 @@ int static ball_detect_obstacle(Graphic_Object *obstacle) {
 void static ball_detect_obstacles() {
     Node *obstacle = game_state.level.obstacles.head;
     for (; obstacle != NULL ; obstacle = obstacle->next) {
-        ball_detect_obstacle(&(obstacle->elem));
+        ball_detect_object(&(obstacle->elem));
+    }
+}
+
+void static ball_detect_bonus() {
+    Node *bonus = game_state.level.bonus.head;
+    for (; bonus != NULL ; bonus = bonus->next) {
+        if (BOUNCE == ball_detect_object(&(bonus->elem))) {
+            switch (bonus->elem.effect) {
+                case GLUE : {
+                    game_state.glue_enabled += GLUE_TICK_BONUS_DURATION;
+                    printf("Glue Bonus!\n");
+                    break;
+                }
+                case EXTRALIFE : {
+                    game_state.lives++;
+                    printf("Extra Life Bonus!\n");
+                    break;
+                } 
+                default : {}
+            }
+        }
     }
 }
 
@@ -181,7 +202,7 @@ void static ball_detect_end_level() {
         level_clear(&(game_state.level));
         if (NO_NEXT_LEVEL == loader_next_level(&(game_state.level), &(game_state.levelLoader))) {
             printf("Game over !\n");
-            game_state.glue_enabled = 1;
+            game_state.glue_enabled = TIMELESS_GLUE; 
         }
         float distance = game_state.ball.position.z - game_state.paddle_z_pos;
         game_state.paddle_z_pos = fmod(game_state.paddle_z_pos, 20.) + TRANSITION_LEVEL_DISTANCE*2;
@@ -200,7 +221,13 @@ void static ball_tick() {
     game_state.ball.position = sum_Vec3D(game_state.ball.position, mul_Vec3D(game_state.ball.direction, game_state.ball.speed));
     ball_detect_wall_collision();
     ball_detect_obstacles();
+    ball_detect_bonus();
     ball_detect_back();
+    
+    if (game_state.glue_enabled && game_state.glue_enabled != TIMELESS_GLUE) {
+        game_state.glue_enabled--;
+    }
+
     int lost_ball = ball_detect_paddle_collision();
     
     if (lost_ball) {
@@ -212,7 +239,10 @@ void static ball_tick() {
         game_state.ball.glued = 1;
         game_state.ball.direction = (Vec3D){0., 0., -1.};
     }
+
+    
     ball_detect_end_level();
+
 }
 
 void game_init() {

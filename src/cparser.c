@@ -117,7 +117,7 @@ print_log("load_label buffer: %s\n", buffer);
     return 0;
 }
 
-int load_graphic_object(Graphic_Object * result, const char * buffer) {
+int load_graphic_object(Graphic_Object * result, const char * buffer, Effect effect) {
     char position3D_bfr[256], orientation3D_bfr[256], colorRGBA_bfr[256], figureType_bfr[256], figureData_bfr[5000];
 #ifdef __LOGGING__
 print_log("load_graphic_object's buffer: %s\n", buffer);
@@ -180,7 +180,7 @@ print_log("Line to be Parsed :%s --- %s --- %s --- %s --- %s\n", position3D_bfr,
         return 1;
     }
 
-    *result = (Graphic_Object){position3D, orientation3D, figure};
+    *result = (Graphic_Object){position3D, orientation3D, figure, effect};
 
     return 0;
 }
@@ -286,13 +286,13 @@ int load_level_objects(FILE * istream, Level* level) {
             sscanf(line, "%d:", &object_type);
             char * line2 = strchr(line, '{');
 
-            if (object_type != 1 && object_type != 2) {
+            if (object_type != OBSTACLE && object_type != GLUE && object_type != EXTRALIFE) {
                 #ifdef __LOGGING__
                     print_log("WARNING : Could not recognized the line as an Obstacle or Bonus (INVALID CODE: %d)\n", object_type);
                 #endif
             } else {
                 Graphic_Object object;
-                if (load_graphic_object(&object, line2)) {
+                if (load_graphic_object(&object, line2, (Effect) object_type)) {
                     #ifdef __LOGGING__
                     print_log("WARNING :Could not load the line as an Obstacle or Bonus : %s\n", line2);
                 #endif
@@ -300,7 +300,7 @@ int load_level_objects(FILE * istream, Level* level) {
                     continue;
                 }
                 
-                if (object_type == 1) {
+                if (object_type == OBSTACLE) {
                     #ifdef __LOGGING__
                     print_log("[New Obstacle Loaded]:");
                     print_graphic_object(object);
