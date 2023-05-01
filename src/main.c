@@ -28,6 +28,7 @@ static void args_parser(int argc, char * const *argv) {
             {"L", no_argument, &Lflag, 1},
             {"l", required_argument, 0, 'l'},
             {"g", required_argument, 0, 'g'},
+            {"help", no_argument, &Lflag, 'h'},
             {0, 0, 0, 0}
         };
         int option_index = 0;
@@ -46,11 +47,13 @@ static void args_parser(int argc, char * const *argv) {
             case 'g':
                 main_game_file_path = optarg;
                 break;
+            case 'h':
             default:
-                printf("Usage : -L -l [logging_file] -g [game_file_path]\n"
-                "\t-L : activate logging on stdout\n"
-                "\t-l [logging_file] activate logging on a given logging_file\n"
-                "\t-g [game_file_path] specify which .game file to take for the game, default is " DEFAULT_GAME_PATH
+                printf("Usage : --help -L -l [logging_file] -g [game_file_path]\n"
+                "\t--help \t\t\t: display this message\n"
+                "\t-L \t\t\t: activate logging on stdout\n"
+                "\t-l [logging_file]\t: activate logging on a given logging_file\n"
+                "\t-g [game_file_path]\t: specify which .game file to take for the game, default is " DEFAULT_GAME_PATH "\n"
                 "\n");
                 exit(EXIT_FAILURE);
         }
