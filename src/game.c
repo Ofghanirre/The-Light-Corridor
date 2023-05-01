@@ -267,6 +267,7 @@ void static ball_tick() {
         }
 
         game_state.ball.glued = 1;
+        game_state.ball.glued_offset = (Point2D) {0., 0.};
         game_state.ball.direction = (Vec3D){0., 0., -1.};
     }
 
