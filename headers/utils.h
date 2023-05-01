@@ -8,7 +8,6 @@
 #include <stdio.h>
 
 extern unsigned int __FLAG_MEMORY_ERROR__;
-extern FILE * log_file;
 
 void set_logging_file(const char * path);
 void set_logging();
