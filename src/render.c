@@ -245,9 +245,20 @@ static void draw_obstacles() {
 }
 
 static void draw_bonus() {
+    static float glowing_effect_iter = 0.0;
+    static float glowing_effect_factor = 1.0;
     Node *bonus = game_state.level.bonus.tail;
     for (; bonus != NULL ; bonus = bonus->prev) {
-        draw_graphic_object(&(bonus->elem));
+        // draw_graphic_object(&(bonus->elem));
+        Graphic_Object glowing = (Graphic_Object){bonus->elem.position, bonus->elem.orientation, bonus->elem.figure, bonus->elem.effect};
+        glowing.figure.color.r += glowing_effect_iter;
+        glowing.figure.color.g += glowing_effect_iter;
+        glowing.figure.color.b += glowing_effect_iter;
+        draw_graphic_object(&(glowing));
+    }
+    glowing_effect_iter += 0.1 * glowing_effect_factor;
+    if (fabs(glowing_effect_iter) >= 0.8) {
+        glowing_effect_factor *= -1.0;
     }
 }
 

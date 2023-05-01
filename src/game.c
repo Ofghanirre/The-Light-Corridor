@@ -123,14 +123,10 @@ int static ball_detect_rectangle(Graphic_Object *obstacle) {
         y2 = temp;
     }
 
-    printf("L: %f %f, R: %f %f\n", x1, y1, x2, y2);
-    printf("BALL: %f %f\n", game_state.ball.position.x, game_state.ball.position.y);
-
     if (game_state.ball.position.x + BALL_RADIUS > x1 
         && game_state.ball.position.x - BALL_RADIUS < x2
         && game_state.ball.position.y - BALL_RADIUS < y1 
         && game_state.ball.position.y + BALL_RADIUS > y2) {
-        printf("HIT!\n");
         return obstacle_ball_bounce(z_distance);
     }
     return NO_BOUNCE;

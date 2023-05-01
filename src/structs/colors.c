@@ -10,6 +10,7 @@ ColorRGB rgba_to_rgb(ColorRGBA color) {
     return (ColorRGB){color.r, color.g, color.b};
 }
 
+
 void print_colorRGBA(ColorRGBA color) {
     print_log("ColorRGBA{%f, %f, %f, %f}", color.r, color.g, color.b, color.a);
 }
