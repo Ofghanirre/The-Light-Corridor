@@ -63,14 +63,13 @@ int GOL_remove(Graphic_Object_List * list, Node * object) {
         temp = temp->next;
     }
     if (temp == NULL) return 1;
-    printf("%p : %p\nnext : %p\nprev : %p\n", temp, object, temp->next, temp->prev);
     if (temp->prev != NULL) { temp->prev->next = temp->next; }
     if (temp->next != NULL) { temp->next->prev = temp->prev; }
     if (temp == list->tail) { list->tail = temp->prev; }
     if (temp == list->head) { list->head = temp->next; }
     free(temp);
     list->size--;
-    
+
     return CLEAR;
 }
 
