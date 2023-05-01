@@ -233,7 +233,7 @@ void game_init() {
     game_state.glue_enabled = 0;
     load_level_loader("./resources/levels/test.game", &(game_state.levelLoader));
 
-    game_state.lives = 3;   
+    game_state.lives = 5;   
 }
 
 void game_free() {
