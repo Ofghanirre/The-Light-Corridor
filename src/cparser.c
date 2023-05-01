@@ -454,6 +454,7 @@ int load_level_loader(const char * file_path, LevelLoader * loader) {
     #ifdef __LOGGING__
     print_log("\n >>>>> GAME LOADED <<<<<\n");
     #endif
+    loader->name = loader_name;
     fclose(file);
     return 0;
 }

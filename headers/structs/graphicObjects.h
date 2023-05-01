@@ -60,6 +60,7 @@ typedef struct LevelLoader {
     char ** levels;
     int size;
     int current_level;
+    char * name;
 } LevelLoader;
 
 /* ------ Functions ------ */

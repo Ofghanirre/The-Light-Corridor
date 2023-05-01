@@ -56,7 +56,15 @@ void print_level(Level * level) {
 }
 
 int loader_next_level(Level * result, LevelLoader * loader) {
-    if (loader->current_level + 1 >= loader->size) { return 1; }
+    if (loader->current_level + 1 >= loader->size) { return NO_NEXT_LEVEL; }
     loader->current_level++;
     return load_level(loader->levels[loader->current_level], result);
+}
+
+void loader_free(LevelLoader* loader) {
+    for (int i = 0; i < loader->size; i++) {
+        free(loader->levels[i]);
+    }
+    free(loader->levels);
+    free(loader->name);
 }
