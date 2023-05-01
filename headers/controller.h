@@ -59,6 +59,8 @@ typedef struct game_state_s {
     double score;
     int moving_forward;
 
+    double desired_paddle_x;
+    double desired_paddle_y;
     paddle_t paddle;
     ball_t ball;
     int glue_enabled;

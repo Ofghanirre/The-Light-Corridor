@@ -65,9 +65,8 @@ static void cursor_position_callback(GLFWwindow* window, double x, double y)
     int width, height;
     glfwGetWindowSize(window, &width, &height);
 
-    game_state.paddle.position.x = (x / width - 0.5) * CORRIDOR_WIDTH;
-    game_state.paddle.position.y = (0.5 - y / height) * CORRIDOR_HEIGHT;
-    clamp_paddle_position();
+    game_state.desired_paddle_x = (x / width - 0.5) * CORRIDOR_WIDTH;
+    game_state.desired_paddle_y = (0.5 - y / height) * CORRIDOR_HEIGHT;
 }
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)

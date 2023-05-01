@@ -216,6 +216,45 @@ void static ball_tick() {
     ball_detect_end_level();
 }
 
+static void clamp_paddle_position() {
+    if (game_state.paddle.position.x - PADDLE_WIDTH / 2 < -CORRIDOR_WIDTH / 2) {
+        game_state.paddle.position.x = -CORRIDOR_WIDTH / 2 + PADDLE_WIDTH / 2;
+    }
+    if (game_state.paddle.position.x + PADDLE_WIDTH / 2 > CORRIDOR_WIDTH / 2) {
+        game_state.paddle.position.x = CORRIDOR_WIDTH / 2 - PADDLE_WIDTH / 2;
+    }
+    if (game_state.paddle.position.y - PADDLE_HEIGHT / 2 < -CORRIDOR_HEIGHT / 2) {
+        game_state.paddle.position.y = -CORRIDOR_HEIGHT / 2 + PADDLE_HEIGHT / 2;
+    }
+    if (game_state.paddle.position.y + PADDLE_HEIGHT / 2 > CORRIDOR_HEIGHT / 2) {
+        game_state.paddle.position.y = CORRIDOR_HEIGHT / 2 - PADDLE_HEIGHT / 2;
+    }
+}
+
+int static paddle_detect_obstacle_ahead(Graphic_Object *obstacle) {
+    
+}
+
+int static paddle_detect_obstacles_ahead() {
+    Node *obstacle = game_state.level.obstacles.head;
+    for (; obstacle != NULL ; obstacle = obstacle->next) {
+        if (paddle_detect_obstacles_ahead(&(obstacle->elem))) return 1;
+    }
+    return 0;
+}
+
+static void paddle_tick() {
+    game_state.paddle.position.x = game_state.desired_paddle_x;
+    game_state.paddle.position.y = game_state.desired_paddle_y;
+    clamp_paddle_position();
+
+    if (game_state.moving_forward && !game_state.ball.glued) {
+        // TODO paddle collisions
+        game_state.paddle_z_pos -= 0.5;
+        game_state.score += 0.5;
+    }
+}
+
 void game_init() {
     printf("Game init\n");
     game_state.scene = TITLE_SCREEN;
@@ -234,11 +273,7 @@ int game_tick() {
     if (game_state.paused || game_state.scene != GAME) return 0;
 
     ball_tick();
-    if (game_state.moving_forward && !game_state.ball.glued) {
-        // TODO paddle collisions
-        game_state.paddle_z_pos -= 0.5;
-        game_state.score += 0.5;
-    }
+    paddle_tick();
     return 0;
 }
 
@@ -273,19 +308,4 @@ void game_restart() {
 
 void game_end() {
     game_state.scene = GAME_OVER;
-}
-
-void clamp_paddle_position() {
-    if (game_state.paddle.position.x - PADDLE_WIDTH / 2 < -CORRIDOR_WIDTH / 2) {
-        game_state.paddle.position.x = -CORRIDOR_WIDTH / 2 + PADDLE_WIDTH / 2;
-    }
-    if (game_state.paddle.position.x + PADDLE_WIDTH / 2 > CORRIDOR_WIDTH / 2) {
-        game_state.paddle.position.x = CORRIDOR_WIDTH / 2 - PADDLE_WIDTH / 2;
-    }
-    if (game_state.paddle.position.y - PADDLE_HEIGHT / 2 < -CORRIDOR_HEIGHT / 2) {
-        game_state.paddle.position.y = -CORRIDOR_HEIGHT / 2 + PADDLE_HEIGHT / 2;
-    }
-    if (game_state.paddle.position.y + PADDLE_HEIGHT / 2 > CORRIDOR_HEIGHT / 2) {
-        game_state.paddle.position.y = CORRIDOR_HEIGHT / 2 - PADDLE_HEIGHT / 2;
-    }
 }
