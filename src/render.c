@@ -357,8 +357,7 @@ static void draw_life_counter() {
 }
 
 static void draw_glue_bonus() {
-    float width = 1.0;
-    if (aspectRatio > 0) width = aspectRatio; 
+    float width = aspectRatio > 0 ? aspectRatio : 1.0;
 
     static float max_glue_value = 0;
     if (game_state.glue_enabled > max_glue_value) {
