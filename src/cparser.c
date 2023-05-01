@@ -194,11 +194,9 @@ char* parser_getLine(FILE* file) {
     }
     int size = 0;
     char c;
-    int gotComment = 0;
     while ((c = fgetc(file)) != EOF && c != '\n') {
         if (c == '#') {
             // on ignore le reste de la ligne
-            gotComment = 1;
             while ((c = fgetc(file)) != EOF && c != '\n');
             break;
         }
@@ -217,18 +215,13 @@ char* parser_getLine(FILE* file) {
         }
         line[size++] = c;
     }
-
-    if (size > 0 || gotComment) {
-        line = realloc(line, size + 1);
-        if (!line) {
-            return NULL;
-        }
-        line[size] = '\0';
-        return line;
-    } else {
-        free(line);
+    if (size == 0 && c == EOF) return NULL;
+    line = realloc(line, size + 1);
+    if (!line) {
         return NULL;
     }
+    line[size] = '\0';
+    return line;
 }
 
 int load_level_name(char ** result, FILE * istream) {
