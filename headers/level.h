@@ -68,5 +68,22 @@ int level_remove_first_bonus(Level *level);
 
 void print_level(Level * level);
 
+#define NO_NEXT_LEVEL -42
+
+/**
+ * @brief Invoke and load the next level on the loader into result, if no next lever,
+ * the int NO_NEXT_LEVEL is returned
+ * 
+ * @param result 
+ * @param loader 
+ * @return int 
+ */
 int loader_next_level(Level * result, LevelLoader * loader);
+
+/**
+ * @brief Free the given loader
+ * 
+ * @param loader 
+ */
+void loader_free(LevelLoader* loader);
 #endif

@@ -179,7 +179,10 @@ void static ball_detect_end_level() {
     if (game_state.paddle_z_pos < - game_state.level.depth) {
         printf("End level\n");
         level_clear(&(game_state.level));
-        loader_next_level(&(game_state.level), &(game_state.levelLoader));
+        if (NO_NEXT_LEVEL == loader_next_level(&(game_state.level), &(game_state.levelLoader))) {
+            printf("Game over !\n");
+            game_state.glue_enabled = 1;
+        }
         float distance = game_state.ball.position.z - game_state.paddle_z_pos;
         game_state.paddle_z_pos = fmod(game_state.paddle_z_pos, 20.) + TRANSITION_LEVEL_DISTANCE*2;
         game_state.ball.position.z = game_state.paddle_z_pos + distance;
@@ -239,6 +242,7 @@ void game_init() {
 void game_free() {
     printf("Game free\n");
     free_logging_file();
+    loader_free(&(game_state.levelLoader));
     level_free(&(game_state.level));
 }
 
