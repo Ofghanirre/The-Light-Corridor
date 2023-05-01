@@ -41,14 +41,14 @@ void static ball_detect_wall_collision() {
 // Returns 1 if the ball failed to be caught
 int static ball_detect_paddle_collision() {
     // We only consider paddle collision is the ball is heading towards it
-    //if (game_state.ball.direction.z < 0) { return 0;}
+    if (game_state.ball.direction.z < 0) { return 0;}
 
     // The ball is still too far from the paddle
     if (game_state.ball.position.z + BALL_RADIUS <= 0 + game_state.paddle_z_pos) {
         return 0;
     }
 
-    // We ball passed the paddle
+    // The ball passed the paddle
     if (game_state.ball.position.z > 0 + game_state.paddle_z_pos) {
         return 1;
     }
@@ -198,11 +198,10 @@ void static ball_detect_back() {
 
 void static ball_detect_end_level() {
     if (game_state.paddle_z_pos < - game_state.level.depth) {
-        printf("End level\n");
         level_clear(&(game_state.level));
         if (NO_NEXT_LEVEL == loader_next_level(&(game_state.level), &(game_state.levelLoader))) {
-            printf("Game over !\n");
-            game_state.glue_enabled = TIMELESS_GLUE; 
+            game_end();
+            return;
         }
         float distance = game_state.ball.position.z - game_state.paddle_z_pos;
         game_state.paddle_z_pos = fmod(game_state.paddle_z_pos, 20.) + TRANSITION_LEVEL_DISTANCE*2;
@@ -219,6 +218,7 @@ void static ball_tick() {
     }
 
     game_state.ball.position = sum_Vec3D(game_state.ball.position, mul_Vec3D(game_state.ball.direction, game_state.ball.speed));
+    int lost_ball = ball_detect_paddle_collision();
     ball_detect_wall_collision();
     ball_detect_obstacles();
     ball_detect_bonus();
@@ -227,13 +227,13 @@ void static ball_tick() {
     if (game_state.glue_enabled && game_state.glue_enabled != TIMELESS_GLUE) {
         game_state.glue_enabled--;
     }
-
-    int lost_ball = ball_detect_paddle_collision();
     
     if (lost_ball) {
         game_state.lives -= 1;
         if (game_state.lives == 0) {
+            level_free(&(game_state.level));
             game_end();
+            return;
         }
 
         game_state.ball.glued = 1;
@@ -243,6 +243,78 @@ void static ball_tick() {
     
     ball_detect_end_level();
 
+}
+
+static void clamp_paddle_position() {
+    if (game_state.paddle.position.x - PADDLE_WIDTH / 2 < -CORRIDOR_WIDTH / 2) {
+        game_state.paddle.position.x = -CORRIDOR_WIDTH / 2 + PADDLE_WIDTH / 2;
+    }
+    if (game_state.paddle.position.x + PADDLE_WIDTH / 2 > CORRIDOR_WIDTH / 2) {
+        game_state.paddle.position.x = CORRIDOR_WIDTH / 2 - PADDLE_WIDTH / 2;
+    }
+    if (game_state.paddle.position.y - PADDLE_HEIGHT / 2 < -CORRIDOR_HEIGHT / 2) {
+        game_state.paddle.position.y = -CORRIDOR_HEIGHT / 2 + PADDLE_HEIGHT / 2;
+    }
+    if (game_state.paddle.position.y + PADDLE_HEIGHT / 2 > CORRIDOR_HEIGHT / 2) {
+        game_state.paddle.position.y = CORRIDOR_HEIGHT / 2 - PADDLE_HEIGHT / 2;
+    }
+}
+
+int static rectangle_overlap(Point2D l1, Point2D r1, Point2D l2, Point2D r2) {
+    if (l1.x > r2.x || l2.x > r1.x) return 0;
+    if (r1.y > l2.y || r2.y > l1.y) return 0;
+    return 1;
+}
+
+int static paddle_detect_obstacle_ahead(Graphic_Object *obstacle) {
+    double z_distance = game_state.paddle_z_pos - obstacle->position.z;
+    if (fabs(z_distance) > BALL_RADIUS * 2 || z_distance < 0) {
+        return NO_BOUNCE;
+    }
+
+    double x1 = obstacle->figure.fig.rectangle.p1.x + obstacle->position.x;
+    double x2 = obstacle->figure.fig.rectangle.p2.x + obstacle->position.x;
+    double y1 = obstacle->figure.fig.rectangle.p1.y + obstacle->position.y;
+    double y2 = obstacle->figure.fig.rectangle.p2.y + obstacle->position.y;
+    if (x1 > x2) { 
+        double temp = x1;
+        x1 = x2;
+        x2 = temp;
+    }
+    if (y1 < y2) { 
+        double temp = y1;
+        y1 = y2;
+        y2 = temp;
+    }
+
+    Point2D l1 = (Point2D) {x1, y1};
+    Point2D r1 = (Point2D) {x2, y2};
+    Point2D l2 = (Point2D) {game_state.paddle.position.x - PADDLE_WIDTH / 2, game_state.paddle.position.y + PADDLE_HEIGHT / 2};
+    Point2D r2 = (Point2D) {game_state.paddle.position.x + PADDLE_WIDTH / 2, game_state.paddle.position.y - PADDLE_HEIGHT / 2};
+
+    return rectangle_overlap(l1, r1, l2, r2);
+}
+
+int static paddle_detect_obstacles_ahead() {
+    Node *obstacle = game_state.level.obstacles.head;
+    for (; obstacle != NULL ; obstacle = obstacle->next) {
+        if (paddle_detect_obstacle_ahead(&(obstacle->elem))) return 1;
+    }
+    return 0;
+}
+
+static void paddle_tick() {
+    game_state.paddle.position.x = game_state.desired_paddle_x;
+    game_state.paddle.position.y = game_state.desired_paddle_y;
+    clamp_paddle_position();
+
+    
+    if (game_state.moving_forward && !game_state.ball.glued 
+        && game_state.paddle_z_pos - PADDLE_SPEED > game_state.ball.position.z && !paddle_detect_obstacles_ahead()) {
+        // TODO paddle collisions
+        game_state.paddle_z_pos -= PADDLE_SPEED;
+        game_state.score += PADDLE_SPEED;
+    }
 }
 
 void game_init() {
@@ -257,25 +329,20 @@ void game_free() {
     printf("Game free\n");
     free_logging_file();
     loader_free(&(game_state.levelLoader));
-    level_free(&(game_state.level));
 }
 
 int game_tick() {
     if (game_state.paused || game_state.scene != GAME) return 0;
 
     ball_tick();
-    if (game_state.moving_forward && !game_state.ball.glued) {
-        // TODO paddle collisions
-        game_state.paddle_z_pos -= 0.5;
-        game_state.score += 0.5;
-    }
+    paddle_tick();
     return 0;
 }
 
 void game_start() {
-    game_state.n_level = 1;
+    game_state.levelLoader.current_level = game_state.level_selected - 1;
     load_level(game_state.levelLoader.levels[game_state.levelLoader.current_level], &(game_state.level));
-    print_level(&(game_state.level));
+
     game_state.scene = GAME;
 
     game_state.paddle.position = (Vec2D){0., 0.};
@@ -292,25 +359,16 @@ void game_start() {
     game_state.glue_enabled = 0;
     game_state.lives = 5;   
     game_state.score = 0.;
+}
 
-    
+void game_restart() {
+    loader_free(&(game_state.levelLoader));
+    game_state.scene = TITLE_SCREEN;
+    game_state.level_selected = 1;
+    load_level_loader("./resources/levels/test.game", &(game_state.levelLoader));
 }
 
 void game_end() {
+    game_state.glue_enabled = TIMELESS_GLUE; 
     game_state.scene = GAME_OVER;
-}
-
-void clamp_paddle_position() {
-    if (game_state.paddle.position.x - PADDLE_WIDTH / 2 < -CORRIDOR_WIDTH / 2) {
-        game_state.paddle.position.x = -CORRIDOR_WIDTH / 2 + PADDLE_WIDTH / 2;
-    }
-    if (game_state.paddle.position.x + PADDLE_WIDTH / 2 > CORRIDOR_WIDTH / 2) {
-        game_state.paddle.position.x = CORRIDOR_WIDTH / 2 - PADDLE_WIDTH / 2;
-    }
-    if (game_state.paddle.position.y - PADDLE_HEIGHT / 2 < -CORRIDOR_HEIGHT / 2) {
-        game_state.paddle.position.y = -CORRIDOR_HEIGHT / 2 + PADDLE_HEIGHT / 2;
-    }
-    if (game_state.paddle.position.y + PADDLE_HEIGHT / 2 > CORRIDOR_HEIGHT / 2) {
-        game_state.paddle.position.y = CORRIDOR_HEIGHT / 2 - PADDLE_HEIGHT / 2;
-    }
 }

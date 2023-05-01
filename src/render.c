@@ -56,15 +56,20 @@ static void draw_corridor() {
         }
     }
 
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[4]);
     glColor3f(0.146, 0.515, 0.860);
     glNormal3f(1., 0., 0.);
+
+    double offset = fmod(-game_state.paddle_z_pos, 5) / 5;
+    double start = offset, end = 1. + offset;
     for (double y = y1 ; y< y2 ; y += 5) {
         for (double z = 50 ; z > -200 ; z -= 5) { 
             glBegin(GL_TRIANGLE_FAN);
-                glVertex3f(x1, y, z);
-                glVertex3f(x1, y+5, z);
-                glVertex3f(x1, y+5, z-5);
-                glVertex3f(x1, y, z-5);
+                glTexCoord2f(start, 0.); glVertex3f(x1, y, z);
+                glTexCoord2f(start, 1.); glVertex3f(x1, y+5, z);
+                glTexCoord2f(end, 1.); glVertex3f(x1, y+5, z-5);
+                glTexCoord2f(end, 0.); glVertex3f(x1, y, z-5);
             glEnd();
         }
     }
@@ -73,30 +78,31 @@ static void draw_corridor() {
     for (double y = y1 ; y< y2 ; y += 5) {
         for (double z = 50 ; z > -200 ; z -= 5) { 
             glBegin(GL_TRIANGLE_FAN);
-                glVertex3f(x2, y, z);
-                glVertex3f(x2, y+5, z);
-                glVertex3f(x2, y+5, z-5);
-                glVertex3f(x2, y, z-5);
+                glTexCoord2f(start, 0.); glVertex3f(x2, y, z);
+                glTexCoord2f(start, 1.); glVertex3f(x2, y+5, z);
+                glTexCoord2f(end, 1.); glVertex3f(x2, y+5, z-5);
+                glTexCoord2f(end, 0.); glVertex3f(x2, y, z-5);
             glEnd();
         }
     }
+    glDisable(GL_TEXTURE_2D);
         
     // Lines
-    glLineWidth(5);
-    glColor3f(1., 1., 1.);
+    // glLineWidth(5);
+    // glColor3f(1., 1., 1.);
     
-    for (double i = fmod(-game_state.paddle_z_pos, 20.); i > -200 ; i -= 20) {
-        glBegin(GL_LINE_LOOP);
-            glNormal3f(0., 1., 0.);
-            glVertex3f(-24.9, -14.9, i);
-            glVertex3f(24.9, -14.9, i);
-            glNormal3f(-1., 0., 0.);
-            glVertex3f(24.9, 14.9, i);
-            glNormal3f(0., -1., 0.);
-            glVertex3f(-24.9, 14.9, i);
-            glNormal3f(1., 0., 0.);
-        glEnd();
-    }
+    // for (double i = fmod(-game_state.paddle_z_pos, 20.); i > -200 ; i -= 20) {
+    //     glBegin(GL_LINE_LOOP);
+    //         glNormal3f(0., 1., 0.);
+    //         glVertex3f(-24.9, -14.9, i);
+    //         glVertex3f(24.9, -14.9, i);
+    //         glNormal3f(-1., 0., 0.);
+    //         glVertex3f(24.9, 14.9, i);
+    //         glNormal3f(0., -1., 0.);
+    //         glVertex3f(-24.9, 14.9, i);
+    //         glNormal3f(1., 0., 0.);
+    //     glEnd();
+    // }
 }
 
 static void draw_paddle() {
@@ -278,7 +284,8 @@ static void load_textures() {
     glGenTextures(NB_TEXTURES, textures.gl_texture);
 
     const char *texture_files[] = {"resources/textures/fontmap.tga", "resources/textures/life.tga", 
-    "resources/textures/title_screen.tga", "resources/textures/game_over.tga"};
+    "resources/textures/title_screen.tga", "resources/textures/game_over.tga",
+    "resources/textures/wall.tga"};
     int x, y, n;
 
     for (int i = 0 ; i < NB_TEXTURES ; i++) {

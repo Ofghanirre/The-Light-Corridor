@@ -46,14 +46,14 @@ static void onKey(GLFWwindow* window, int key, int scancode, int action, int mod
 				glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 				break;
             case GLFW_KEY_LEFT:
-                if (game_state.scene == TITLE_SCREEN) game_state.level_selected -= 1;
+                if (game_state.scene == TITLE_SCREEN && game_state.level_selected > 1)  game_state.level_selected -= 1;
                 break;
             case GLFW_KEY_RIGHT:
-                if (game_state.scene == TITLE_SCREEN) game_state.level_selected += 1;
+                if (game_state.scene == TITLE_SCREEN && game_state.level_selected < game_state.levelLoader.size) game_state.level_selected += 1;
                 break;
             case GLFW_KEY_ENTER:
                 if (game_state.scene == TITLE_SCREEN) game_start();
-                else if (game_state.scene == GAME_OVER) game_state.scene = TITLE_SCREEN;
+                else if (game_state.scene == GAME_OVER) game_restart();
                 break;
 			default: fprintf(stdout, "Unhandled key : %d\n", key);
 		}
@@ -65,9 +65,8 @@ static void cursor_position_callback(GLFWwindow* window, double x, double y)
     int width, height;
     glfwGetWindowSize(window, &width, &height);
 
-    game_state.paddle.position.x = (x / width - 0.5) * CORRIDOR_WIDTH;
-    game_state.paddle.position.y = (0.5 - y / height) * CORRIDOR_HEIGHT;
-    clamp_paddle_position();
+    game_state.desired_paddle_x = (x / width - 0.5) * CORRIDOR_WIDTH;
+    game_state.desired_paddle_y = (0.5 - y / height) * CORRIDOR_HEIGHT;
 }
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)

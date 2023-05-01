@@ -59,13 +59,14 @@ typedef struct game_state_s {
     double score;
     int moving_forward;
 
+    double desired_paddle_x;
+    double desired_paddle_y;
     paddle_t paddle;
     ball_t ball;
     int glue_enabled;
     int lives;
 
     // Information about level
-    int n_level;
     Level level;
     LevelLoader levelLoader;
 } game_state_t;
