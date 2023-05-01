@@ -171,6 +171,24 @@ void static ball_detect_obstacles() {
     }
 }
 
+int static paddle_detect_bonus(Graphic_Object * bonus) {
+    // The bonus are set to only be SPHERE FOR NOW
+    // TODO CHANGE on later versions
+    if (bonus->figure.type != SPHERE) return NO_BOUNCE;
+    // The ball is still too far from the paddle
+    if (bonus->position.z + bonus->figure.fig.sphere.radius <= 0 + game_state.paddle_z_pos) {
+        return NO_BOUNCE;
+    }
+    
+    if (bonus->position.x > game_state.paddle.position.x - PADDLE_WIDTH / 2 - BALL_RADIUS / 2
+        && bonus->position.x < game_state.paddle.position.x + PADDLE_WIDTH / 2 + BALL_RADIUS / 2
+        && bonus->position.y > game_state.paddle.position.y - PADDLE_WIDTH / 2 - BALL_RADIUS / 2
+        && bonus->position.y < game_state.paddle.position.y + PADDLE_WIDTH / 2 + BALL_RADIUS / 2) {
+            return BOUNCE;
+        }
+    return NO_BOUNCE;
+}
+
 void static ball_detect_bonus() {
     Node *bonus = game_state.level.bonus.head;
     Node ** to_remove = (Node**) malloc(sizeof(Node*) * game_state.level.bonus.size);
@@ -180,7 +198,7 @@ void static ball_detect_bonus() {
     }
     int to_remove_size = 0;
     for (; bonus != NULL ; bonus = bonus->next) {
-        if (BOUNCE == ball_detect_object(&(bonus->elem))) {
+        if (BOUNCE == paddle_detect_bonus(&(bonus->elem))) {
             to_remove[to_remove_size] = bonus;
             to_remove_size++;
             switch (bonus->elem.effect) {
