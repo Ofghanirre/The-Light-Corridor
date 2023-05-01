@@ -238,6 +238,7 @@ void game_init() {
 
 void game_free() {
     printf("Game free\n");
+    free_logging_file();
     level_free(&(game_state.level));
 }
 
