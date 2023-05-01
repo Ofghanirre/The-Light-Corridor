@@ -17,4 +17,6 @@ void clamp_paddle_position();
 
 void game_start();
 
+void game_end();
+
 #endif

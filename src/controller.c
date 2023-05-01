@@ -46,13 +46,14 @@ static void onKey(GLFWwindow* window, int key, int scancode, int action, int mod
 				glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 				break;
             case GLFW_KEY_LEFT:
-                game_state.level_selected -= 1;
+                if (game_state.scene == TITLE_SCREEN) game_state.level_selected -= 1;
                 break;
             case GLFW_KEY_RIGHT:
-                game_state.level_selected += 1;
+                if (game_state.scene == TITLE_SCREEN) game_state.level_selected += 1;
                 break;
             case GLFW_KEY_ENTER:
-                game_start();
+                if (game_state.scene == TITLE_SCREEN) game_start();
+                else if (game_state.scene == GAME_OVER) game_state.scene = TITLE_SCREEN;
                 break;
 			default: fprintf(stdout, "Unhandled key : %d\n", key);
 		}
@@ -72,11 +73,11 @@ static void cursor_position_callback(GLFWwindow* window, double x, double y)
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
-        game_state.ball.glued = 0;
+        if (game_state.scene == GAME) game_state.ball.glued = 0;
     } else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        game_state.moving_forward = 1;
+        if (game_state.scene == GAME) game_state.moving_forward = 1;
     } else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
-        game_state.moving_forward = 0;
+        if (game_state.scene == GAME) game_state.moving_forward = 0;
     }
 }
 

@@ -270,40 +270,20 @@ static void load_textures() {
 
     glGenTextures(NB_TEXTURES, textures.gl_texture);
 
+    const char *texture_files[] = {"resources/textures/fontmap.tga", "resources/textures/life.tga", 
+    "resources/textures/title_screen.tga", "resources/textures/game_over.tga"};
     int x, y, n;
 
-    // Texture 1
-	textures.data[0] = stbi_load("resources/textures/fontmap.tga", &x, &y, &n, 0);
-	if (textures.data[0] == NULL) {
-		fprintf(stderr, "Texture 0 failed to load");
-		exit(1);
-	}
-    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, textures.data[0]);
-
-    // Texture 2
-	textures.data[1] = stbi_load("resources/textures/life.tga", &x, &y, &n, 0);
-    
-	if (textures.data[1] == NULL) {
-		fprintf(stderr, "Texture 1 failed to load");
-		exit(1);
-	}
-    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[1]);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, textures.data[1]);
-
-    // Texture 3
-	textures.data[2] = stbi_load("resources/textures/title_screen.tga", &x, &y, &n, 0);
-    
-	if (textures.data[2] == NULL) {
-		fprintf(stderr, "Texture 2 failed to load");
-		exit(1);
-	}
-    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[2]);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, textures.data[2]);
-
+    for (int i = 0 ; i < NB_TEXTURES ; i++) {
+        textures.data[i] = stbi_load(texture_files[i], &x, &y, &n, 0);
+        if (textures.data[i] == NULL) {
+            fprintf(stderr, "Texture %d failed to load", i);
+            exit(1);
+        }
+        glBindTexture(GL_TEXTURE_2D, textures.gl_texture[i]);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, textures.data[i]);
+    }
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -548,6 +528,69 @@ static void draw_title_screen() {
     glDepthMask(GL_TRUE); 
 }
 
+static void draw_game_over() {
+    glDepthMask(GL_FALSE); 
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+
+    float width = 1.0, height = 1.0;
+
+    if (aspectRatio > 0) {
+        width = aspectRatio;
+        gluOrtho2D(0.0, 1.0 * aspectRatio, 1.0, 0.0);
+    } else {
+        height = aspectRatio;
+        gluOrtho2D(0.0, 1.0, 1.0 * aspectRatio, 0.0);
+    }
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glEnable(GL_TEXTURE_2D);
+    
+    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[3]);
+    // Draw now
+    glBegin(GL_TRIANGLE_FAN);
+        glTexCoord2f(0., 1.); glVertex3f(0., height, 0.);
+        glTexCoord2f(1., 1.); glVertex3f(width, height, 0.);
+        glTexCoord2f(1., 0.); glVertex3f(width, 0., 0.);
+        glTexCoord2f(0., 0.); glVertex3f(0., 0., 0.);
+    glEnd();
+
+    glPushMatrix();
+        glTranslatef(0.25 * width, 0.4 * height, 0.);
+        glScalef(0.7, 0.7, 1.);
+        glColor3f(1., 1., 1.);
+
+        if (game_state.lives <= 1) drawString("You ran out of lives!");
+        else drawString("Congratulations, you won!");
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(0.5 * width, 0.62 * height, 0.);
+        glColor3f(1., 1., 1.);
+
+
+        char score_string[32];
+        snprintf(score_string, 32, "%ld", (long) game_state.score);
+        drawString(score_string);
+    glPopMatrix();
+    
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glDepthMask(GL_TRUE); 
+}
+
 void render_init() {
     printf("Render init\n");
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -574,6 +617,7 @@ int render_tick() {
             draw_game_HUD();
             break;
         case GAME_OVER:
+            draw_game_over();
             break;
     }    
 

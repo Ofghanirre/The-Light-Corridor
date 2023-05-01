@@ -56,6 +56,7 @@ typedef struct game_state_s {
     // Information about game
     int paused;
     double paddle_z_pos;
+    double score;
     int moving_forward;
 
     paddle_t paddle;
