@@ -41,13 +41,30 @@ typedef struct ball_s {
     int glued;
 } ball_t;
 
+typedef enum {
+    TITLE_SCREEN,
+    GAME,
+    GAME_OVER
+} Scene;
+
 typedef struct game_state_s {
+    Scene scene;
+
+    // Information about title screen:
+    int level_selected;
+    
+    // Information about game
+    int paused;
     double paddle_z_pos;
     int moving_forward;
+
     paddle_t paddle;
     ball_t ball;
     int glue_enabled;
+    int lives;
 
+    // Information about level
+    int n_level;
     Level level;
     LevelLoader levelLoader;
 } game_state_t;
