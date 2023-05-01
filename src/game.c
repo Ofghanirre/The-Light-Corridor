@@ -41,14 +41,14 @@ void static ball_detect_wall_collision() {
 // Returns 1 if the ball failed to be caught
 int static ball_detect_paddle_collision() {
     // We only consider paddle collision is the ball is heading towards it
-    //if (game_state.ball.direction.z < 0) { return 0;}
+    if (game_state.ball.direction.z < 0) { return 0;}
 
     // The ball is still too far from the paddle
     if (game_state.ball.position.z + BALL_RADIUS <= 0 + game_state.paddle_z_pos) {
         return 0;
     }
 
-    // We ball passed the paddle
+    // The ball passed the paddle
     if (game_state.ball.position.z > 0 + game_state.paddle_z_pos) {
         return 1;
     }
@@ -280,10 +280,11 @@ static void paddle_tick() {
     clamp_paddle_position();
 
     
-    if (game_state.moving_forward && !game_state.ball.glued && !paddle_detect_obstacles_ahead()) {
+    if (game_state.moving_forward && !game_state.ball.glued 
+        && game_state.paddle_z_pos - PADDLE_SPEED > game_state.ball.position.z && !paddle_detect_obstacles_ahead()) {
         // TODO paddle collisions
-        game_state.paddle_z_pos -= 0.5;
-        game_state.score += 0.5;
+        game_state.paddle_z_pos -= PADDLE_SPEED;
+        game_state.score += PADDLE_SPEED;
     }
 }
 

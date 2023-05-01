@@ -3,6 +3,7 @@
 
 #define BACK_DISTANCE 150
 #define TRANSITION_LEVEL_DISTANCE 60
+#define PADDLE_SPEED 1.
 
 /**
  * Initializes the game
