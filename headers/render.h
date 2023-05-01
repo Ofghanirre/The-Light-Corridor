@@ -6,7 +6,7 @@
 */
 #define CAMERA_OFFSET 30
 
-#define NB_TEXTURES 3
+#define NB_TEXTURES 4
 /**
  * Structure containing the information for a texture
 */

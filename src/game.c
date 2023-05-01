@@ -201,10 +201,9 @@ void static ball_tick() {
     int lost_ball = ball_detect_paddle_collision();
     
     if (lost_ball) {
-        printf("You lost the ball!\n");
         game_state.lives -= 1;
         if (game_state.lives == 0) {
-            printf("Game over\n");
+            game_end();
         }
 
         game_state.ball.glued = 1;
@@ -216,24 +215,9 @@ void static ball_tick() {
 void game_init() {
     printf("Game init\n");
     game_state.scene = TITLE_SCREEN;
-
     game_state.level_selected = 1;
 
-    game_state.paddle.position = (Vec2D){0., 0.};
-
-    game_state.paddle_z_pos = 0;
-    game_state.moving_forward = 0;
-
-    game_state.ball.position = (Vec3D){0., 0., -BALL_RADIUS};
-    game_state.ball.direction = (Vec3D){0, 0, -1};
-    game_state.ball.speed = 1.;
-    game_state.ball.glued = 1;
-    game_state.ball.glued_offset = (Vec2D){0., 0.};
-    
-    game_state.glue_enabled = 0;
     load_level_loader("./resources/levels/test.game", &(game_state.levelLoader));
-
-    game_state.lives = 5;   
 }
 
 void game_free() {
@@ -247,7 +231,9 @@ int game_tick() {
 
     ball_tick();
     if (game_state.moving_forward && !game_state.ball.glued) {
+        // TODO paddle collisions
         game_state.paddle_z_pos -= 0.5;
+        game_state.score += 0.5;
     }
     return 0;
 }
@@ -257,6 +243,27 @@ void game_start() {
     load_level(game_state.levelLoader.levels[game_state.levelLoader.current_level], &(game_state.level));
     print_level(&(game_state.level));
     game_state.scene = GAME;
+
+    game_state.paddle.position = (Vec2D){0., 0.};
+
+    game_state.paddle_z_pos = 0;
+    game_state.moving_forward = 0;
+
+    game_state.ball.position = (Vec3D){0., 0., -BALL_RADIUS};
+    game_state.ball.direction = (Vec3D){0, 0, -1};
+    game_state.ball.speed = 1.;
+    game_state.ball.glued = 1;
+    game_state.ball.glued_offset = (Vec2D){0., 0.};
+    
+    game_state.glue_enabled = 0;
+    game_state.lives = 5;   
+    game_state.score = 0.;
+
+    
+}
+
+void game_end() {
+    game_state.scene = GAME_OVER;
 }
 
 void clamp_paddle_position() {
