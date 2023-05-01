@@ -46,10 +46,10 @@ static void onKey(GLFWwindow* window, int key, int scancode, int action, int mod
 				glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 				break;
             case GLFW_KEY_LEFT:
-                if (game_state.scene == TITLE_SCREEN) game_state.level_selected -= 1;
+                if (game_state.scene == TITLE_SCREEN && game_state.level_selected > 1)  game_state.level_selected -= 1;
                 break;
             case GLFW_KEY_RIGHT:
-                if (game_state.scene == TITLE_SCREEN) game_state.level_selected += 1;
+                if (game_state.scene == TITLE_SCREEN && game_state.level_selected < game_state.levelLoader.size) game_state.level_selected += 1;
                 break;
             case GLFW_KEY_ENTER:
                 if (game_state.scene == TITLE_SCREEN) game_start();

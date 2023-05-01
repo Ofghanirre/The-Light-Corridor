@@ -177,8 +177,12 @@ void static ball_detect_back() {
 
 void static ball_detect_end_level() {
     if (game_state.paddle_z_pos < - game_state.level.depth) {
-        printf("End level\n");
         level_clear(&(game_state.level));
+        if (game_state.levelLoader.current_level >= game_state.levelLoader.size - 1) {
+            game_end();
+            return;
+        }
+
         loader_next_level(&(game_state.level), &(game_state.levelLoader));
         float distance = game_state.ball.position.z - game_state.paddle_z_pos;
         game_state.paddle_z_pos = fmod(game_state.paddle_z_pos, 20.) + TRANSITION_LEVEL_DISTANCE*2;
@@ -239,9 +243,9 @@ int game_tick() {
 }
 
 void game_start() {
-    game_state.n_level = 1;
+    game_state.levelLoader.current_level = game_state.level_selected - 1;
     load_level(game_state.levelLoader.levels[game_state.levelLoader.current_level], &(game_state.level));
-    print_level(&(game_state.level));
+
     game_state.scene = GAME;
 
     game_state.paddle.position = (Vec2D){0., 0.};

@@ -65,7 +65,6 @@ typedef struct game_state_s {
     int lives;
 
     // Information about level
-    int n_level;
     Level level;
     LevelLoader levelLoader;
 } game_state_t;
