@@ -53,7 +53,7 @@ static void onKey(GLFWwindow* window, int key, int scancode, int action, int mod
                 break;
             case GLFW_KEY_ENTER:
                 if (game_state.scene == TITLE_SCREEN) game_start();
-                else if (game_state.scene == GAME_OVER) game_state.scene = TITLE_SCREEN;
+                else if (game_state.scene == GAME_OVER) game_restart();
                 break;
 			default: fprintf(stdout, "Unhandled key : %d\n", key);
 		}

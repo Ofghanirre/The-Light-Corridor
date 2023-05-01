@@ -205,7 +205,9 @@ void static ball_tick() {
     if (lost_ball) {
         game_state.lives -= 1;
         if (game_state.lives == 0) {
+            level_free(&(game_state.level));
             game_end();
+            return;
         }
 
         game_state.ball.glued = 1;
@@ -226,7 +228,6 @@ void game_free() {
     printf("Game free\n");
     free_logging_file();
     loader_free(&(game_state.levelLoader));
-    level_free(&(game_state.level));
 }
 
 int game_tick() {
@@ -261,8 +262,13 @@ void game_start() {
     game_state.glue_enabled = 0;
     game_state.lives = 5;   
     game_state.score = 0.;
+}
 
-    
+void game_restart() {
+    loader_free(&(game_state.levelLoader));
+    game_state.scene = TITLE_SCREEN;
+    game_state.level_selected = 1;
+    load_level_loader("./resources/levels/test.game", &(game_state.levelLoader));
 }
 
 void game_end() {

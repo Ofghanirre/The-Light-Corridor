@@ -19,4 +19,6 @@ void game_start();
 
 void game_end();
 
+void game_restart();
+
 #endif
