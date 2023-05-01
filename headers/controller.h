@@ -49,6 +49,7 @@ typedef struct game_state_s {
     int glue_enabled;
 
     Level level;
+    LevelLoader levelLoader;
 } game_state_t;
 
 extern game_state_t game_state;

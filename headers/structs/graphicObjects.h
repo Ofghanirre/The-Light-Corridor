@@ -39,11 +39,9 @@ typedef struct Graphic_Object_List {
 
 /**
  * @brief Represents the level of the game
- * Contains all non-const objects that will be displayed like 
- * - ball
- * - paddle
- * - obstacles
- * - bonuses
+ * Contains a name, a depth and all obstacles and bonuses
+ * 
+ * loaded with the parser from a .level file
  * 
  */
 typedef struct Level {
@@ -52,6 +50,17 @@ typedef struct Level {
     Graphic_Object_List obstacles;
     Graphic_Object_List bonus;
 } Level;
+
+/**
+ * @brief Manage loaded levels for the game
+ * The levels are loaded with the parser from ./resources/levels
+ * 
+ */
+typedef struct LevelLoader {
+    char ** levels;
+    int size;
+    int current_level;
+} LevelLoader;
 
 /* ------ Functions ------ */
 

@@ -67,4 +67,6 @@ int level_remove_first_obstacle(Level *level);
 int level_remove_first_bonus(Level *level);
 
 void print_level(Level * level);
+
+int loader_next_level(Level * result, LevelLoader * loader);
 #endif

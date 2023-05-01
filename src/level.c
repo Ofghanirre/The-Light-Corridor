@@ -1,4 +1,5 @@
 #include "level.h"
+#include "cparser.h"
 
 int is_initialized = 0;
 
@@ -52,4 +53,10 @@ void print_level(Level * level) {
     print_log(",\nBonus:");
     print_GOL(level->bonus);
     print_log("\n}");
+}
+
+int loader_next_level(Level * result, LevelLoader * loader) {
+    if (loader->current_level + 1 >= loader->size) { return 1; }
+    loader->current_level++;
+    return load_level(loader->levels[loader->current_level], result);
 }

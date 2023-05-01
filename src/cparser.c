@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "cparser.h"
 #include "structs/vectors.h"
 #include "structs/colors.h"
 #include "structs/figures.h"
@@ -7,7 +7,13 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "utils.h"
 
+/* 
+-----------------------------------------------------
+                    LEVEL LOADING 
+-----------------------------------------------------
+*/
 int load_vec3D(Vec3D * result, const char * buffer) {
     float x,y,z;
 #ifdef __LOGGING__
@@ -180,13 +186,15 @@ print_log("Line to be Parsed :%s --- %s --- %s --- %s --- %s\n", position3D_bfr,
 }
 
 char* parser_getLine(FILE* file) {
-    char* line = (char*) malloc(sizeof(char) * 16);
-    if (NULL == line) return NULL;
     int capacity = 16;
+    char* line = (char*) malloc(sizeof(char) * capacity);
+    if (NULL == line) {
+        __FLAG_MEMORY_ERROR__ = 1;
+        return NULL;
+    }
     int size = 0;
     char c;
     int gotComment = 0;
-
     while ((c = fgetc(file)) != EOF && c != '\n') {
         if (c == '#') {
             // on ignore le reste de la ligne
@@ -194,6 +202,12 @@ char* parser_getLine(FILE* file) {
             while ((c = fgetc(file)) != EOF && c != '\n');
             break;
         }
+        // test for CRLF:
+        else if (c == '\r') {
+            fgetc(file); // don't care about next char nature
+            break;
+        }
+        
         if (size == capacity) {
             capacity *= 2;
             line = realloc(line, capacity);
@@ -233,7 +247,7 @@ int load_level_name(char ** result, FILE * istream) {
             strncpy(*result, line, len);
             free(line);
             #ifdef __LOGGING__
-            print_log("Level Name : %s\n", *result);
+                print_log("Level Name : %s\n", *result);
             #endif
             return 0;
         }
@@ -334,3 +348,111 @@ int load_level(const char * file_path, Level * level) {
     return 0;
 }
 
+/* 
+-----------------------------------------------------
+                LEVEL LOADER LOADING 
+-----------------------------------------------------
+*/
+
+int load_loader_name(char ** result, FILE * istream) {
+    char* line = NULL;
+    while ((line = parser_getLine(istream)) != NULL) {
+        int len = strlen(line);
+        if (len != 0) {
+
+            if (*result == NULL)
+                *result = (char*) malloc(len);
+            if (*result == NULL) {
+                __FLAG_MEMORY_ERROR__ = 1;
+                free(line);
+                return MEMORY_ERROR;
+            }
+            strncpy(*result, line, len);
+            free(line);
+            #ifdef __LOGGING__
+                print_log("Game Name : %s\n", *result);
+            #endif
+            return 0;
+        }
+        free(line);
+    }
+
+    return 1;
+}
+
+int load_loader_levels(FILE * stream, LevelLoader * loader) {
+    int capacityLevels = 16;
+    char * line = NULL;
+    loader->size = 0;
+    loader->levels = (char **) malloc(sizeof(char*) * capacityLevels);
+    if (loader->levels == NULL) {
+        __FLAG_MEMORY_ERROR__ = 1;
+        return MEMORY_ERROR;
+    }
+
+    while ((line = parser_getLine(stream)) != NULL) {
+        if (strlen(line) != 0) {
+            char * file_path = (char *) malloc(sizeof(char) * (strlen(LEVEL_FOLDER) + strlen(line) + 1));
+            if (file_path == NULL) {
+                __FLAG_MEMORY_ERROR__ = 1;
+                return MEMORY_ERROR;
+            }
+            strcpy(file_path, LEVEL_FOLDER);
+            strcat(file_path, line);
+            FILE * test_file = fopen(file_path, "r");
+            if (NULL == test_file) {
+                #ifdef __LOGGING__
+                print_log("WARNING : Could not find level : %s\nIgnoring and continuing the game loading...\n", file_path);
+                #endif
+                free(line);
+                continue;
+            } // TEST IF THE FILE EXISTS
+            else {fclose(test_file);}
+            if (loader->size + 1 >= capacityLevels) {
+                capacityLevels *= 2;
+                loader->levels = (char**) realloc(loader->levels, sizeof(char*) * capacityLevels);
+                if (loader->levels == NULL) {
+                    __FLAG_MEMORY_ERROR__ = 1;
+                    return MEMORY_ERROR;
+                }
+            }
+
+            #ifdef __LOGGING__
+            print_log("Adding level: %s\n", file_path);
+            #endif
+            loader->levels[loader->size] = file_path;
+            loader->size++;
+        }
+        free(line);
+    }
+
+    loader->levels = realloc(loader->levels, sizeof(char*) * loader->size);
+    if (loader->levels == NULL) {
+        __FLAG_MEMORY_ERROR__ = 1;
+        return MEMORY_ERROR;
+    }
+    loader->current_level = 0;
+    #ifdef __LOGGING__
+    print_log("First Level to be loaded: %s\n", loader->levels[loader->current_level]);
+    #endif
+    return 0;
+}
+
+int load_level_loader(const char * file_path, LevelLoader * loader) {
+    FILE * file = fopen(file_path, "r");
+    if (NULL == file) {
+        return 1;
+    }
+    #ifdef __LOGGING__
+    print_log("\n >>>>> GAME LOADING <<<<<\n");
+    #endif
+
+    char * loader_name = NULL;
+    load_loader_name(&loader_name, file);
+    load_loader_levels(file, loader);
+    #ifdef __LOGGING__
+    print_log("\n >>>>> GAME LOADED <<<<<\n");
+    #endif
+    fclose(file);
+    return 0;
+}

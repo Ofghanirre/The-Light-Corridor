@@ -17,7 +17,7 @@ OBJECTS = \
 	render.o \
 	level.o \
 	utils.o \
-	parser.o \
+	cparser.o \
 	test.o \
 	structs/colors.o \
 	structs/vectors.o \

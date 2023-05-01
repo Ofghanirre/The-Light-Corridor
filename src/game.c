@@ -4,7 +4,7 @@
 #include "level.h"
 #include <stdio.h>
 #include <math.h>
-#include "parser.h"
+#include "cparser.h"
 
 #ifndef M_PI
 #define M_PI 3.141
@@ -169,10 +169,15 @@ void static ball_detect_obstacles() {
     }
 }
 
-// Temp, there won't actually be a back wall in the actual game
 void static ball_detect_back() {
-    if (game_state.ball.position.z < game_state.paddle_z_pos - 150) {
+    if (game_state.ball.position.z < game_state.paddle_z_pos - BACK_DISTANCE) {
         ball_bounce((Vec3D){0., 0., 1.});
+    }
+}
+
+void static ball_detect_end_level() {
+    if (game_state.ball.position.z < - game_state.level.depth) {
+        printf("End level");
     }
 }
 
@@ -197,6 +202,7 @@ void static ball_tick() {
         game_state.ball.glued = 1;
         game_state.ball.direction = (Vec3D){0., 0., -1.};
     }
+    ball_detect_end_level();
 }
 
 void game_init() {
@@ -213,8 +219,8 @@ void game_init() {
     game_state.ball.glued_offset = (Vec2D){0., 0.};
     
     game_state.glue_enabled = 0;
-
-    load_level("./resources/levels/test.level", &(game_state.level));
+    load_level_loader("./resources/levels/test.game", &(game_state.levelLoader));
+    load_level(game_state.levelLoader.levels[game_state.levelLoader.current_level], &(game_state.level));
 
     print_level(&(game_state.level));
 }
