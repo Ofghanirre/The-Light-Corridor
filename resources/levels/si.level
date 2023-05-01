@@ -1,0 +1,28 @@
+# Level's Name :
+Synthese d'Image Level 
+# Level's length:
+100 # distance from camera in z axes
+# ----------
+# Objects:
+# ----------
+# Objects are identified by a code :
+# 0 : OBSTACLE
+# 1 : BONUS GLUE
+# 2 : BONUS EXTRALIFE
+# Format :
+# CODE: position3D, orientation3D, colorRGBA, figureType, figureInfo
+# Code S
+0:{-20.000000 7.50000 -25.000000}, {0.0 0.0 1.0}, {0.0 0.8 0.0}, RECTANGLE, {{0.0 10.0 0.0}, {-5.0 -10.0 0.0}};#barre haut gauche du s
+0:{0.000000 15.00000 -25.000000}, {0.0 0.0 1.0}, {0.0 1.0 0.0}, RECTANGLE, {{0.0 0. 0.0}, {-20.0 -5.0 0.0}};#barre haut du s
+0:{0.000000 0.00000 -25.000000}, {0.0 0.0 1.0}, {0.0 1.0 0.0}, RECTANGLE, {{0.0 2.5 0.0}, {-20.0 -2.5 0.0}};#barre milieu du s
+0:{-5.000000 -15.00000 -25.000000}, {0.0 0.0 1.0}, {0.0 1.0 0.0}, RECTANGLE, {{0.0 5.0 0.0}, {-20.0 0.0 0.0}};# barre bas du s
+0:{0.000000 2.50000 -25.000000}, {0.0 0.0 1.0}, {0.5 1.0 0.5}, RECTANGLE, {{0.0 -20.0 0.0}, {-5.0 0.0 0.0}};#barre bas droite du s
+
+# Code I
+0:{10.000000 0.00000 -50.000000}, {0.0 0.0 1.0}, {1.0 0.0 0.0}, RECTANGLE, {{-2.5 5.0 0.0}, {2.5 -15.0 0.0}};
+0:{10.000000 10.00000 -50.000000}, {0.0 0.0 1.0}, {1.0 0.0 0.0}, CIRCLE, {3.0};
+
+# Bonus
+1:{10.000000 3.500000 -25.000000}, {0.0 0.0 1.0}, {0.0 1.0 1.0}, SPHERE, {1};
+2:{10.000000 -3.500000 -35.000000}, {0.0 0.0 1.0}, {1.0 0.0 1.0}, SPHERE, {1};
+

@@ -346,12 +346,12 @@ static void paddle_tick() {
     }
 }
 
-void game_init() {
+void game_init(const char * game_path) {
     printf("Game init\n");
     game_state.scene = TITLE_SCREEN;
     game_state.level_selected = 1;
-
-    load_level_loader("./resources/levels/test.game", &(game_state.levelLoader));
+    game_state.game_path = game_path;
+    load_level_loader(game_state.game_path, &(game_state.levelLoader));
 }
 
 void game_free() {
@@ -394,7 +394,7 @@ void game_restart() {
     loader_free(&(game_state.levelLoader));
     game_state.scene = TITLE_SCREEN;
     game_state.level_selected = 1;
-    load_level_loader("./resources/levels/test.game", &(game_state.levelLoader));
+    load_level_loader(game_state.game_path, &(game_state.levelLoader));
 }
 
 void game_end() {

@@ -69,6 +69,7 @@ typedef struct game_state_s {
     // Information about level
     Level level;
     LevelLoader levelLoader;
+    const char * game_path;
 } game_state_t;
 
 extern game_state_t game_state;

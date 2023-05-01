@@ -583,10 +583,30 @@ static void draw_title_screen() {
         glScalef(0.7, 0.7, 1.);
         glColor3f(1., 1., 1.);
 
-        char level_number_string[8];
-        snprintf(level_number_string, 8, "%d", game_state.level_selected);
+        char level_number_string[16];
+        snprintf(level_number_string, 16, "%d / %d", game_state.level_selected, game_state.levelLoader.size);
         drawString(level_number_string);
     glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(0.02 * width, 0.3 * height, 0.);
+        glScalef(0.6, 0.6, 1.);
+        glColor3f(1., 1., 1.);
+
+        char game_name[128];
+        snprintf(game_name, 128, "Game: %s", game_state.levelLoader.name);
+        drawString(game_name);
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(0.05 * width, 0.4 * height, 0.);
+        glScalef(0.33, 0.33, 1.);
+        glColor3f(1., 1., 1.);
+
+        char level_name[128];
+        snprintf(level_name, 128, "Level: %s", game_state.levelLoader.levels[game_state.level_selected-1]);
+        drawString(level_name);
+    glPopMatrix();
+    
     
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);

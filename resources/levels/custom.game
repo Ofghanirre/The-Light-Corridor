@@ -1,0 +1,10 @@
+# Game's Name
+Custom Game File
+# ------
+# Levels
+# ------
+# One per line, separated by \n
+# give path from folder ./resources/levels/
+test2.level
+test.level
+si.level

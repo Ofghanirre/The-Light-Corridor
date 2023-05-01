@@ -17,6 +17,7 @@
 
 int Lflag = 0;
 char *lvalue = NULL;
+char * main_game_file_path = "./resources/levels/default.game";
 
 static void args_parser(int argc, char * const *argv) {
     int c;
@@ -25,10 +26,11 @@ static void args_parser(int argc, char * const *argv) {
         static struct option long_options[] = {
             {"L", no_argument, &Lflag, 1},
             {"l", required_argument, 0, 'l'},
+            {"g", required_argument, 0, 'g'},
             {0, 0, 0, 0}
         };
         int option_index = 0;
-        c = getopt_long(argc, argv, "Ll:", long_options, &option_index);
+        c = getopt_long(argc, argv, "Ll:g:", long_options, &option_index);
         if (c == -1) {
             break;
         }
@@ -39,6 +41,9 @@ static void args_parser(int argc, char * const *argv) {
             case 'l':
                 set_logging();
                 set_logging_file(optarg);
+                break;
+            case 'g':
+                main_game_file_path = optarg;
                 break;
             default:
                 printf("Usage : -L -l [logging_file]\n\t-L : activate logging on stdout\n\t-l [logging_file] activate logging on a given logging_file\n\n");
@@ -61,7 +66,7 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
-    game_init();
+    game_init(main_game_file_path);
     render_init();
 
     run_game(window);
