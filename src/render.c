@@ -190,7 +190,7 @@ static void draw_rectangle(Graphic_Object *obstacle) {
         x1 = x2;
         x2 = temp;
     }
-    if (y1 > y2) { 
+    if (y1 < y2) { 
         double temp = y1;
         y1 = y2;
         y2 = temp;
@@ -210,14 +210,17 @@ static void draw_rectangle(Graphic_Object *obstacle) {
         glMaterialf(GL_FRONT, GL_SHININESS, 1.);
         glColor4d(obstacle->figure.color.r, obstacle->figure.color.g, obstacle->figure.color.b, alpha);
         
-        glNormal3d(0, 0, 1);
+        glNormal3d(0., 0., 1.);
+        double offset_x, offset_y;
+        offset_x = x2 - x1 < 5 ? x2 - x1 : 5;
+        offset_y = y1 - y2 < 5 ? y1 - y2 : 5;
         for (double x = x1 ; x < x2 ; x += 5) {
-            for (double y = y1 ; y < y2 ; y += 5) {
+            for (double y = y2 ; y < y1 ; y += 5) {
                 glBegin(GL_TRIANGLE_FAN);
                     glVertex3d(x, y, 0);
-                    glVertex3d(x, y+5, 0);
-                    glVertex3d(x+5, y+5, 0);
-                    glVertex3d(x+5, y, 0);
+                    glVertex3d(x, y+offset_y, 0);
+                    glVertex3d(x+offset_x, y+offset_y, 0);
+                    glVertex3d(x+offset_x, y, 0);
                 glEnd();
             }
         }

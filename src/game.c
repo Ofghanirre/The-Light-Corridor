@@ -117,14 +117,20 @@ int static ball_detect_rectangle(Graphic_Object *obstacle) {
         x1 = x2;
         x2 = temp;
     }
-    if (y1 > y2) { 
+    if (y1 < y2) { 
         double temp = y1;
         y1 = y2;
         y2 = temp;
     }
 
-    if (game_state.ball.position.x > x1 - BALL_RADIUS / 2 && game_state.ball.position.x < x2 + BALL_RADIUS / 2 
-        && game_state.ball.position.y > y1 - BALL_RADIUS / 2 && game_state.ball.position.y < y2 + - BALL_RADIUS / 2) {
+    printf("L: %f %f, R: %f %f\n", x1, y1, x2, y2);
+    printf("BALL: %f %f\n", game_state.ball.position.x, game_state.ball.position.y);
+
+    if (game_state.ball.position.x + BALL_RADIUS > x1 
+        && game_state.ball.position.x - BALL_RADIUS < x2
+        && game_state.ball.position.y - BALL_RADIUS < y1 
+        && game_state.ball.position.y + BALL_RADIUS > y2) {
+        printf("HIT!\n");
         return obstacle_ball_bounce(z_distance);
     }
     return NO_BOUNCE;
@@ -165,7 +171,7 @@ int static ball_detect_object(Graphic_Object *obstacle) {
 void static ball_detect_obstacles() {
     Node *obstacle = game_state.level.obstacles.head;
     for (; obstacle != NULL ; obstacle = obstacle->next) {
-        ball_detect_object(&(obstacle->elem));
+        if (ball_detect_object(&(obstacle->elem)) == BOUNCE) return;
     }
 }
 
