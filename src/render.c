@@ -108,7 +108,8 @@ static void draw_corridor() {
 static void draw_paddle() {
     glMaterialfv(GL_FRONT, GL_SPECULAR, (float[]){0.01, 0.01, 0.01});
     glMaterialf(GL_FRONT, GL_SHININESS, 1.);
-    glColor4f(0.0140, 0.700, 0.243, 0.6);
+    if (game_state.glue_enabled) glColor4f(0.0140, 0.700, 0.243, 0.6);
+    else glColor4f(0.7, 0.7, 0.7, 0.6);
     glBegin(GL_TRIANGLE_FAN);
         glNormal3d(0, 0, 1);
         glVertex3f(-PADDLE_WIDTH / 2, -PADDLE_HEIGHT / 2, 0);
