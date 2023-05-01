@@ -176,14 +176,19 @@ void static ball_detect_back() {
 }
 
 void static ball_detect_end_level() {
-    if (game_state.ball.position.z < - game_state.level.depth) {
-        printf("End level");
+    if (game_state.paddle_z_pos < - game_state.level.depth) {
+        printf("End level\n");
+        level_clear(&(game_state.level));
+        loader_next_level(&(game_state.level), &(game_state.levelLoader));
+        float distance = game_state.ball.position.z - game_state.paddle_z_pos;
+        game_state.paddle_z_pos = fmod(game_state.paddle_z_pos, 20.) + TRANSITION_LEVEL_DISTANCE*2;
+        game_state.ball.position.z = game_state.paddle_z_pos + distance;
     }
 }
 
 void static ball_tick() {
     if (game_state.ball.glued != 0) {
-        game_state.ball.position.x = game_state.paddle.position.x + game_state.ball.glued_offset.x;
+        game_state.ball.position.x = game_state.paddle. position.x + game_state.ball.glued_offset.x;
         game_state.ball.position.y = game_state.paddle.position.y + game_state.ball.glued_offset.y;
         game_state.ball.position.z = game_state.paddle_z_pos - PADDLE_Z - BALL_RADIUS;
         return;
@@ -227,9 +232,6 @@ void game_init() {
     
     game_state.glue_enabled = 0;
     load_level_loader("./resources/levels/test.game", &(game_state.levelLoader));
-    load_level(game_state.levelLoader.levels[game_state.levelLoader.current_level], &(game_state.level));
-
-    print_level(&(game_state.level));
 
     game_state.lives = 3;   
 }
@@ -251,9 +253,8 @@ int game_tick() {
 
 void game_start() {
     game_state.n_level = 1;
-    load_level("./resources/levels/test.level", &(game_state.level));
+    load_level(game_state.levelLoader.levels[game_state.levelLoader.current_level], &(game_state.level));
     print_level(&(game_state.level));
-
     game_state.scene = GAME;
 }
 

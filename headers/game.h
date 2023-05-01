@@ -2,7 +2,7 @@
 #define __GAME_H
 
 #define BACK_DISTANCE 100
-#define TRANSITION_LEVEL_DISTANCE  ;
+#define TRANSITION_LEVEL_DISTANCE 60
 
 void game_init();
 

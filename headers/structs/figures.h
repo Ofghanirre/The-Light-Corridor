@@ -38,7 +38,7 @@ typedef struct Figure_Circle {
  */
 typedef struct Figure_Label {
     const char* text;
-    int font_size;
+    float font_size;
 } Figure_Label;
 
 /**
@@ -65,7 +65,7 @@ typedef struct Figure {
 Figure make_rectangle(Point3D p1, Point3D p2, ColorRGBA color);
 Figure make_circle(float radius, ColorRGBA color);
 Figure make_sphere(float radius, ColorRGBA color);
-Figure make_label(const char* text, int font_size, ColorRGBA color);
+Figure make_label(const char* text, float font_size, ColorRGBA color);
 
 void print_figure(Figure object);
 #endif

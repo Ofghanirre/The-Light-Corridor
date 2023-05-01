@@ -106,11 +106,11 @@ print_log("load_sphere buffer: %s\n", buffer);
 
 int load_label(Figure * result, const char * buffer, ColorRGBA color) {
     char text[4096];
-    int font_size;
+    float font_size;
 #ifdef __LOGGING__
 print_log("load_label buffer: %s\n", buffer);
 #endif
-    if (EOF == sscanf(buffer, "\"%[^\"], %d}", text, &font_size)) {
+    if (EOF == sscanf(buffer, "\"%[^\"], %f}", text, &font_size)) {
         return 1;
     }
     *result = make_label(text, font_size, color);
@@ -332,6 +332,7 @@ int load_level(const char * file_path, Level * level) {
 
     char * level_name = NULL;
     int level_length;
+    print_log("\n >>>>> LEVEL LOADING %s <<<<<\n", file_path);
 
     load_level_name(&level_name, file);
     load_level_length(&level_length, file);

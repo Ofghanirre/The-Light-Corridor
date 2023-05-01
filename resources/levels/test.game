@@ -5,5 +5,5 @@ Test Game
 # ------
 # One per line, separated by \n
 # give path from folder ./resources/levels/
-test.level
 test2.level
+test.level

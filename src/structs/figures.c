@@ -15,7 +15,7 @@ Figure make_sphere(float radius, ColorRGBA color) {
     return (Figure){SPHERE, .fig.sphere = (Figure_Sphere){radius}, color};
 }
 
-Figure make_label(const char* text, int font_size, ColorRGBA color) {
+Figure make_label(const char* text, float font_size, ColorRGBA color) {
     return (Figure){LABEL, .fig.label = (Figure_Label){text, font_size}, color};
 }
 

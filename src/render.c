@@ -6,6 +6,7 @@
 #include <GL/glu.h>
 #include <math.h>
 #include <stdint.h>
+#include "game.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -324,6 +325,55 @@ static void load_font_metrics() {
     fclose(file);
 }
 
+static void draw_level_info() {
+    glPushMatrix();
+        glColor3f(1., 1., 1.);
+        glScalef(0.5, 0.5, 0.5);
+        glPushMatrix();
+            glTranslatef(0.05, 0.05, 0.);
+            drawString(game_state.level.name);
+        glPopMatrix();
+        glTranslatef(0.05, 0.15, 0.0);
+        glScalef(0.75, 0.75, 0.75);
+        char position[64];
+        sprintf(position, "%f", game_state.paddle_z_pos );
+        drawString(position);
+    glPopMatrix();
+}
+
+static void draw_life_counter() {
+    glPushMatrix();
+        glTranslatef(0.05, 0.88, 0.);
+        glColor3f(1., 1., 1.);
+        drawString("Lives:");
+        glBindTexture(GL_TEXTURE_2D, textures.gl_texture[1]);
+        glColor3f(1., 1., 1.);
+        for (int i = 0 ; i < game_state.lives ; i++) {
+            glBegin(GL_QUADS);
+                glTexCoord2f(0., 1.); glVertex2f(0., BASE_CHAR_SIZE);
+                glTexCoord2f(0., 0.); glVertex2f(0., 0.);
+                glTexCoord2f(1., 0.); glVertex2f(BASE_CHAR_SIZE, 0.);
+                glTexCoord2f(1., 1.); glVertex2f(BASE_CHAR_SIZE, BASE_CHAR_SIZE);
+            glEnd();
+            glTranslatef(BASE_CHAR_SIZE / 2., 0., 0.);
+        }
+        glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
+
+        glDisable(GL_TEXTURE_2D);
+        glDisable(GL_BLEND);
+    glPopMatrix();
+}
+
+static void draw_new_level() {
+    if (game_state.paddle_z_pos <= TRANSITION_LEVEL_DISTANCE && game_state.paddle_z_pos >= 0) {
+        glPushMatrix();
+            glColor3f(1., 1., 1.);
+            glTranslatef(0.4, 0.5, 0.5);
+            drawString("-*- NEW LEVEL -*-");
+        glPopMatrix();
+    }
+}
+
 static void draw_game_HUD() {
     glDepthMask(GL_FALSE); 
     glMatrixMode(GL_PROJECTION);
@@ -344,25 +394,14 @@ static void draw_game_HUD() {
     glEnable(GL_BLEND);
     glEnable(GL_TEXTURE_2D);
     
-    // Draw life counter
-    glTranslatef(0.05, 0.88, 0.);
-    glColor3f(1., 1., 1.);
-    drawString("Lives:");
-    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[1]);
-    glColor3f(1., 1., 1.);
-    for (int i = 0 ; i < game_state.lives ; i++) {
-        glBegin(GL_QUADS);
-            glTexCoord2f(0., 1.); glVertex2f(0., BASE_CHAR_SIZE);
-            glTexCoord2f(0., 0.); glVertex2f(0., 0.);
-            glTexCoord2f(1., 0.); glVertex2f(BASE_CHAR_SIZE, 0.);
-            glTexCoord2f(1., 1.); glVertex2f(BASE_CHAR_SIZE, BASE_CHAR_SIZE);
-        glEnd();
-        glTranslatef(BASE_CHAR_SIZE / 2., 0., 0.);
-    }
-    glBindTexture(GL_TEXTURE_2D, textures.gl_texture[0]);
+    // Draw Level Info
+    draw_level_info();
 
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_BLEND);
+    // Draw life counter
+    draw_life_counter();
+
+    // New level info
+    draw_new_level();
 
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();

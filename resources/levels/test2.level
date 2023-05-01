@@ -1,7 +1,7 @@
 # Level's Name :
-Test level 2
+Green First Level
 # Level's length:
-100 # distance from camera in z axes
+75 # distance from camera in z axes
 # ----------
 # Objects:
 # ----------
@@ -10,4 +10,4 @@ Test level 2
 # 2 : BONUS
 # Format :
 # CODE: position3D, orientation3D, colorRGBA, figureType, figureInfo
-1:{5.000000 3.500000 -50.000000}, {0.0 0.0 1.0}, {0.0 1.0 0.0}, RECTANGLE, {{15.0 25.0 0.0}, {-15.0 -25.0 0.0}};
+1:{5.000000 3.500000 -45.000000}, {0.0 0.0 1.0}, {0.0 1.0 0.0}, RECTANGLE, {{15.0 25.0 0.0}, {-15.0 -25.0 0.0}};
